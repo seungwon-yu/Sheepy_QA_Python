@@ -36,6 +36,12 @@
 - `screen-state.json`에 기대결과, 실제결과, 판단 근거, 분석 값을 함께 저장한다.
 - Sprint 2 전체 실행 스크립트 `scripts/run_sprint_2_screen_state.ps1`를 추가했다.
 
+### 플레이어 상태 분리 기준
+
+- 최초 실행 유저와 기존 플레이 유저는 사전조건과 기대결과가 달라질 수 있으므로 별도 조건 축으로 분리했다.
+- `docs/player-state-strategy.md`에 `PLAYER-NEW`, `PLAYER-RETURNING`, `PLAYER-UNKNOWN` 기준을 정리했다.
+- 세이브 파일을 직접 수정하는 테스트는 사용자 데이터 손상 위험이 있으므로, 세이브 경로와 백업/복원 기준 확인 후 후속 Sprint에서 구현한다.
+
 ## 최근 검증 결과
 
 기본 테스트:
@@ -71,6 +77,7 @@ artifacts/evidence/2026-09-01T13-01-10.691+00-00-TC-005
 3. 입력 전후 screenshot 비교 기준 정의
 4. TC-007 짧은 실행 안정성 확인 구현
 5. 사람이 보기 좋은 Markdown 실행 요약 리포트 생성 검토
+6. TC-014, TC-015, TC-016으로 최초 실행 유저와 기존 플레이 유저 상태 분리
 
 ## 현재 주의할 점
 

@@ -20,6 +20,7 @@
 | ISTQB Game Testing - Graphics Testing | TC-GROUP-03, TC-GROUP-06 |
 | ISTQB Game Testing - Game Level Testing | TC-GROUP-05 |
 | ISTQB Game Testing - Game Controllers Testing | TC-GROUP-04 |
+| ISTQB Game Testing - Save Data and Player Progression Risk | TC-GROUP-03, TC-GROUP-05, 저장/로드 |
 
 ## TC 추적표
 
@@ -33,6 +34,9 @@
 | TC-006 | 입력 반응 | TC-04-B 점프 입력 | Controller Testing, 게임 메커닉 | Medium | 입력 전후 이미지 비교 |
 | TC-007 | 안정성/크래시/프리즈 | TC-07-C 짧은 안정성 | 신뢰성, 크래시 리스크 | High | 프로세스 타임라인 |
 | TC-008 | Evidence 및 리포트 | TC-08-A/B/C | 결함 보고, evidence | High | 파일 생성 확인 |
+| TC-014 | 메인 화면 및 초기 진입 | TC-03-A 초기 화면 도달 | 최초 실행 상태, 테스트 데이터 | Medium | 후속 구현 |
+| TC-015 | 메인 화면 및 초기 진입 | TC-03-B 메뉴 표시 | 기존 플레이 상태, 저장 상태 복구 | Medium | 후속 구현 |
+| TC-016 | 저장/로드 | 후속 확장 | 세이브 데이터 보존, 리그레션 리스크 | High | 후속 구현 |
 
 ## 대분류에서 TC로 내려가는 방식
 

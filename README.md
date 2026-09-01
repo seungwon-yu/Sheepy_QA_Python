@@ -41,6 +41,7 @@ TC 대분류/소분류 설계
 - `docs/guardrails.md`: 테스트 수행 원칙과 제한사항
 - `docs/sprint-plan.md`: Sprint별 자동화 진행 순서와 개별 실행 단위
 - `docs/sprint-strategy.md`: Sprint를 나눈 기준과 ISTQB 연결 근거
+- `docs/player-state-strategy.md`: 최초 실행 유저와 기존 플레이 유저 분리 기준
 - `docs/progress.md`: 현재 완료 범위와 다음 작업 후보
 - `docs/code-convention.md`: 코드 작성 컨벤션
 - `docs/commit-convention.md`: 커밋 메시지 컨벤션

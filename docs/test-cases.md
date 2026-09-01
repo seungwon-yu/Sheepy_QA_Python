@@ -18,6 +18,7 @@
 | 테스트 베이시스 | 테스트 기준이 되는 자료 또는 관찰 |
 | 테스트 조건 | 검증할 조건 |
 | 사전조건 | 실행 전 필요한 조건 |
+| 플레이어 상태 | 최초 실행 유저, 기존 플레이 유저, 상태 불명확 중 하나 |
 | 절차 | 테스트 수행 단계 |
 | 기대결과 | PASS 기준 |
 | Evidence | 저장해야 할 증거 |
@@ -40,6 +41,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | Steam 클라이언트에서 Sheepy를 실행해야 함 |
 | 테스트 조건 | Steam 클라이언트 실행 가능 여부를 확인한다 |
 | 사전조건 | Windows에 Steam이 설치되어 있어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | Steam 프로세스 또는 실행 경로를 확인한다 |
 | 기대결과 | Steam 실행 또는 Steam 프로세스 확인이 가능해야 한다 |
 | Evidence | process-state.json, execution-log.txt |
@@ -56,6 +58,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | Sheepy Steam AppID는 1568400 |
 | 테스트 조건 | Steam AppID로 게임 실행을 시도한다 |
 | 사전조건 | Steam 로그인 및 Sheepy 설치가 완료되어 있어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | steam://run/1568400 또는 Steam 실행 명령을 호출한다 |
 | 기대결과 | 실행 명령이 오류 없이 호출되어야 한다 |
 | Evidence | execution-log.txt, process-state.json |
@@ -72,6 +75,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | 게임 실행 후 OS에서 프로세스를 관찰할 수 있어야 함 |
 | 테스트 조건 | 지정 시간 안에 Sheepy 관련 프로세스를 감지한다 |
 | 사전조건 | TC-002 실행 시도가 완료되어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 일정 시간 동안 프로세스 목록을 확인한다 |
 | 기대결과 | 지정 시간 안에 게임 프로세스가 실행 상태로 확인되어야 한다 |
 | Evidence | process-state.json, timestamp.txt |
@@ -88,6 +92,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | 실행 후 화면 evidence를 저장해야 함 |
 | 테스트 조건 | 게임 실행 후 초기 화면 스크린샷을 저장한다 |
 | 사전조건 | 게임 창이 화면에 표시되어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 게임 실행 후 지정 대기 시간 뒤 screenshot을 저장한다 |
 | 기대결과 | screenshot 파일이 생성되고 파일 크기가 0보다 커야 한다 |
 | Evidence | screenshot.png, screen-metadata.json |
@@ -104,6 +109,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | 게임 실행 후 화면이 장시간 검은 상태면 진행 불가 리스크가 있음 |
 | 테스트 조건 | 초기 화면 screenshot이 완전한 검은 화면인지 확인한다 |
 | 사전조건 | TC-004 screenshot이 저장되어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | screenshot의 평균 밝기 또는 픽셀 분포를 분석한다 |
 | 기대결과 | 화면이 완전 검은 상태로만 유지되지 않아야 한다 |
 | Evidence | screenshot.png, image-analysis.json, screen-state.json, process-state.json, execution-log.json |
@@ -131,6 +137,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | 2D 플랫폼 게임은 점프 입력 반응이 핵심 조작 중 하나임 |
 | 테스트 조건 | 점프 키 입력 전후 화면 변화가 있는지 확인한다 |
 | 사전조건 | 게임 창이 활성화되어 있어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 입력 전 screenshot 저장, 점프 입력, 입력 후 screenshot 저장, 이미지 차이 비교 |
 | 기대결과 | 입력 전후 화면 차이가 기준값 이상이어야 한다 |
 | Evidence | before-input.png, after-input.png, image-diff.json |
@@ -145,6 +152,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | 게임은 짧은 시간 동안 비정상 종료 없이 유지되어야 함 |
 | 테스트 조건 | 일정 시간 동안 게임 프로세스가 유지되는지 확인한다 |
 | 사전조건 | 게임 프로세스가 실행 중이어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 30초 동안 프로세스 상태와 화면 변화를 관찰한다 |
 | 기대결과 | 프로세스가 비정상 종료되지 않아야 한다 |
 | Evidence | process-timeline.json, screenshots/ |
@@ -159,6 +167,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 테스트 베이시스 | 자동화 QA는 실패 시 판단 가능한 증거를 남겨야 함 |
 | 테스트 조건 | 실패 시 screenshot, process state, log, result가 저장되는지 확인한다 |
 | 사전조건 | 테스트 실행 폴더가 생성 가능해야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 의도된 실패 또는 조건 불만족 상황에서 evidence 저장을 확인한다 |
 | 기대결과 | 지정된 evidence 파일이 생성되어야 한다 |
 | Evidence | screenshot.png, process-state.json, execution-log.txt, result.json |
@@ -173,3 +182,6 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | TC-011 이동 입력 반응 | TC-GROUP-04 | TC-04-A | 좌우 입력 전후 화면 변화 확인 |
 | TC-012 프리즈 감지 | TC-GROUP-07 | TC-07-B | 일정 시간 화면 변화 없음 감지 |
 | TC-013 리포트 생성 | TC-GROUP-08 | TC-08-D | 실행 결과 Markdown 또는 HTML 리포트 생성 |
+| TC-014 최초 실행 상태 식별 | TC-GROUP-03 | TC-03-A | 세이브 데이터가 없는 첫 진입 상태 확인 |
+| TC-015 기존 플레이 상태 식별 | TC-GROUP-03 | TC-03-B | 세이브 데이터가 있는 기존 진입 상태 확인 |
+| TC-016 세이브 상태 보존 확인 | 저장/로드 | 후속 확장 | 테스트 후 기존 세이브 데이터가 손상되지 않았는지 확인 |
