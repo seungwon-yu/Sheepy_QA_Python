@@ -16,6 +16,7 @@
 6. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
 7. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
 8. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
+9. CI 관련 변경 전 `docs/ci.md`를 확인한다.
 
 ## 저장소 지도
 
@@ -25,6 +26,7 @@
 - `src/sheepy_qa/screen_capture.py`: 화면 캡처 유틸.
 - `src/sheepy_qa/evidence.py`: evidence 디렉터리와 JSON 저장 유틸.
 - `tests/unit/`: 실제 게임 실행 없이 검증 가능한 기본 유틸 테스트.
+- `.github/workflows/ci.yml`: GitHub Actions 단위 테스트 workflow.
 - `docs/`: 테스트 기준, TC 분류, 컨벤션 문서.
 
 ## 테스트 설계 규칙
@@ -52,3 +54,7 @@ pytest
 ```
 
 실제 Steam 게임을 실행하는 테스트는 별도 표시를 두고, 기본 단위 테스트와 분리한다.
+
+CI에서는 실제 Steam 게임을 실행하지 않는다.
+
+CI는 의존성 설치, import 오류, 기본 유틸 테스트를 확인하는 범위로 제한한다.

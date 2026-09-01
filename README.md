@@ -41,6 +41,7 @@ TC 대분류/소분류 설계
 - `docs/guardrails.md`: 테스트 수행 원칙과 제한사항
 - `docs/code-convention.md`: 코드 작성 컨벤션
 - `docs/commit-convention.md`: 커밋 메시지 컨벤션
+- `docs/ci.md`: CI 범위와 로컬 QA 범위 구분
 
 ## 프로젝트 구조
 
@@ -56,6 +57,9 @@ Sheepy_QA_Python/
 ├─ tests/
 │  └─ unit/
 ├─ docs/
+├─ .github/
+│  └─ workflows/
+│     └─ ci.yml
 ├─ pyproject.toml
 ├─ pytest.ini
 └─ requirements.txt
@@ -92,6 +96,14 @@ pytest
 ```
 
 현재 단위 테스트는 실제 Steam 게임을 실행하지 않고, 실행 명령 생성, 프로세스 상태 판단, evidence 파일 저장 같은 기본 유틸을 먼저 검증합니다.
+
+## CI
+
+GitHub Actions CI는 실제 Steam 게임을 실행하지 않습니다.
+
+CI는 Python 의존성 설치, import 오류, 기본 유틸 테스트가 깨지지 않았는지 확인하는 용도입니다.
+
+실제 Sheepy 실행, 게임 화면 캡처, 키보드 입력 반응 확인은 로컬 QA에서 수행합니다.
 
 ## 현재 상태
 
