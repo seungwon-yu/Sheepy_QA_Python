@@ -15,10 +15,11 @@
 5. `docs/traceability-matrix.md`에서 기준, 대분류, 소분류, TC 연결을 확인한다.
 6. `docs/sprint-strategy.md`에서 Sprint를 나눈 기준과 ISTQB 연결 근거를 확인한다.
 7. `docs/sprint-plan.md`에서 Sprint별 실행 순서와 개별 실행 스크립트를 확인한다.
-8. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
-9. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
-10. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
-11. CI 관련 변경 전 `docs/ci.md`를 확인한다.
+8. `docs/progress.md`에서 현재 완료 범위와 다음 작업 후보를 확인한다.
+9. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
+10. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
+11. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
+12. CI 관련 변경 전 `docs/ci.md`를 확인한다.
 
 ## 저장소 지도
 
@@ -27,6 +28,7 @@
 - `src/sheepy_qa/steam_environment.py`: Steam 실행 환경 snapshot 생성.
 - `src/sheepy_qa/process_check.py`: 프로세스 상태 관찰 유틸.
 - `src/sheepy_qa/screen_capture.py`: 화면 캡처 유틸.
+- `src/sheepy_qa/image_analysis.py`: screenshot 밝기와 픽셀 분포 분석 유틸.
 - `src/sheepy_qa/wait.py`: 로컬 자동화용 제한 시간 대기 유틸.
 - `src/sheepy_qa/local_test_config.py`: 로컬 Steam 테스트 실행 플래그.
 - `src/sheepy_qa/evidence.py`: evidence 디렉터리와 JSON 저장 유틸.
@@ -86,4 +88,6 @@ Windows PowerShell에서는 다음 스크립트로 같은 흐름을 실행할 �
 .\scripts\run_tc_002_sheepy_launch.ps1
 .\scripts\run_tc_003_process_detection.ps1
 .\scripts\run_tc_004_initial_screenshot.ps1
+.\scripts\run_tc_005_black_screen_check.ps1
+.\scripts\run_sprint_2_screen_state.ps1
 ```

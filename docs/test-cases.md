@@ -106,8 +106,21 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 사전조건 | TC-004 screenshot이 저장되어야 한다 |
 | 절차 | screenshot의 평균 밝기 또는 픽셀 분포를 분석한다 |
 | 기대결과 | 화면이 완전 검은 상태로만 유지되지 않아야 한다 |
-| Evidence | screenshot.png, image-analysis.json |
+| Evidence | screenshot.png, image-analysis.json, screen-state.json, process-state.json, execution-log.json |
 | 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_005_black_screen_check.ps1` |
+
+판단 기준:
+
+- `averageBrightness`가 검은 화면 기준값보다 높아야 한다.
+- `darkPixelRatio`가 대부분의 화면이 검은 픽셀임을 나타내지 않아야 한다.
+- `uniqueSampledColorCount`가 화면 변화 또는 시각 정보가 있음을 보여야 한다.
+
+현재 제한:
+
+- 전체 화면 screenshot을 분석하므로, 게임 창 포커스가 다른 창에 가려진 경우 `ENV_FAIL` 또는 `REVIEW_REQUIRED` 검토가 필요하다.
+- 메인 메뉴의 정확한 문구나 버튼 식별은 아직 수행하지 않는다.
 
 ### TC-006 기본 입력 반응 확인
 

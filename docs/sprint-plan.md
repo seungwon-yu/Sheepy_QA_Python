@@ -43,7 +43,7 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 
 | TC | 대분류 | 목적 |
 | --- | --- | --- |
-| TC-005 검은 화면 여부 확인 | 화면/그래픽 표시 | screenshot이 장시간 검은 화면인지 확인 |
+| TC-005 검은 화면 여부 확인 | 화면/그래픽 표시 | screenshot이 검은 화면 상태인지 확인 |
 | TC-009 메인 메뉴 진입 확인 | 메인 화면 및 초기 진입 | 초기 화면이 메뉴 또는 진행 가능한 화면인지 확인 |
 
 예상 evidence:
@@ -51,6 +51,20 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 - screenshot.png
 - image-analysis.json
 - screen-state.json
+
+현재 구현된 Sprint 2 실행:
+
+```powershell
+.\scripts\run_sprint_2_screen_state.ps1
+```
+
+개별 실행:
+
+```powershell
+.\scripts\run_tc_005_black_screen_check.ps1
+```
+
+주의: TC-005는 화면이 완전한 검은 화면인지 판별하는 테스트이다. 아직 메인 메뉴의 특정 로고, 버튼, 문구를 인식하는 테스트는 아니며, TC-009에서 별도 기준을 세운 뒤 확장한다.
 
 ## Sprint 3: 입력 반응
 
