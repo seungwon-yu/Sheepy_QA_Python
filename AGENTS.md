@@ -13,10 +13,11 @@
 3. `docs/test-classification.md`에서 TC 대분류와 소분류 기준을 확인한다.
 4. `docs/test-cases.md`에서 개별 TC를 확인한다.
 5. `docs/traceability-matrix.md`에서 기준, 대분류, 소분류, TC 연결을 확인한다.
-6. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
-7. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
-8. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
-9. CI 관련 변경 전 `docs/ci.md`를 확인한다.
+6. `docs/sprint-plan.md`에서 Sprint별 실행 순서와 개별 실행 스크립트를 확인한다.
+7. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
+8. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
+9. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
+10. CI 관련 변경 전 `docs/ci.md`를 확인한다.
 
 ## 저장소 지도
 
@@ -30,6 +31,7 @@
 - `src/sheepy_qa/evidence.py`: evidence 디렉터리와 JSON 저장 유틸.
 - `tests/unit/`: 실제 게임 실행 없이 검증 가능한 기본 유틸 테스트.
 - `tests/local/`: 실제 Steam과 Sheepy 실행이 필요한 로컬 전용 테스트.
+- `scripts/`: 로컬 테스트 실행 스크립트.
 - `.github/workflows/ci.yml`: GitHub Actions 단위 테스트 workflow.
 - `docs/`: 테스트 기준, TC 분류, 컨벤션 문서.
 
@@ -68,4 +70,19 @@ CI는 의존성 설치, import 오류, 기본 유틸 테스트를 확인하는 �
 ```bash
 $env:SHEEPY_RUN_STEAM_TESTS = "1"
 pytest tests/local
+```
+
+Windows PowerShell에서는 다음 스크립트로 같은 흐름을 실행할 수 있다.
+
+```powershell
+.\scripts\run_local_steam_tests.ps1
+```
+
+개별 TC는 다음 스크립트로 하나씩 실행한다.
+
+```powershell
+.\scripts\run_tc_001_steam_environment.ps1
+.\scripts\run_tc_002_sheepy_launch.ps1
+.\scripts\run_tc_003_process_detection.ps1
+.\scripts\run_tc_004_initial_screenshot.ps1
 ```

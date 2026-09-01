@@ -12,6 +12,7 @@ from sheepy_qa.wait import waitUntil
 pytestmark = pytest.mark.local_steam
 
 
+@pytest.mark.tc_001
 def test_tc_001_steam_environment_is_available() -> None:
     if not shouldRunSteamTests():
         pytest.skip("Set SHEEPY_RUN_STEAM_TESTS=1 to run local Steam QA tests.")
@@ -24,6 +25,7 @@ def test_tc_001_steam_environment_is_available() -> None:
     assert isSteamAvailable(snapshot) is True
 
 
+@pytest.mark.tc_002
 def test_tc_002_sheepy_appid_launch_command_is_called() -> None:
     if not shouldRunSteamTests():
         pytest.skip("Set SHEEPY_RUN_STEAM_TESTS=1 to run local Steam QA tests.")
@@ -37,6 +39,7 @@ def test_tc_002_sheepy_appid_launch_command_is_called() -> None:
     assert "steam://run/1568400" in launchCommand.command
 
 
+@pytest.mark.tc_003
 def test_tc_003_sheepy_process_is_detected_after_launch() -> None:
     if not shouldRunSteamTests():
         pytest.skip("Set SHEEPY_RUN_STEAM_TESTS=1 to run local Steam QA tests.")
@@ -54,6 +57,7 @@ def test_tc_003_sheepy_process_is_detected_after_launch() -> None:
     assert matched is True
 
 
+@pytest.mark.tc_004
 def test_tc_004_initial_screen_screenshot_is_saved() -> None:
     if not shouldRunSteamTests():
         pytest.skip("Set SHEEPY_RUN_STEAM_TESTS=1 to run local Steam QA tests.")

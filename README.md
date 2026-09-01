@@ -39,6 +39,7 @@ TC 대분류/소분류 설계
 - `docs/test-cases.md`: 전체 TC 목록과 상세 분류
 - `docs/traceability-matrix.md`: 기준, 대분류, 소분류, TC 연결표
 - `docs/guardrails.md`: 테스트 수행 원칙과 제한사항
+- `docs/sprint-plan.md`: Sprint별 자동화 진행 순서와 개별 실행 단위
 - `docs/code-convention.md`: 코드 작성 컨벤션
 - `docs/commit-convention.md`: 커밋 메시지 컨벤션
 - `docs/ci.md`: CI 범위와 로컬 QA 범위 구분
@@ -117,6 +118,21 @@ pytest
 ```bash
 $env:SHEEPY_RUN_STEAM_TESTS = "1"
 pytest tests/local
+```
+
+또는 Windows PowerShell에서 아래 스크립트로 한 번에 실행할 수 있습니다.
+
+```powershell
+.\scripts\run_local_steam_tests.ps1
+```
+
+각 TC는 다음 스크립트로 하나씩 실행할 수 있습니다.
+
+```powershell
+.\scripts\run_tc_001_steam_environment.ps1
+.\scripts\run_tc_002_sheepy_launch.ps1
+.\scripts\run_tc_003_process_detection.ps1
+.\scripts\run_tc_004_initial_screenshot.ps1
 ```
 
 현재 로컬 Steam 테스트는 `TC-001`부터 `TC-004`까지의 실행 환경, AppID 실행, 프로세스 감지, 초기 화면 screenshot 저장을 대상으로 합니다.

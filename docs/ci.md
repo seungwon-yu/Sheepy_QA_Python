@@ -61,6 +61,12 @@ pytest 결과 artifact 업로드
 
 CI에서는 이 환경 변수를 설정하지 않으므로 실제 Steam 실행 테스트는 수행하지 않는다.
 
+로컬 Steam 테스트는 Windows PowerShell에서 다음 스크립트로 실행한다.
+
+```powershell
+.\scripts\run_local_steam_tests.ps1
+```
+
 ## 실패 해석 기준
 
 CI 실패는 곧바로 게임 제품 버그를 의미하지 않는다.

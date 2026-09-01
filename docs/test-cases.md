@@ -25,6 +25,12 @@
 
 ## Sprint 1 TC
 
+Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
+
+각 TC는 독립 실행 가능한 자동화 단위로 나누며, 앞 단계가 안정적으로 확인된 뒤 다음 단계로 넘어간다.
+
+상세 Sprint 순서는 `docs/sprint-plan.md`를 따른다.
+
 ### TC-001 Steam 실행 환경 확인
 
 | 항목 | 내용 |
@@ -39,6 +45,7 @@
 | Evidence | process-state.json, execution-log.txt |
 | 실패 분류 후보 | ENV_FAIL |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_001_steam_environment.ps1` |
 
 ### TC-002 Sheepy AppID 실행 시도
 
@@ -54,6 +61,7 @@
 | Evidence | execution-log.txt, process-state.json |
 | 실패 분류 후보 | ENV_FAIL, REVIEW_REQUIRED |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_002_sheepy_launch.ps1` |
 
 ### TC-003 게임 프로세스 감지
 
@@ -69,6 +77,7 @@
 | Evidence | process-state.json, timestamp.txt |
 | 실패 분류 후보 | ENV_FAIL, PRODUCT_FAIL, REVIEW_REQUIRED |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_003_process_detection.ps1` |
 
 ### TC-004 초기 화면 스크린샷 저장
 
@@ -84,6 +93,7 @@
 | Evidence | screenshot.png, screen-metadata.json |
 | 실패 분류 후보 | ENV_FAIL, TEST_FAIL |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_004_initial_screenshot.ps1` |
 
 ### TC-005 검은 화면 여부 확인
 
