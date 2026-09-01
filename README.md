@@ -40,6 +40,7 @@ TC 대분류/소분류 설계
 - `docs/traceability-matrix.md`: 기준, 대분류, 소분류, TC 연결표
 - `docs/guardrails.md`: 테스트 수행 원칙과 제한사항
 - `docs/sprint-plan.md`: Sprint별 자동화 진행 순서와 개별 실행 단위
+- `docs/sprint-strategy.md`: Sprint를 나눈 기준과 ISTQB 연결 근거
 - `docs/code-convention.md`: 코드 작성 컨벤션
 - `docs/commit-convention.md`: 커밋 메시지 컨벤션
 - `docs/ci.md`: CI 범위와 로컬 QA 범위 구분

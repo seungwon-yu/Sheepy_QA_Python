@@ -8,6 +8,8 @@
 
 따라서 게임 진입부터 게임 진행까지 한 번에 묶지 않고, 각 Sprint와 TC를 독립적으로 실행할 수 있게 나눈다.
 
+Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
+
 ## 진행 원칙
 
 1. 한 Sprint는 하나의 주요 QA 목적을 가진다.

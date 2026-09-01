@@ -13,11 +13,12 @@
 3. `docs/test-classification.md`에서 TC 대분류와 소분류 기준을 확인한다.
 4. `docs/test-cases.md`에서 개별 TC를 확인한다.
 5. `docs/traceability-matrix.md`에서 기준, 대분류, 소분류, TC 연결을 확인한다.
-6. `docs/sprint-plan.md`에서 Sprint별 실행 순서와 개별 실행 스크립트를 확인한다.
-7. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
-8. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
-9. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
-10. CI 관련 변경 전 `docs/ci.md`를 확인한다.
+6. `docs/sprint-strategy.md`에서 Sprint를 나눈 기준과 ISTQB 연결 근거를 확인한다.
+7. `docs/sprint-plan.md`에서 Sprint별 실행 순서와 개별 실행 스크립트를 확인한다.
+8. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
+9. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
+10. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
+11. CI 관련 변경 전 `docs/ci.md`를 확인한다.
 
 ## 저장소 지도
 
