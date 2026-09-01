@@ -39,6 +39,27 @@ TC 대분류/소분류 설계
 - `docs/test-cases.md`: 전체 TC 목록과 상세 분류
 - `docs/traceability-matrix.md`: 기준, 대분류, 소분류, TC 연결표
 - `docs/guardrails.md`: 테스트 수행 원칙과 제한사항
+- `docs/code-convention.md`: 코드 작성 컨벤션
+- `docs/commit-convention.md`: 커밋 메시지 컨벤션
+
+## 프로젝트 구조
+
+```text
+Sheepy_QA_Python/
+├─ src/
+│  └─ sheepy_qa/
+│     ├─ config.py
+│     ├─ steam_app.py
+│     ├─ process_check.py
+│     ├─ screen_capture.py
+│     └─ evidence.py
+├─ tests/
+│  └─ unit/
+├─ docs/
+├─ pyproject.toml
+├─ pytest.ini
+└─ requirements.txt
+```
 
 ## 초기 TC 대분류
 
@@ -63,8 +84,17 @@ TC 대분류/소분류 설계
 - `opencv-python`: 화면 이미지 비교
 - `psutil`: 프로세스 상태 확인
 
+## 로컬 테스트
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
+현재 단위 테스트는 실제 Steam 게임을 실행하지 않고, 실행 명령 생성, 프로세스 상태 판단, evidence 파일 저장 같은 기본 유틸을 먼저 검증합니다.
+
 ## 현재 상태
 
-문서 기반 테스트 설계 초기 구조를 작성한 상태입니다.
+문서 기반 테스트 설계와 Python 자동화 기본 구조를 작성한 상태입니다.
 
-아직 자동화 코드는 구현하지 않았습니다.
+아직 실제 Sheepy 실행 자동화 테스트는 구현하지 않았습니다.

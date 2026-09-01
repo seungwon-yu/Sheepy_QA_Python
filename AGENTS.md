@@ -14,6 +14,18 @@
 4. `docs/test-cases.md`에서 개별 TC를 확인한다.
 5. `docs/traceability-matrix.md`에서 기준, 대분류, 소분류, TC 연결을 확인한다.
 6. `docs/guardrails.md`에서 테스트 수행 제한사항을 확인한다.
+7. 코드를 수정하기 전에 `docs/code-convention.md`를 확인한다.
+8. 커밋하기 전에 `docs/commit-convention.md`를 확인한다.
+
+## 저장소 지도
+
+- `src/sheepy_qa/config.py`: Sheepy AppID와 공통 설정.
+- `src/sheepy_qa/steam_app.py`: Steam AppID 실행 명령 생성.
+- `src/sheepy_qa/process_check.py`: 프로세스 상태 관찰 유틸.
+- `src/sheepy_qa/screen_capture.py`: 화면 캡처 유틸.
+- `src/sheepy_qa/evidence.py`: evidence 디렉터리와 JSON 저장 유틸.
+- `tests/unit/`: 실제 게임 실행 없이 검증 가능한 기본 유틸 테스트.
+- `docs/`: 테스트 기준, TC 분류, 컨벤션 문서.
 
 ## 테스트 설계 규칙
 
@@ -32,3 +44,11 @@ TC는 반드시 대분류와 소분류에 연결한다.
 먼저 일반 Python 자동화 QA로 실행, 화면, 입력, evidence 수집을 구현한다.
 
 반복 코드나 불안정한 대기가 늘어나는 시점에 하네스와 루프의 필요성을 문서로 비교한다.
+
+## 검증 명령
+
+```bash
+pytest
+```
+
+실제 Steam 게임을 실행하는 테스트는 별도 표시를 두고, 기본 단위 테스트와 분리한다.

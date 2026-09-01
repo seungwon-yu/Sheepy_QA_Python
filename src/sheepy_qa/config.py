@@ -1,0 +1,6 @@
+"""Shared configuration for Sheepy QA automation."""
+
+SHEEPY_APP_ID = "1568400"
+STEAM_RUN_URI = f"steam://run/{SHEEPY_APP_ID}"
+DEFAULT_LAUNCH_TIMEOUT_SECONDS = 30
+DEFAULT_STABILITY_SECONDS = 30

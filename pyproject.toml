@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sheepy-qa-python"
+version = "0.1.0"
+description = "Python automation QA project for Sheepy: A Short Adventure"
+requires-python = ">=3.11"
+dependencies = [
+  "pillow>=10.4.0",
+  "psutil>=6.0.0",
+  "pytest>=8.3.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
