@@ -57,6 +57,10 @@ pytest 결과 artifact 업로드
 | CI | 코드 오류, import 오류, 유틸 테스트 실패 확인 |
 | 로컬 QA | Steam 실행, 실제 게임 화면, 입력 반응, screenshot evidence 확인 |
 
+기본 `pytest` 실행 시 로컬 Steam 테스트는 `SHEEPY_RUN_STEAM_TESTS=1`이 없으면 skip된다.
+
+CI에서는 이 환경 변수를 설정하지 않으므로 실제 Steam 실행 테스트는 수행하지 않는다.
+
 ## 실패 해석 기준
 
 CI 실패는 곧바로 게임 제품 버그를 의미하지 않는다.

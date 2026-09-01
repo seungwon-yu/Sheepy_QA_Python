@@ -51,11 +51,15 @@ Sheepy_QA_Python/
 │  └─ sheepy_qa/
 │     ├─ config.py
 │     ├─ steam_app.py
+│     ├─ steam_environment.py
 │     ├─ process_check.py
 │     ├─ screen_capture.py
+│     ├─ wait.py
+│     ├─ local_test_config.py
 │     └─ evidence.py
 ├─ tests/
-│  └─ unit/
+│  ├─ unit/
+│  └─ local/
 ├─ docs/
 ├─ .github/
 │  └─ workflows/
@@ -97,6 +101,26 @@ pytest
 
 현재 단위 테스트는 실제 Steam 게임을 실행하지 않고, 실행 명령 생성, 프로세스 상태 판단, evidence 파일 저장 같은 기본 유틸을 먼저 검증합니다.
 
+## 로컬 Steam 테스트
+
+실제 Steam과 Sheepy 실행이 필요한 테스트는 기본 `pytest`에서는 skip됩니다.
+
+로컬에서 실제 게임 테스트를 실행하려면 다음 조건이 필요합니다.
+
+- Steam 설치
+- Steam 로그인
+- Sheepy 설치
+- GUI 화면 세션
+
+실행 명령:
+
+```bash
+$env:SHEEPY_RUN_STEAM_TESTS = "1"
+pytest tests/local
+```
+
+현재 로컬 Steam 테스트는 `TC-001`부터 `TC-004`까지의 실행 환경, AppID 실행, 프로세스 감지, 초기 화면 screenshot 저장을 대상으로 합니다.
+
 ## CI
 
 GitHub Actions CI는 실제 Steam 게임을 실행하지 않습니다.
@@ -109,4 +133,4 @@ CI는 Python 의존성 설치, import 오류, 기본 유틸 테스트가 깨지�
 
 문서 기반 테스트 설계와 Python 자동화 기본 구조를 작성한 상태입니다.
 
-아직 실제 Sheepy 실행 자동화 테스트는 구현하지 않았습니다.
+실제 Steam 실행이 필요한 `TC-001`부터 `TC-004`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.

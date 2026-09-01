@@ -38,6 +38,7 @@
 | 기대결과 | Steam 실행 또는 Steam 프로세스 확인이 가능해야 한다 |
 | Evidence | process-state.json, execution-log.txt |
 | 실패 분류 후보 | ENV_FAIL |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
 
 ### TC-002 Sheepy AppID 실행 시도
 
@@ -52,6 +53,7 @@
 | 기대결과 | 실행 명령이 오류 없이 호출되어야 한다 |
 | Evidence | execution-log.txt, process-state.json |
 | 실패 분류 후보 | ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
 
 ### TC-003 게임 프로세스 감지
 
@@ -66,6 +68,7 @@
 | 기대결과 | 지정 시간 안에 게임 프로세스가 실행 상태로 확인되어야 한다 |
 | Evidence | process-state.json, timestamp.txt |
 | 실패 분류 후보 | ENV_FAIL, PRODUCT_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
 
 ### TC-004 초기 화면 스크린샷 저장
 
@@ -80,6 +83,7 @@
 | 기대결과 | screenshot 파일이 생성되고 파일 크기가 0보다 커야 한다 |
 | Evidence | screenshot.png, screen-metadata.json |
 | 실패 분류 후보 | ENV_FAIL, TEST_FAIL |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
 
 ### TC-005 검은 화면 여부 확인
 

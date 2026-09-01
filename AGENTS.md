@@ -22,10 +22,14 @@
 
 - `src/sheepy_qa/config.py`: Sheepy AppID와 공통 설정.
 - `src/sheepy_qa/steam_app.py`: Steam AppID 실행 명령 생성.
+- `src/sheepy_qa/steam_environment.py`: Steam 실행 환경 snapshot 생성.
 - `src/sheepy_qa/process_check.py`: 프로세스 상태 관찰 유틸.
 - `src/sheepy_qa/screen_capture.py`: 화면 캡처 유틸.
+- `src/sheepy_qa/wait.py`: 로컬 자동화용 제한 시간 대기 유틸.
+- `src/sheepy_qa/local_test_config.py`: 로컬 Steam 테스트 실행 플래그.
 - `src/sheepy_qa/evidence.py`: evidence 디렉터리와 JSON 저장 유틸.
 - `tests/unit/`: 실제 게임 실행 없이 검증 가능한 기본 유틸 테스트.
+- `tests/local/`: 실제 Steam과 Sheepy 실행이 필요한 로컬 전용 테스트.
 - `.github/workflows/ci.yml`: GitHub Actions 단위 테스트 workflow.
 - `docs/`: 테스트 기준, TC 분류, 컨벤션 문서.
 
@@ -58,3 +62,10 @@ pytest
 CI에서는 실제 Steam 게임을 실행하지 않는다.
 
 CI는 의존성 설치, import 오류, 기본 유틸 테스트를 확인하는 범위로 제한한다.
+
+로컬 Steam 테스트 실행 명령은 다음과 같다.
+
+```bash
+$env:SHEEPY_RUN_STEAM_TESTS = "1"
+pytest tests/local
+```

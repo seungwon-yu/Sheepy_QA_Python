@@ -8,6 +8,11 @@ coverage/
 htmlcov/
 artifacts/
 local-notes/
+drafts/
+notes/
+*.draft.md
+*.local.md
+*.private.md
 .env
 .env.*
 !.env.example
