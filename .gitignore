@@ -1,0 +1,16 @@
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+dist/
+build/
+coverage/
+htmlcov/
+artifacts/
+local-notes/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
