@@ -151,6 +151,20 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 기대결과 | 입력 전후 화면 차이가 기준값 이상이어야 한다 |
 | Evidence | before-input.png, after-input.png, image-diff.json |
 | 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_006_basic_action_input.ps1` |
+
+판단 기준:
+
+- 테스트 대상 창이 `SheepyAShortAdventure.exe` foreground 상태여야 한다.
+- 입력 전 무입력 대기 화면 변화량과 입력 후 화면 변화량을 분리해서 비교한다.
+- 입력 후 변화량이 무입력 변화량보다 충분히 커야 입력 반응으로 판단한다.
+- 언어 선택 이후 화면이 아닌 상태에서 실행되면 제품 실패가 아니라 `REVIEW_REQUIRED`로 기록한다.
+
+현재 제한:
+
+- Space 입력은 화면을 다음 상태로 진행시킬 수 있으므로 Sprint 4 통합 실행에서는 마지막에 실행한다.
+- 현재는 이미지 차이 기반 반응만 확인하며, 캐릭터 좌표나 게임 내부 상태는 읽지 않는다.
 
 ### TC-007 짧은 실행 안정성 확인
 
@@ -195,6 +209,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | TC-015 기존 플레이 상태 식별 | TC-GROUP-03 | TC-03-B | 세이브 데이터가 있는 기존 진입 상태 확인 |
 | TC-016 세이브 상태 보존 확인 | 저장/로드 | 후속 확장 | 테스트 후 기존 세이브 데이터가 손상되지 않았는지 확인 |
 | TC-017 언어 선택 입력 반응 확인 | TC-GROUP-04 | TC-04-D | 언어 선택 화면에서 선택 입력 후 화면 전환 확인 |
+| TC-018 언어 선택 이후 화면 상태 확인 | TC-GROUP-03 | TC-03-E | 언어 선택 완료 후 화면 상태 캡처와 분류 |
 
 ## 다음 Sprint 후보: 언어 선택 화면
 
@@ -243,3 +258,55 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 - 최초 실행 유저라면 언어 선택 입력은 첫 진입 흐름의 필수 단계일 가능성이 높다.
 - 기존 플레이 유저라면 언어 선택 화면이 재노출되는 설계인지 먼저 확인해야 한다.
 - 기존 플레이 유저에게 언어 선택 화면이 나오지 않는다면 이 TC는 `PLAYER-NEW` 전용 TC로 분리한다.
+
+## Sprint 4 TC: 언어 선택 이후 화면과 입력 반응
+
+### TC-018 언어 선택 이후 화면 상태 확인
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
+| 소분류 | TC-03-E 언어 선택 이후 화면 |
+| 테스트 베이시스 | 언어 선택 입력 이후 다음 화면이 표시되어야 함 |
+| 테스트 조건 | 현재 게임 화면이 언어 선택 이후 화면인지 캡처하고 분류한다 |
+| 사전조건 | Sheepy가 실행 중이고 언어 선택이 완료된 상태여야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
+| 절차 | 게임 창 탐지, 창 단독 screenshot 저장, 이미지 분석, 언어 선택 화면 특징 재검사, 이후 화면 분류 |
+| 기대결과 | 화면이 검은 화면이 아니고 언어 선택 화면 특징이 남아 있지 않으며, 충분한 시각 정보가 있어야 한다 |
+| Evidence | post-language-screen.png, screen-analysis.json, language-screen-analysis.json, post-language-screen.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_018_post_language_screen.ps1` |
+
+판단 기준:
+
+- `post-language-screen.json.screenState`가 `POST_LANGUAGE_SCREEN`이어야 한다.
+- `screen-analysis.json.uniqueSampledColorCount`가 10보다 커야 한다.
+- `language-screen-analysis.json.isLanguageSelectionLike`가 `false`여야 한다.
+- `screen-analysis.json.isMostlyBlack`이 `false`여야 한다.
+- 언어 선택 화면이 다시 감지되면 사전조건 불충족 가능성이 있으므로 `REVIEW_REQUIRED`로 남긴다.
+
+### TC-011 이동 입력 반응
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-04 입력 반응 |
+| 소분류 | TC-04-A 이동 입력 |
+| 테스트 베이시스 | 2D 플랫폼 게임은 좌우 이동 입력 반응이 핵심 조작 중 하나임 |
+| 테스트 조건 | 좌우 입력 전후 화면 변화가 무입력 상태 변화보다 명확한지 확인한다 |
+| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 화면이 표시되어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
+| 절차 | 입력 전 screenshot 저장, 무입력 대기 screenshot 저장, 좌우 입력, 입력 후 screenshot 저장, 이미지 차이 비교 |
+| 기대결과 | 입력 후 변화량이 무입력 변화량보다 기준값 이상 커야 한다 |
+| Evidence | before-movement-input.png, idle-movement-input.png, after-movement-input.png, idle-diff.json, input-diff.json, input-log.json, foreground-window.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_011_movement_input.ps1` |
+
+판단 기준:
+
+- 테스트 대상 창이 `SheepyAShortAdventure.exe` foreground 상태여야 한다.
+- 사전 화면은 `POST_LANGUAGE_SCREEN`으로 분류되어야 한다.
+- `input-log.json.inputChangeDelta`가 `0.005` 이상이어야 한다.
+- 입력 후 화면이 완전히 동일하면 이상 신호로 기록한다.
+- 사전 화면이 언어 선택 화면 또는 검은 화면이면 제품 실패로 단정하지 않고 `REVIEW_REQUIRED`로 남긴다.

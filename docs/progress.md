@@ -48,6 +48,18 @@
 - `judgement.json`을 저장해 테스트 동작 수행 여부, 기대 신호, 이상 신호, 차단 조건을 분리해서 기록한다.
 - `scripts/run_sprint_3_language_selection.ps1`로 Sprint 3만 별도 실행할 수 있게 했다.
 
+### Sprint 4: 언어 선택 이후 화면과 입력 반응
+
+- TC-018 언어 선택 이후 화면 상태 확인을 구현했다.
+- TC-006 기본 액션 입력 반응 확인을 구현했다.
+- TC-011 이동 입력 반응 확인을 구현했다.
+- `src/sheepy_qa/post_language_screen.py`에서 언어 선택 이후 화면을 `POST_LANGUAGE_SCREEN`, `LANGUAGE_SELECTION_SCREEN`, `BLACK_SCREEN`, `REVIEW_REQUIRED`로 분류한다.
+- 입력 반응은 무입력 대기 변화량과 입력 후 변화량을 분리해서 비교한다.
+- `foreground-window.json`을 저장해 입력 대상이 Sheepy 창인지 확인한다.
+- `idle-diff.json`, `input-diff.json`, `input-log.json`을 저장해 입력 반응 판단 근거를 남긴다.
+- `scripts/run_sprint_4_input_response.ps1`로 Sprint 4만 별도 실행할 수 있게 했다.
+- Space 입력은 화면을 다음 상태로 진행시킬 수 있으므로 Sprint 4 통합 실행에서는 TC-006을 마지막에 둔다.
+
 ### 플레이어 상태 분리 기준
 
 - 최초 실행 유저와 기존 플레이 유저는 사전조건과 기대결과가 달라질 수 있으므로 별도 조건 축으로 분리했다.
@@ -59,7 +71,7 @@
 기본 테스트:
 
 ```text
-23 passed, 7 skipped
+26 passed, 10 skipped
 ```
 
 Sprint 1 로컬 테스트:
@@ -86,6 +98,21 @@ Sprint 3 로컬 테스트:
 2 passed
 ```
 
+Sprint 4 로컬 테스트:
+
+```text
+첫 실행: 2 passed, 1 xfailed
+재실행: 3 xfailed
+```
+
+Sprint 4 결과 해석:
+
+- `TC-018`은 언어 선택 이후 화면이 관찰되었을 때 PASS했다.
+- `TC-006`은 Space 입력 후 무입력 대비 화면 변화량이 커서 PASS했다.
+- `TC-011`은 앞선 Space 입력 이후 화면 상태가 바뀌어 사전조건이 맞지 않아 `REVIEW_REQUIRED`로 기록되었다.
+- 재실행 시 현재 화면이 다시 언어 선택 화면으로 분류되어 TC-018, TC-011, TC-006 모두 `REVIEW_REQUIRED`로 기록되었다.
+- 이 결과는 하네스 없이 일반 자동화로 진행할 때 테스트 간 상태 오염과 사전조건 관리가 중요하다는 근거로 사용한다.
+
 TC-009 실행 evidence:
 
 ```text
@@ -110,6 +137,17 @@ artifacts/evidence/2026-09-03T12-40-54.232+00-00-TC-009
 artifacts/evidence/2026-09-03T12-41-00.046+00-00-TC-017
 ```
 
+Sprint 4 실행 evidence:
+
+```text
+artifacts/evidence/2026-09-03T12-58-12.753+00-00-TC-018
+artifacts/evidence/2026-09-03T12-58-16.627+00-00-TC-006
+artifacts/evidence/2026-09-03T12-58-22.702+00-00-TC-011
+artifacts/evidence/2026-09-03T13-01-54.948+00-00-TC-018
+artifacts/evidence/2026-09-03T13-01-59.149+00-00-TC-011
+artifacts/evidence/2026-09-03T13-02-03.651+00-00-TC-006
+```
+
 공통 저장 파일:
 
 - 모든 구현 TC는 `judgement.json`을 저장한다.
@@ -118,14 +156,16 @@ artifacts/evidence/2026-09-03T12-41-00.046+00-00-TC-017
 
 ## 다음 작업 후보
 
-1. TC-006 기본 입력 반응 확인 구현
-2. TC-007 짧은 실행 안정성 확인 구현
+1. TC-007 짧은 실행 안정성 확인 구현
+2. TC-012 프리즈 감지 구현
 3. 사람이 보기 좋은 Markdown 실행 요약 리포트 생성 검토
 4. TC-014, TC-015, TC-016으로 최초 실행 유저와 기존 플레이 유저 상태 분리
+5. Sprint 4 입력 TC가 상태 오염 없이 반복 실행되도록 사전조건 복구 또는 하네스 필요성 검토
 
 ## 현재 주의할 점
 
 - TC-005는 전체 화면 screenshot을 분석하므로 게임 창이 다른 창에 가려지면 판단이 부정확할 수 있다.
 - TC-009와 TC-017은 Sheepy 창 탐지 후 창 단독 screenshot 캡처를 우선 사용한다.
+- TC-018, TC-006, TC-011은 언어 선택 이후 화면을 사전조건으로 하며, 언어 선택 화면이 다시 감지되면 `REVIEW_REQUIRED`로 기록한다.
 - 아직 UI 텍스트 OCR, 메인 메뉴 판별, 세이브 상태별 분리 자동화는 구현하지 않았다.
 - 하네스와 루프는 아직 적용하지 않는다. 반복 코드와 불안정한 대기가 누적되는 시점에 필요성을 비교한다.
