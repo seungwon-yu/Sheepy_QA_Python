@@ -62,6 +62,13 @@
 - `scripts/run_sprint_4_input_response.ps1`로 Sprint 4만 별도 실행할 수 있게 했다.
 - Space 입력은 화면을 다음 상태로 진행시킬 수 있으므로 Sprint 4 통합 실행에서는 TC-006을 마지막에 둔다.
 
+### Sprint 5: 기본 플레이 진입
+
+- TC-010 로비 CTA를 통한 플레이 화면 진입 확인을 구현했다.
+- `src/sheepy_qa/gameplay_screen.py`에서 입력 후 화면을 `GAMEPLAY_SCREEN_CANDIDATE`, `LOBBY_MENU_SCREEN`, `LANGUAGE_SELECTION_SCREEN`, `BLACK_SCREEN`, `REVIEW_REQUIRED`로 분류한다.
+- 로비 CTA가 입력 후 사라졌는지, 로비 대비 화면 변화량이 충분한지, 언어 선택 화면이나 검은 화면이 아닌지를 판단 근거로 기록한다.
+- 현재 선택된 CTA에 Enter를 보내므로 `Continue` 선택 상태에서는 기존 플레이 유저 흐름으로 진입할 수 있다.
+
 ### 플레이어 상태 분리 기준
 
 - 최초 실행 유저와 기존 플레이 유저는 사전조건과 기대결과가 달라질 수 있으므로 별도 조건 축으로 분리했다.
@@ -108,6 +115,12 @@ Sprint 4 로컬 테스트:
 TC-019 개별 실행: 1 passed
 ```
 
+TC-010 로컬 테스트:
+
+```text
+1 passed
+```
+
 Sprint 4 결과 해석:
 
 - `TC-018`은 언어 선택 이후 화면이 관찰되었을 때 PASS했다.
@@ -116,6 +129,12 @@ Sprint 4 결과 해석:
 - `TC-011`은 앞선 Space 입력 이후 화면 상태가 바뀌어 사전조건이 맞지 않아 `REVIEW_REQUIRED`로 기록되었다.
 - 재실행 시 현재 화면이 다시 언어 선택 화면으로 분류되어 TC-018, TC-011, TC-006 모두 `REVIEW_REQUIRED`로 기록되었다.
 - 이 결과는 하네스 없이 일반 자동화로 진행할 때 테스트 간 상태 오염과 사전조건 관리가 중요하다는 근거로 사용한다.
+
+TC-010 결과 해석:
+
+- 입력 전 로비 상태는 `LOBBY_MENU_WITH_CONTINUE_AND_START`였다.
+- 선택된 진입 CTA 힌트는 `Continue`였고, 플레이어 상태 힌트는 `PLAYER-RETURNING`이었다.
+- Enter 입력 후 로비 CTA가 사라졌고, 화면 변화량 `0.5194`가 관찰되어 `GAMEPLAY_SCREEN_CANDIDATE`로 PASS했다.
 
 TC-009 실행 evidence:
 
@@ -151,6 +170,7 @@ artifacts/evidence/2026-09-03T13-01-54.948+00-00-TC-018
 artifacts/evidence/2026-09-03T13-01-59.149+00-00-TC-011
 artifacts/evidence/2026-09-03T13-02-03.651+00-00-TC-006
 artifacts/evidence/2026-09-03T13-10-38.635+00-00-TC-019
+artifacts/evidence/2026-09-03T13-21-42.859+00-00-TC-010
 ```
 
 공통 저장 파일:
@@ -173,5 +193,6 @@ artifacts/evidence/2026-09-03T13-10-38.635+00-00-TC-019
 - TC-009와 TC-017은 Sheepy 창 탐지 후 창 단독 screenshot 캡처를 우선 사용한다.
 - TC-018, TC-006, TC-011은 언어 선택 이후 화면을 사전조건으로 하며, 언어 선택 화면이 다시 감지되면 `REVIEW_REQUIRED`로 기록한다.
 - TC-019는 OCR 없이 후보 영역의 이미지 신호로 Continue와 Start Your Journey를 판별하므로 UI 배치 변경 시 기준 재검토가 필요하다.
+- TC-010은 플레이 화면 후보 진입까지만 확인하며, 실제 조작 가능 여부는 후속 TC에서 확인한다.
 - 아직 UI 텍스트 OCR, 메인 메뉴 판별, 세이브 상태별 분리 자동화는 구현하지 않았다.
 - 하네스와 루프는 아직 적용하지 않는다. 반복 코드와 불안정한 대기가 누적되는 시점에 필요성을 비교한다.

@@ -342,3 +342,36 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 - OCR을 사용하지 않고 화면 내 예상 CTA 영역의 밝기와 텍스트 후보 픽셀 비율로 판별한다.
 - 따라서 버튼 문구를 실제 텍스트로 읽는 것은 아니며, 로비 UI 배치가 크게 바뀌면 기준 재검토가 필요하다.
 - 이 TC는 로비 CTA 표시 상태를 확인하는 테스트이고, 어떤 CTA를 선택해 실제 플레이로 진입하는지는 후속 TC에서 다룬다.
+
+## Sprint 5 TC: 기본 플레이 진입
+
+### TC-010 로비 CTA를 통한 플레이 화면 진입 확인
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-05 기본 플레이 흐름 |
+| 소분류 | TC-05-A 새 게임 시작 |
+| 테스트 베이시스 | 로비 화면에서 Continue 또는 Start Your Journey를 선택하면 실제 플레이 화면으로 진입해야 함 |
+| 테스트 조건 | 로비 CTA 선택 입력 후 로비 화면이 사라지고 플레이 화면 후보로 전환되는지 확인한다 |
+| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN, Continue 감지 시 PLAYER-RETURNING 힌트 기록 |
+| 절차 | 로비 screenshot 저장, CTA 표시 확인, Enter 입력, 입력 후 screenshot 저장, 로비 CTA 잔류 여부와 화면 변화량 확인 |
+| 기대결과 | 로비 CTA가 더 이상 관찰되지 않고 화면 변화량이 기준값 이상이며 플레이 화면 후보로 분류되어야 한다 |
+| Evidence | before-gameplay-entry.png, after-gameplay-entry.png, before-lobby-menu-analysis.json, after-lobby-menu-analysis.json, transition-diff.json, gameplay-screen.json, entry-input-log.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_010_gameplay_entry.ps1` |
+
+판단 기준:
+
+- 입력 전 화면에서 Continue 또는 Start Your Journey가 관찰되어야 한다.
+- Enter 입력 후 `gameplay-screen.json.screenState`가 `GAMEPLAY_SCREEN_CANDIDATE`여야 한다.
+- 로비 대비 입력 후 화면 변화량이 `0.05` 이상이어야 한다.
+- 입력 후 언어 선택 화면 또는 검은 화면이 아니어야 한다.
+- 입력 후 Continue 또는 Start Your Journey CTA가 남아 있으면 플레이 진입으로 판단하지 않는다.
+
+현재 제한:
+
+- 현재 자동화는 선택된 CTA를 직접 읽지 않고, 로비에서 Enter를 눌러 현재 선택 상태로 진입한다.
+- `Continue`가 선택된 상태에서는 기존 플레이 유저 흐름으로 진입할 수 있으므로 `entry-input-log.json`에 `PLAYER-RETURNING` 힌트를 남긴다.
+- 이 TC는 플레이 화면 후보 진입까지만 확인하며, 실제 조작 가능한 상태인지는 후속 입력/안정성 TC에서 확인한다.

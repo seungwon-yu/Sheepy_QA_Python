@@ -177,14 +177,25 @@ Sprint 1 evidence 공통 항목:
 
 ## Sprint 5: 기본 플레이 흐름
 
-목표: 게임 시작 후 짧은 플레이 구간이 진행 가능한지 확인한다.
+목표: 로비에서 실제 플레이 화면으로 진입하고, 짧은 플레이 구간이 진행 가능한지 확인한다.
 
 후보 TC:
 
 | TC | 대분류 | 목적 |
 | --- | --- | --- |
-| TC-010 새 게임 시작 확인 | 기본 플레이 흐름 | 초기 화면에서 플레이 상태 진입 |
+| TC-010 로비 CTA를 통한 플레이 화면 진입 확인 | 기본 플레이 흐름 | Continue 또는 Start Your Journey 선택 후 플레이 화면 후보 진입 |
 | 신규 TC 기본 이동 흐름 | 기본 플레이 흐름 | 짧은 이동/점프 조합 수행 |
+
+현재 구현된 Sprint 5 개별 실행:
+
+```powershell
+.\scripts\run_tc_010_gameplay_entry.ps1
+```
+
+주의:
+
+- 현재 TC-010은 `Start Your Journey`를 강제로 선택하지 않고, 현재 선택된 로비 CTA에 Enter를 입력한다.
+- `Continue`가 선택된 상태라면 기존 플레이 유저 흐름으로 진입할 수 있으므로 evidence에 `PLAYER-RETURNING` 힌트를 기록한다.
 
 ## Sprint 5.5: 플레이어 상태 분리
 
