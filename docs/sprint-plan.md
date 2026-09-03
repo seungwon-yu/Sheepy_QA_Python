@@ -226,12 +226,14 @@ Sprint 1 evidence 공통 항목:
 
 ```powershell
 .\scripts\run_tc_007_short_stability.ps1
+.\scripts\run_tc_012_freeze_detection.ps1
 ```
 
 주의:
 
 - TC-007은 프로세스 유지와 주기적 screenshot 저장 여부를 확인한다.
-- TC-012는 화면 변화가 멈췄는지를 별도 기준으로 판단한다.
+- TC-012는 연속 screenshot 비교로 화면 변화가 멈췄는지를 별도 기준으로 판단한다.
+- 정적 화면 가능성이 있으면 제품 프리즈로 단정하지 않고 `REVIEW_REQUIRED`로 남긴다.
 
 ## Sprint 7: Evidence와 리포트
 

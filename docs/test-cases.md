@@ -390,3 +390,33 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 - 현재 자동화는 선택된 CTA를 직접 읽지 않고, 로비에서 Enter를 눌러 현재 선택 상태로 진입한다.
 - `Continue`가 선택된 상태에서는 기존 플레이 유저 흐름으로 진입할 수 있으므로 `entry-input-log.json`에 `PLAYER-RETURNING` 힌트를 남긴다.
 - 이 TC는 플레이 화면 후보 진입까지만 확인하며, 실제 조작 가능한 상태인지는 후속 입력/안정성 TC에서 확인한다.
+
+### TC-012 프리즈 감지
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-07 안정성/크래시/프리즈 |
+| 소분류 | TC-07-B 프리즈 감지 |
+| 테스트 베이시스 | 실행 중 게임 화면이 장시간 정지하면 플레이 진행에 직접적인 영향을 준다 |
+| 테스트 조건 | 일정 시간 동안 연속 screenshot을 저장하고 화면 변화가 관찰되는지 확인한다 |
+| 사전조건 | Sheepy가 실행 중이고 게임 창이 관찰 가능해야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
+| 절차 | 일정 간격으로 screenshot 저장, 연속 screenshot 쌍 이미지 비교, 변화 샘플 수 요약 |
+| 기대결과 | 비교 가능한 screenshot 쌍이 있고, 관찰 중 화면 변화가 1회 이상 확인되어야 한다 |
+| Evidence | freeze-sample-*.png, freeze-diff-*.json, freeze-samples.json, freeze-summary.json, final-process-state.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_012_freeze_detection.ps1` |
+
+판단 기준:
+
+- 비교 가능한 screenshot 쌍이 1개 이상 있어야 한다.
+- 연속 screenshot 비교에서 기준값 이상의 화면 변화가 1회 이상 있어야 한다.
+- 관찰 종료 시 Sheepy 프로세스가 유지되어야 한다.
+- 변화가 거의 없더라도 현재 장면이 정적 화면일 수 있으므로, 근거가 부족하면 제품 프리즈로 단정하지 않고 `REVIEW_REQUIRED`로 남긴다.
+
+현재 제한:
+
+- 내부 FPS, 렌더 스레드, 게임 엔진 상태는 직접 읽지 않는다.
+- 화면이 의도적으로 정적인 메뉴나 컷신일 경우 이미지 변화가 작을 수 있다.
+- 조작 후 프리즈 여부는 후속 입력 기반 안정성 TC에서 확장한다.

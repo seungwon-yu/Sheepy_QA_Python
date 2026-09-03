@@ -36,6 +36,7 @@
 - `src/sheepy_qa/lobby_menu.py`: 로비 CTA 버튼 상태 분석 유틸.
 - `src/sheepy_qa/gameplay_screen.py`: 플레이 화면 후보 분류 유틸.
 - `src/sheepy_qa/stability.py`: 짧은 안정성 관찰 결과 요약 유틸.
+- `src/sheepy_qa/freeze_detection.py`: 연속 screenshot 기반 프리즈 감지 요약 유틸.
 - `src/sheepy_qa/image_diff.py`: 입력 전후 screenshot 차이 분석 유틸.
 - `src/sheepy_qa/keyboard_input.py`: 로컬 키보드 입력 전송 유틸.
 - `src/sheepy_qa/window_state.py`: foreground window 기록 유틸.
@@ -103,6 +104,7 @@ Windows PowerShell에서는 다음 스크립트로 같은 흐름을 실행할 �
 .\scripts\run_tc_007_short_stability.ps1
 .\scripts\run_tc_009_language_selection_screen.ps1
 .\scripts\run_tc_010_gameplay_entry.ps1
+.\scripts\run_tc_012_freeze_detection.ps1
 .\scripts\run_tc_017_language_selection_input.ps1
 .\scripts\run_tc_018_post_language_screen.ps1
 .\scripts\run_tc_019_lobby_menu_options.ps1
