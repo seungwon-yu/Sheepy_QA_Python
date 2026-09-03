@@ -18,6 +18,7 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 4. 실패하면 제품 문제로 단정하지 않고 evidence를 먼저 확인한다.
 5. 하네스와 루프는 초기 Sprint에 넣지 않고, 일반 자동화의 한계를 확인한 뒤 비교 대상으로 도입한다.
 6. 최초 실행 유저와 기존 플레이 유저처럼 사전조건과 기대결과가 달라지는 경우 플레이어 상태를 별도 조건으로 기록한다.
+7. 모든 구현 TC는 `judgement.json`에 테스트 동작 수행 여부, 기대 신호, 이상 신호, 차단 조건을 분리해 기록한다.
 
 ## Sprint 1: 실행 환경과 초기 진입
 
@@ -36,6 +37,11 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 .\scripts\run_sprint_1_initial_entry.ps1
 ```
 
+Sprint 1 evidence 공통 항목:
+
+- process-state.json 또는 screen-metadata.json
+- judgement.json
+
 ## Sprint 2: 화면 상태 판별
 
 목표: 단순 screenshot 저장을 넘어, 화면이 테스트 가능한 상태인지 판단한다.
@@ -52,6 +58,7 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 - screenshot.png
 - image-analysis.json
 - screen-state.json
+- judgement.json
 
 현재 구현된 Sprint 2 실행:
 

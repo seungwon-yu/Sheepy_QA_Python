@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+import psutil
+
 from sheepy_qa.process_check import findProcessesByName, hasRunningProcess
 
 
@@ -22,13 +24,15 @@ def getDefaultSteamPaths() -> list[Path]:
 
 
 def createSteamEnvironmentSnapshot() -> SteamEnvironmentSnapshot:
-    steamProcesses = findProcessesByName(["steam.exe", "steamwebhelper.exe"])
+    steamProcesses = findProcessesByName(["steam", "steam.exe", "steamwebhelper", "steamwebhelper.exe"])
     steamPaths = [path for path in getDefaultSteamPaths() if path.exists()]
+    processPaths = getSteamProcessPaths()
+    allSteamPaths = list(dict.fromkeys([str(path) for path in steamPaths] + processPaths))
 
     return SteamEnvironmentSnapshot(
         steamProcessFound=hasRunningProcess(steamProcesses),
-        steamExecutableFound=len(steamPaths) > 0,
-        steamExecutableCandidates=[str(path) for path in steamPaths],
+        steamExecutableFound=len(allSteamPaths) > 0,
+        steamExecutableCandidates=allSteamPaths,
         steamProcesses=[
             {
                 "name": process.name,
@@ -42,3 +46,21 @@ def createSteamEnvironmentSnapshot() -> SteamEnvironmentSnapshot:
 
 def isSteamAvailable(snapshot: SteamEnvironmentSnapshot) -> bool:
     return snapshot.steamProcessFound or snapshot.steamExecutableFound
+
+
+def getSteamProcessPaths() -> list[str]:
+    paths: list[str] = []
+
+    for process in psutil.process_iter(["name", "exe"]):
+        info = process.info
+        processName = (info.get("name") or "").lower()
+
+        if "steam" not in processName:
+            continue
+
+        processPath = info.get("exe")
+
+        if processPath:
+            paths.append(str(processPath))
+
+    return list(dict.fromkeys(paths))

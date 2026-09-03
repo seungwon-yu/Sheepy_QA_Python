@@ -66,7 +66,7 @@ def classifyScreenState(result: ImageAnalysisResult) -> str:
     if result.isMostlyBlack:
         return "BLACK_SCREEN"
 
-    if result.averageBrightness > 12:
+    if result.averageBrightness > 12 or result.uniqueSampledColorCount > 1:
         return "VISIBLE_SCREEN"
 
     return "REVIEW_REQUIRED"

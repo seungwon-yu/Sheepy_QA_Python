@@ -4,6 +4,8 @@ import ctypes
 from dataclasses import dataclass
 from ctypes import wintypes
 
+import psutil
+
 
 SW_RESTORE = 9
 MOUSEEVENTF_LEFTDOWN = 0x0002
@@ -13,6 +15,8 @@ MOUSEEVENTF_LEFTUP = 0x0004
 @dataclass(frozen=True)
 class WindowSnapshot:
     handle: int
+    processId: int
+    processName: str
     title: str
     left: int
     top: int
@@ -65,6 +69,37 @@ def findWindowByTitleFragments(titleFragments: list[str]) -> WindowSnapshot | No
     return createWindowSnapshot(matchedHandles[0])
 
 
+def findWindowByProcessNameFragments(processNameFragments: list[str]) -> WindowSnapshot | None:
+    user32 = ctypes.windll.user32
+    matchedHandles: list[int] = []
+    loweredFragments = [fragment.lower() for fragment in processNameFragments]
+
+    def enumWindow(windowHandle: int, lparam: int) -> bool:
+        if not user32.IsWindowVisible(windowHandle):
+            return True
+
+        snapshot = createWindowSnapshot(windowHandle)
+
+        if snapshot.width == 0 or snapshot.height == 0:
+            return True
+
+        processName = snapshot.processName.lower()
+
+        if any(fragment in processName for fragment in loweredFragments):
+            matchedHandles.append(windowHandle)
+            return False
+
+        return True
+
+    enumWindowProc = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)(enumWindow)
+    user32.EnumWindows(enumWindowProc, 0)
+
+    if not matchedHandles:
+        return None
+
+    return createWindowSnapshot(matchedHandles[0])
+
+
 def focusWindow(windowHandle: int) -> None:
     user32 = ctypes.windll.user32
     user32.ShowWindow(windowHandle, SW_RESTORE)
@@ -85,6 +120,9 @@ def createWindowSnapshot(windowHandle: int) -> WindowSnapshot:
     rect = wintypes.RECT()
     user32.GetWindowRect(windowHandle, ctypes.byref(rect))
     foregroundHandle = user32.GetForegroundWindow()
+    processId = wintypes.DWORD()
+    user32.GetWindowThreadProcessId(windowHandle, ctypes.byref(processId))
+    processName = getProcessName(processId.value)
     width = max(rect.right - rect.left, 0)
     height = max(rect.bottom - rect.top, 0)
     titleLength = user32.GetWindowTextLengthW(windowHandle)
@@ -93,6 +131,8 @@ def createWindowSnapshot(windowHandle: int) -> WindowSnapshot:
 
     return WindowSnapshot(
         handle=windowHandle,
+        processId=processId.value,
+        processName=processName,
         title=buffer.value,
         left=rect.left,
         top=rect.top,
@@ -102,3 +142,10 @@ def createWindowSnapshot(windowHandle: int) -> WindowSnapshot:
         height=height,
         isForeground=windowHandle == foregroundHandle
     )
+
+
+def getProcessName(processId: int) -> str:
+    try:
+        return psutil.Process(processId).name()
+    except psutil.Error:
+        return ""

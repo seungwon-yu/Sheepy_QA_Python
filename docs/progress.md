@@ -27,6 +27,7 @@
 - TC-002 Sheepy AppID 실행 시도를 구현했다.
 - TC-003 게임 프로세스 감지를 구현했다.
 - TC-004 초기 화면 스크린샷 저장을 구현했다.
+- TC-001부터 TC-004까지 `judgement.json`을 저장해 테스트 동작, 기대 신호, 이상 신호를 분리해서 기록한다.
 - 각 TC를 개별 PowerShell 스크립트로 실행할 수 있게 분리했다.
 
 ### Sprint 2: 화면 상태 판별
@@ -34,6 +35,7 @@
 - TC-005 검은 화면 여부 확인을 구현했다.
 - `src/sheepy_qa/image_analysis.py`에서 screenshot의 평균 밝기, 어두운 픽셀 비율, 샘플 색상 수를 분석한다.
 - `screen-state.json`에 기대결과, 실제결과, 판단 근거, 분석 값을 함께 저장한다.
+- `judgement.json`에 화면 상태 판별의 기대 신호와 검은 화면 지속 여부를 함께 기록한다.
 - Sprint 2 전체 실행 스크립트 `scripts/run_sprint_2_screen_state.ps1`를 추가했다.
 
 ### Sprint 3: 언어 선택 화면과 선택 입력
@@ -57,7 +59,19 @@
 기본 테스트:
 
 ```text
-22 passed, 7 skipped
+23 passed, 7 skipped
+```
+
+Sprint 1 로컬 테스트:
+
+```text
+4 passed
+```
+
+Sprint 2 로컬 테스트:
+
+```text
+1 passed
 ```
 
 로컬 Steam smoke 테스트:
@@ -84,25 +98,23 @@ TC-017 실행 evidence:
 artifacts/evidence/2026-09-03T10-03-31.449+00-00-TC-017
 ```
 
-Sprint 2 로컬 테스트:
+최신 Sprint 1~3 실행 evidence:
 
 ```text
-1 passed
+artifacts/evidence/2026-09-03T12-40-27.744+00-00-TC-001
+artifacts/evidence/2026-09-03T12-40-30.511+00-00-TC-002
+artifacts/evidence/2026-09-03T12-40-30.528+00-00-TC-003
+artifacts/evidence/2026-09-03T12-40-32.102+00-00-TC-004
+artifacts/evidence/2026-09-03T12-40-41.509+00-00-TC-005
+artifacts/evidence/2026-09-03T12-40-54.232+00-00-TC-009
+artifacts/evidence/2026-09-03T12-41-00.046+00-00-TC-017
 ```
 
-TC-005 실행 evidence:
+공통 저장 파일:
 
-```text
-artifacts/evidence/2026-09-01T13-01-10.691+00-00-TC-005
-```
-
-저장된 주요 파일:
-
-- `screenshot.png`
-- `image-analysis.json`
-- `screen-state.json`
-- `process-state.json`
-- `execution-log.json`
+- 모든 구현 TC는 `judgement.json`을 저장한다.
+- TC별로 `process-state.json`, `execution-log.json`, screenshot, image analysis, image diff 등이 함께 저장된다.
+- `judgement.json`은 테스트 동작 수행 여부, 기대 신호, 이상 신호, 차단 조건을 분리해서 기록한다.
 
 ## 다음 작업 후보
 

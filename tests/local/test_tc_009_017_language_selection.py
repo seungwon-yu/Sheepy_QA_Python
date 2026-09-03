@@ -14,7 +14,7 @@ from sheepy_qa.process_check import findProcessesByName, hasRunningProcess
 from sheepy_qa.screen_capture import captureScreenshot, captureWindowScreenshot
 from sheepy_qa.steam_app import SteamApp
 from sheepy_qa.wait import waitUntil
-from sheepy_qa.window_state import clickWindowTitleArea, findWindowByTitleFragments, focusWindow, getForegroundWindowTitle
+from sheepy_qa.window_state import clickWindowTitleArea, findWindowByProcessNameFragments, focusWindow, getForegroundWindowTitle
 
 
 pytestmark = pytest.mark.local_steam
@@ -37,7 +37,7 @@ def launchAndWaitForSheepy(writer: EvidenceWriter, runDir: Path) -> bool:
 
 
 def focusSheepyWindow(writer: EvidenceWriter, runDir: Path):
-    window = findWindowByTitleFragments(["sheepy"])
+    window = findWindowByProcessNameFragments(["sheepyashortadventure"])
     writer.writeJson(
         runDir,
         "window-search.json",
@@ -52,12 +52,12 @@ def focusSheepyWindow(writer: EvidenceWriter, runDir: Path):
 
     focusWindow(window.handle)
     time.sleep(1)
-    focusedWindow = findWindowByTitleFragments(["sheepy"])
+    focusedWindow = findWindowByProcessNameFragments(["sheepyashortadventure"])
 
     if focusedWindow is not None and focusedWindow.isForeground is False:
         clickWindowTitleArea(focusedWindow)
         time.sleep(1)
-        focusedWindow = findWindowByTitleFragments(["sheepy"])
+        focusedWindow = findWindowByProcessNameFragments(["sheepyashortadventure"])
 
     writer.writeJson(runDir, "focused-window.json", focusedWindow)
     return focusedWindow
@@ -110,6 +110,13 @@ def test_tc_009_language_selection_screen_is_visible() -> None:
                 actual=analysisResult.centralDarkPixelRatio,
                 passed=analysisResult.centralDarkPixelRatio >= 0.5,
                 evidenceKey="language-screen-analysis.json.centralDarkPixelRatio"
+            ),
+            JudgementCondition(
+                name="전체 화면의 어두운 배경 비율",
+                expected="0.7 이상",
+                actual=screenAnalysisResult.darkPixelRatio,
+                passed=screenAnalysisResult.darkPixelRatio >= 0.7,
+                evidenceKey="screen-analysis.json.darkPixelRatio"
             )
         ],
         forbiddenSignals=[
@@ -131,10 +138,17 @@ def test_tc_009_language_selection_screen_is_visible() -> None:
             ),
             JudgementCondition(
                 name="screenshot capture target",
-                expected="SHEEPY_WINDOW 또는 언어 선택 화면이 보이는 FULL_SCREEN_FALLBACK",
+                expected="SheepyAShortAdventure.exe window",
                 actual=captureTarget,
-                passed=captureTarget == "SHEEPY_WINDOW" or analysisResult.isLanguageSelectionLike,
+                passed=captureTarget == "SHEEPY_WINDOW" and window.processName.lower() == "sheepyashortadventure.exe",
                 evidenceKey="language-selection-screen.png"
+            ),
+            JudgementCondition(
+                name="PLAYER-UNKNOWN 언어 선택 화면 적용 가능성",
+                expected="언어 선택 화면이 표시되는 상태",
+                actual=analysisResult.isLanguageSelectionLike,
+                passed=analysisResult.isLanguageSelectionLike,
+                evidenceKey="language-screen-analysis.json.isLanguageSelectionLike"
             )
         ]
     )
@@ -165,7 +179,7 @@ def test_tc_017_language_selection_enter_input_changes_screen() -> None:
 
     beforeLanguageAnalysis = analyzeLanguageSelectionScreen(beforeImagePath)
     beforeWindowTitle = getForegroundWindowTitle()
-    inputTargetConfirmed = window.isForeground and "sheepy" in window.title.lower()
+    inputTargetConfirmed = window.isForeground and window.processName.lower() == "sheepyashortadventure.exe"
 
     if inputTargetConfirmed:
         pressEnter()
@@ -246,6 +260,7 @@ def test_tc_017_language_selection_enter_input_changes_screen() -> None:
                 actual={
                     "beforeWindowTitle": beforeWindowTitle,
                     "sheepyWindowTitle": window.title,
+                    "sheepyProcessName": window.processName,
                     "isSheepyForeground": window.isForeground,
                     "isLanguageSelectionLike": beforeLanguageAnalysis.isLanguageSelectionLike
                 },

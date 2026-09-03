@@ -73,6 +73,16 @@ AND 사전조건 충족 여부
 
 각 TC는 가능하면 `judgement.json`을 저장한다.
 
+이 기준은 Sprint 3 전용이 아니라 전체 Sprint에 공통 적용한다.
+
+현재 적용 범위:
+
+| Sprint | TC | 적용 상태 |
+| --- | --- | --- |
+| Sprint 1 | TC-001, TC-002, TC-003, TC-004 | 적용 |
+| Sprint 2 | TC-005 | 적용 |
+| Sprint 3 | TC-009, TC-017 | 적용 |
+
 기본 구조:
 
 ```json
@@ -130,3 +140,4 @@ Sheepy 창이 foreground가 아니면 입력을 전송하지 않고 REVIEW_REQUI
 - PASS를 만들기 위해 assertion을 완화하지 않는다.
 - 관찰 방식이 잘못된 경우 제품 FAIL로 단정하지 않고 REVIEW_REQUIRED로 남긴다.
 - 기준값을 변경할 때는 실제 evidence와 변경 이유를 문서에 남긴다.
+- 검은 배경이 많은 화면이라도 UI, 텍스트, 아이콘 같은 시각 정보가 있으면 검은 화면으로 단정하지 않는다.

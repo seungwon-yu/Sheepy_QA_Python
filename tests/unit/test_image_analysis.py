@@ -35,6 +35,23 @@ def test_analyze_image_detects_visible_screen(tmp_path: Path) -> None:
     assert classifyScreenState(result) == "VISIBLE_SCREEN"
 
 
+def test_analyze_image_detects_dark_screen_with_visible_ui(tmp_path: Path) -> None:
+    imagePath = tmp_path / "dark-visible.png"
+    image = Image.new("RGB", (64, 64), (0, 0, 0))
+
+    for x in range(24, 40):
+        for y in range(24, 40):
+            image.putpixel((x, y), (255, 0, 0))
+
+    image.save(imagePath)
+
+    result = analyzeImage(imagePath, sampleStep=1)
+
+    assert result.averageBrightness < 12
+    assert result.isMostlyBlack is False
+    assert classifyScreenState(result) == "VISIBLE_SCREEN"
+
+
 def test_analyze_image_rejects_invalid_sample_step(tmp_path: Path) -> None:
     imagePath = saveImage(tmp_path / "sample.png", (255, 255, 255))
 

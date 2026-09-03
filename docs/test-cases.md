@@ -52,7 +52,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | Steam 프로세스 또는 실행 경로를 확인한다 |
 | 기대결과 | Steam 실행 또는 Steam 프로세스 확인이 가능해야 한다 |
-| Evidence | process-state.json, execution-log.txt |
+| Evidence | process-state.json, judgement.json |
 | 실패 분류 후보 | ENV_FAIL |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
 | 개별 실행 | `scripts/run_tc_001_steam_environment.ps1` |
@@ -69,7 +69,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | steam://run/1568400 또는 Steam 실행 명령을 호출한다 |
 | 기대결과 | 실행 명령이 오류 없이 호출되어야 한다 |
-| Evidence | execution-log.txt, process-state.json |
+| Evidence | execution-log.json, judgement.json |
 | 실패 분류 후보 | ENV_FAIL, REVIEW_REQUIRED |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
 | 개별 실행 | `scripts/run_tc_002_sheepy_launch.ps1` |
@@ -86,7 +86,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 일정 시간 동안 프로세스 목록을 확인한다 |
 | 기대결과 | 지정 시간 안에 게임 프로세스가 실행 상태로 확인되어야 한다 |
-| Evidence | process-state.json, timestamp.txt |
+| Evidence | process-state.json, judgement.json |
 | 실패 분류 후보 | ENV_FAIL, PRODUCT_FAIL, REVIEW_REQUIRED |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
 | 개별 실행 | `scripts/run_tc_003_process_detection.ps1` |
@@ -103,7 +103,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 게임 실행 후 지정 대기 시간 뒤 screenshot을 저장한다 |
 | 기대결과 | screenshot 파일이 생성되고 파일 크기가 0보다 커야 한다 |
-| Evidence | screenshot.png, screen-metadata.json |
+| Evidence | screenshot.png, screen-metadata.json, judgement.json |
 | 실패 분류 후보 | ENV_FAIL, TEST_FAIL |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
 | 개별 실행 | `scripts/run_tc_004_initial_screenshot.ps1` |
@@ -120,7 +120,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | screenshot의 평균 밝기 또는 픽셀 분포를 분석한다 |
 | 기대결과 | 화면이 완전 검은 상태로만 유지되지 않아야 한다 |
-| Evidence | screenshot.png, image-analysis.json, screen-state.json, process-state.json, execution-log.json |
+| Evidence | screenshot.png, image-analysis.json, screen-state.json, process-state.json, execution-log.json, judgement.json |
 | 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
 | 자동화 상태 | 로컬 전용 pytest 구현 |
 | 개별 실행 | `scripts/run_tc_005_black_screen_check.ps1` |
@@ -130,6 +130,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 - `averageBrightness`가 검은 화면 기준값보다 높아야 한다.
 - `darkPixelRatio`가 대부분의 화면이 검은 픽셀임을 나타내지 않아야 한다.
 - `uniqueSampledColorCount`가 화면 변화 또는 시각 정보가 있음을 보여야 한다.
+- 언어 선택 화면처럼 배경이 어둡더라도 국기나 텍스트 등 시각 정보가 있으면 검은 화면으로 단정하지 않는다.
 
 현재 제한:
 
