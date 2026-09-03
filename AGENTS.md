@@ -33,6 +33,7 @@
 - `src/sheepy_qa/image_analysis.py`: screenshot 밝기와 픽셀 분포 분석 유틸.
 - `src/sheepy_qa/language_screen.py`: 언어 선택 화면 특징 분석 유틸.
 - `src/sheepy_qa/post_language_screen.py`: 언어 선택 이후 화면 분류 유틸.
+- `src/sheepy_qa/lobby_menu.py`: 로비 CTA 버튼 상태 분석 유틸.
 - `src/sheepy_qa/image_diff.py`: 입력 전후 screenshot 차이 분석 유틸.
 - `src/sheepy_qa/keyboard_input.py`: 로컬 키보드 입력 전송 유틸.
 - `src/sheepy_qa/window_state.py`: foreground window 기록 유틸.
@@ -100,6 +101,7 @@ Windows PowerShell에서는 다음 스크립트로 같은 흐름을 실행할 �
 .\scripts\run_tc_009_language_selection_screen.ps1
 .\scripts\run_tc_017_language_selection_input.ps1
 .\scripts\run_tc_018_post_language_screen.ps1
+.\scripts\run_tc_019_lobby_menu_options.ps1
 .\scripts\run_tc_011_movement_input.ps1
 .\scripts\run_tc_006_basic_action_input.ps1
 .\scripts\run_sprint_1_initial_entry.ps1

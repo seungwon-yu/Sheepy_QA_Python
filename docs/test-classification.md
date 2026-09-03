@@ -71,6 +71,7 @@ ISTQB 기준:
 | TC-03-C | 화면 캡처 | 초기 상태 screenshot evidence 저장 |
 | TC-03-D | 언어 선택 화면 | 최초 진입 또는 설정 초기화 후 언어 선택 화면 표시 |
 | TC-03-E | 언어 선택 이후 화면 | 언어 선택 완료 후 로비 또는 다음 진입 화면 표시 |
+| TC-03-F | 로비 CTA 상태 | Continue, Start Your Journey 같은 진입 선택지 표시 |
 
 ## TC-GROUP-04 입력 반응
 

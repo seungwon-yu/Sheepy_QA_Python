@@ -133,6 +133,7 @@ Sprint 1 evidence 공통 항목:
 | TC | 대분류 | 목적 |
 | --- | --- | --- |
 | TC-018 언어 선택 이후 화면 상태 확인 | 메인 화면 및 초기 진입 | 언어 선택 완료 후 화면을 캡처하고 분류 |
+| TC-019 로비 CTA 버튼 상태 확인 | 메인 화면 및 초기 진입 | Continue와 Start Your Journey 표시 여부 확인 |
 | TC-006 기본 입력 반응 확인 | 입력 반응 | 점프 입력 전후 화면 변화 확인 |
 | TC-011 이동 입력 반응 | 입력 반응 | 좌우 입력 전후 화면 변화 확인 |
 
@@ -144,6 +145,7 @@ Sprint 1 evidence 공통 항목:
 - screen-analysis.json
 - language-screen-analysis.json
 - post-language-screen.json
+- lobby-menu-analysis.json
 - idle-diff.json
 - input-diff.json
 - input-log.json
@@ -160,6 +162,7 @@ Sprint 1 evidence 공통 항목:
 
 ```powershell
 .\scripts\run_tc_018_post_language_screen.ps1
+.\scripts\run_tc_019_lobby_menu_options.ps1
 .\scripts\run_tc_011_movement_input.ps1
 .\scripts\run_tc_006_basic_action_input.ps1
 ```
@@ -167,6 +170,7 @@ Sprint 1 evidence 공통 항목:
 주의:
 
 - Sprint 4는 “언어 선택 이후 화면”을 사전조건으로 한다.
+- TC-019는 로비 CTA 표시 상태를 확인하며, `Continue`와 `Start Your Journey`가 모두 보이면 기존 플레이 유저 가능성을 `PLAYER-RETURNING` 힌트로 기록한다.
 - 현재 화면이 언어 선택 화면이면 제품 FAIL이 아니라 `REVIEW_REQUIRED`로 기록한다.
 - Space 입력은 화면을 다음 상태로 진행시킬 수 있으므로 통합 실행에서는 TC-006을 마지막에 둔다.
 - 이 Sprint는 하네스 없이 일반 자동화로 상태 오염 문제가 생길 수 있음을 관찰하는 기준점이 된다.

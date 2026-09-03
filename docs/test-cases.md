@@ -210,6 +210,7 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | TC-016 세이브 상태 보존 확인 | 저장/로드 | 후속 확장 | 테스트 후 기존 세이브 데이터가 손상되지 않았는지 확인 |
 | TC-017 언어 선택 입력 반응 확인 | TC-GROUP-04 | TC-04-D | 언어 선택 화면에서 선택 입력 후 화면 전환 확인 |
 | TC-018 언어 선택 이후 화면 상태 확인 | TC-GROUP-03 | TC-03-E | 언어 선택 완료 후 화면 상태 캡처와 분류 |
+| TC-019 로비 CTA 버튼 상태 확인 | TC-GROUP-03 | TC-03-F | Continue와 Start Your Journey 표시 여부 확인 |
 
 ## 다음 Sprint 후보: 언어 선택 화면
 
@@ -310,3 +311,34 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 - `input-log.json.inputChangeDelta`가 `0.005` 이상이어야 한다.
 - 입력 후 화면이 완전히 동일하면 이상 신호로 기록한다.
 - 사전 화면이 언어 선택 화면 또는 검은 화면이면 제품 실패로 단정하지 않고 `REVIEW_REQUIRED`로 남긴다.
+
+### TC-019 로비 CTA 버튼 상태 확인
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
+| 소분류 | TC-03-F 로비 CTA 상태 |
+| 테스트 베이시스 | 언어 선택 이후 로비 화면에서 Continue와 Start Your Journey가 표시됨 |
+| 테스트 조건 | 로비 화면의 주요 진입 CTA가 관찰 가능한지 확인한다 |
+| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN, 결과에 따라 PLAYER-RETURNING 힌트 기록 |
+| 절차 | 게임 창 탐지, 창 단독 screenshot 저장, 언어 선택 이후 화면 분류, 왼쪽 메뉴 CTA 후보 영역 분석 |
+| 기대결과 | Continue와 Start Your Journey 후보 영역에서 메뉴 텍스트 신호가 모두 관찰되어야 한다 |
+| Evidence | lobby-menu.png, screen-analysis.json, language-screen-analysis.json, post-language-screen.json, lobby-menu-analysis.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_019_lobby_menu_options.ps1` |
+
+판단 기준:
+
+- `post-language-screen.json.screenState`가 `POST_LANGUAGE_SCREEN`이어야 한다.
+- `lobby-menu-analysis.json.continueVisible`이 `true`여야 한다.
+- `lobby-menu-analysis.json.startJourneyVisible`이 `true`여야 한다.
+- 언어 선택 화면 특징이 남아 있거나 검은 화면이면 이상 신호로 기록한다.
+- `Continue`가 표시되면 기존 플레이 유저 가능성이 있으므로 `playerStateHint`를 `PLAYER-RETURNING`으로 기록한다.
+
+현재 제한:
+
+- OCR을 사용하지 않고 화면 내 예상 CTA 영역의 밝기와 텍스트 후보 픽셀 비율로 판별한다.
+- 따라서 버튼 문구를 실제 텍스트로 읽는 것은 아니며, 로비 UI 배치가 크게 바뀌면 기준 재검토가 필요하다.
+- 이 TC는 로비 CTA 표시 상태를 확인하는 테스트이고, 어떤 CTA를 선택해 실제 플레이로 진입하는지는 후속 TC에서 다룬다.

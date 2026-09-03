@@ -62,6 +62,7 @@ Sheepy_QA_Python/
 │     ├─ image_analysis.py
 │     ├─ language_screen.py
 │     ├─ post_language_screen.py
+│     ├─ lobby_menu.py
 │     ├─ image_diff.py
 │     ├─ keyboard_input.py
 │     ├─ window_state.py
@@ -148,6 +149,7 @@ pytest tests/local
 .\scripts\run_tc_009_language_selection_screen.ps1
 .\scripts\run_tc_017_language_selection_input.ps1
 .\scripts\run_tc_018_post_language_screen.ps1
+.\scripts\run_tc_019_lobby_menu_options.ps1
 .\scripts\run_tc_011_movement_input.ps1
 .\scripts\run_tc_006_basic_action_input.ps1
 ```
@@ -194,4 +196,4 @@ CI는 Python 의존성 설치, import 오류, 기본 유틸 테스트가 깨지�
 
 문서 기반 테스트 설계와 Python 자동화 기본 구조를 작성한 상태입니다.
 
-실제 Steam 실행이 필요한 `TC-001`부터 `TC-005`, `TC-009`, `TC-017`, `TC-018`, `TC-006`, `TC-011`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.
+실제 Steam 실행이 필요한 `TC-001`부터 `TC-005`, `TC-009`, `TC-017`, `TC-018`, `TC-019`, `TC-006`, `TC-011`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.
