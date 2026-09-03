@@ -32,7 +32,7 @@
 | TC-004 | 메인 화면 및 초기 진입 | TC-03-C 화면 캡처 | 관찰 가능한 결과, 그래픽 evidence | High | screenshot 저장 |
 | TC-005 | 화면/그래픽 표시 | TC-06-A 검은 화면 감지 | Graphics Testing, 진행 불가 리스크 | High | screenshot 밝기와 픽셀 분포 분석 |
 | TC-006 | 입력 반응 | TC-04-B 점프 입력 | Controller Testing, 게임 메커닉 | Medium | 입력 전후 이미지 비교 |
-| TC-007 | 안정성/크래시/프리즈 | TC-07-C 짧은 안정성 | 신뢰성, 크래시 리스크 | High | 프로세스 타임라인 |
+| TC-007 | 안정성/크래시/프리즈 | TC-07-C 짧은 안정성 | 신뢰성, 크래시 리스크 | High | 프로세스 타임라인과 주기적 screenshot 저장 |
 | TC-008 | Evidence 및 리포트 | TC-08-A/B/C | 결함 보고, evidence | High | 파일 생성 확인 |
 | TC-009 | 메인 화면 및 초기 진입 | TC-03-D 언어 선택 화면 | 초기 진입 화면, 관찰 가능한 결과 | High | 창 캡처와 언어 선택 UI 이미지 분석 |
 | TC-010 | 기본 플레이 흐름 | TC-05-A 새 게임 시작 | Game Mechanics Testing, 상태 전이 | High | 로비 CTA 입력과 플레이 화면 후보 이미지 분석 |

@@ -180,6 +180,21 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 기대결과 | 프로세스가 비정상 종료되지 않아야 한다 |
 | Evidence | process-timeline.json, screenshots/ |
 | 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_007_short_stability.ps1` |
+
+판단 기준:
+
+- 관찰 샘플이 2개 이상 저장되어야 한다.
+- 모든 관찰 샘플에서 Sheepy 프로세스가 유지되어야 한다.
+- 모든 관찰 샘플에서 screenshot이 저장되어야 한다.
+- 비정상 종료 또는 캡처 실패 샘플이 0개여야 한다.
+
+현재 제한:
+
+- 이 TC는 짧은 실행 안정성만 확인한다.
+- 화면이 멈췄는지 여부는 별도 `TC-012 프리즈 감지`에서 판단한다.
+- 입력 없이 관찰하므로 특정 조작 후 안정성은 후속 TC에서 확장한다.
 
 ### TC-008 실패 evidence 저장 확인
 
