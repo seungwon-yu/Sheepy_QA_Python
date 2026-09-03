@@ -29,7 +29,7 @@ Sprint 분리 기준은 다음과 같다.
 ↓
 화면 관찰
 ↓
-입력 반응
+언어 선택 화면/입력
 ↓
 플레이 흐름
 ↓
@@ -85,7 +85,31 @@ ISTQB 연결:
 | Foundation | 관찰 가능한 기대결과 |
 | Game Testing | Graphics Testing |
 
-## Sprint 3: 입력 반응
+## Sprint 3: 언어 선택 화면과 선택 입력
+
+목표는 현재 관찰된 언어 선택 화면을 테스트 가능한 화면으로 판별하고, 언어 선택 입력이 다음 화면 변화로 이어지는지 확인하는 것이다.
+
+확인 질문:
+
+- 언어 선택 화면으로 볼 수 있는 UI 신호가 있는가?
+- 입력 대상 창이 Sheepy로 확인되는가?
+- Enter 입력 전후 화면 차이가 있는가?
+- 입력 대상 창이 올바르게 활성화되어 있는가?
+
+이 단계가 필요한 이유:
+
+Sheepy는 메인 메뉴 전에 언어 선택 화면이 표시될 수 있다.
+
+따라서 메인 메뉴나 기본 플레이 흐름으로 바로 넘어가기 전에 언어 선택 화면 도달과 선택 입력 반응을 먼저 확인해야 한다.
+
+ISTQB 연결:
+
+| 기준 | 연결 |
+| --- | --- |
+| Foundation | 입력값, 기대결과, 상태 전이 |
+| Game Testing | Game Controllers Testing, UI/초기 진입 리스크 |
+
+## Sprint 4: 기본 입력 반응
 
 목표는 키보드 입력이 게임 화면 변화로 이어지는지 확인하는 것이다.
 
@@ -97,7 +121,7 @@ ISTQB 연결:
 
 이 단계가 필요한 이유:
 
-화면이 준비된 상태를 확인한 뒤에야 입력 반응을 검증할 수 있다.
+언어 선택과 초기 화면 전환이 확인된 뒤에야 플레이 조작 입력을 검증할 수 있다.
 
 ISTQB 연결:
 
@@ -106,7 +130,7 @@ ISTQB 연결:
 | Foundation | 입력값과 기대결과 |
 | Game Testing | Game Controllers Testing, Game Mechanics Testing |
 
-## Sprint 4: 기본 플레이 흐름
+## Sprint 5: 기본 플레이 흐름
 
 목표는 새 게임 시작 후 짧은 플레이 구간이 진행 가능한지 확인하는 것이다.
 
@@ -127,7 +151,7 @@ ISTQB 연결:
 | Foundation | 시나리오 테스트, 상태 전이 |
 | Game Testing | Game Mechanics Testing, Game Level Testing |
 
-## Sprint 5: 안정성 관찰
+## Sprint 6: 안정성 관찰
 
 목표는 게임이 일정 시간 동안 비정상 종료되거나 멈추지 않는지 확인하는 것이다.
 
@@ -148,7 +172,7 @@ ISTQB 연결:
 | Foundation | 리스크 기반 테스트, 신뢰성 |
 | Game Testing | 게임 제품 리스크, 기술 리스크 |
 
-## Sprint 6: Evidence와 리포트
+## Sprint 7: Evidence와 리포트
 
 목표는 각 TC 실행 결과를 사람이 확인하기 좋은 형태로 정리하는 것이다.
 

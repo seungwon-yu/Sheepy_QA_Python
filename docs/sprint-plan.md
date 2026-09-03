@@ -33,7 +33,7 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 전체 Sprint 1 로컬 실행:
 
 ```powershell
-.\scripts\run_local_steam_tests.ps1
+.\scripts\run_sprint_1_initial_entry.ps1
 ```
 
 ## Sprint 2: 화면 상태 판별
@@ -81,15 +81,41 @@ Sprint를 나눈 상세 기준은 `docs/sprint-strategy.md`에 정리한다.
 예상 evidence:
 
 - language-selection-screen.png
+- screen-analysis.json
+- language-screen-analysis.json
 - before-language-input.png
 - after-language-input.png
 - image-diff.json
 - input-log.json
+- foreground-window.json
+- judgement.json
 
 플레이어 상태 기준:
 
 - 언어 선택 화면이 최초 실행 유저에게만 나오는지 아직 확정하지 않는다.
 - 초기 자동화는 `PLAYER-UNKNOWN`으로 실행하고, 반복 실행 결과와 세이브 데이터 기준을 확인한 뒤 `PLAYER-NEW` 전용 TC인지 결정한다.
+
+전체 Sprint 3 로컬 실행:
+
+```powershell
+.\scripts\run_sprint_3_language_selection.ps1
+```
+
+개별 실행:
+
+```powershell
+.\scripts\run_tc_009_language_selection_screen.ps1
+.\scripts\run_tc_017_language_selection_input.ps1
+```
+
+주의: `TC-017`은 실제 Enter 입력을 전송하므로 게임 창 포커스 상태를 evidence로 함께 저장한다.
+
+판단 근거:
+
+- 테스트 동작이 실제로 수행됐는지 기록한다.
+- 언어 선택 화면 후보 개수, 어두운 배경 비율, 채도 픽셀 비율 같은 기대 신호를 기록한다.
+- 검은 화면 지속, 입력 전후 동일 화면 같은 이상 신호를 기록한다.
+- 사전조건이 부족하면 제품 FAIL로 단정하지 않고 REVIEW_REQUIRED로 남긴다.
 
 ## Sprint 4: 기본 입력 반응
 

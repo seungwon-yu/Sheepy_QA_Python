@@ -10,5 +10,5 @@ if (-not (Test-Path ".\.venv\Scripts\python.exe")) {
 Write-Host "Installing dependencies..."
 & ".\.venv\Scripts\python.exe" -m pip install -r requirements.txt
 
-Write-Host "Running local Steam QA tests..."
-& ".\.venv\Scripts\python.exe" -m pytest tests/local
+Write-Host "Running local Steam QA smoke tests..."
+& ".\.venv\Scripts\python.exe" -m pytest tests/local/test_tc_001_004_local_steam.py tests/local/test_tc_005_screen_state.py

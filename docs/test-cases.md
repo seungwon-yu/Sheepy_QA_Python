@@ -24,6 +24,14 @@
 | Evidence | 저장해야 할 증거 |
 | 실패 분류 후보 | 실패 시 우선 검토할 분류 |
 
+각 TC는 구현 시 가능하면 `docs/judgement-basis.md`의 기준에 따라 `judgement.json`을 저장한다.
+
+판단 근거는 다음 세 조건을 분리해서 남긴다.
+
+- 테스트 동작이 실제로 수행됐는가
+- 기대 신호가 정상적으로 발생했는가
+- 발생하면 안 되는 이상 신호가 없었는가
+
 ## Sprint 1 TC
 
 Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
@@ -201,8 +209,10 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 게임 실행, 프로세스 감지, screenshot 저장, 언어 선택 화면 특징 확인 |
 | 기대결과 | 영어, 프랑스어, 스페인어, 중국어, 일본어 중 하나 이상의 언어 선택 UI가 보여야 한다 |
-| Evidence | screenshot.png, screen-state.json, language-screen-analysis.json |
+| Evidence | language-selection-screen.png, screen-analysis.json, language-screen-analysis.json, judgement.json |
 | 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_009_language_selection_screen.ps1` |
 
 플레이어 상태 판단:
 
@@ -222,8 +232,10 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | 플레이어 상태 | PLAYER-UNKNOWN |
 | 절차 | 입력 전 screenshot 저장, 선택 입력 수행, 입력 후 screenshot 저장, 화면 변화 비교 |
 | 기대결과 | 입력 전후 screenshot 차이가 발생하고 다음 화면으로 전환되어야 한다 |
-| Evidence | before-language-input.png, after-language-input.png, image-diff.json, input-log.json |
+| Evidence | before-language-input.png, after-language-input.png, image-diff.json, input-log.json, foreground-window.json, judgement.json |
 | 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_017_language_selection_input.ps1` |
 
 플레이어 상태 판단:
 

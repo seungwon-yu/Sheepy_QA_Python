@@ -42,6 +42,7 @@ TC 대분류/소분류 설계
 - `docs/sprint-plan.md`: Sprint별 자동화 진행 순서와 개별 실행 단위
 - `docs/sprint-strategy.md`: Sprint를 나눈 기준과 ISTQB 연결 근거
 - `docs/player-state-strategy.md`: 최초 실행 유저와 기존 플레이 유저 분리 기준
+- `docs/judgement-basis.md`: PASS/FAIL/REVIEW_REQUIRED 판단 근거 기록 기준
 - `docs/progress.md`: 현재 완료 범위와 다음 작업 후보
 - `docs/code-convention.md`: 코드 작성 컨벤션
 - `docs/commit-convention.md`: 커밋 메시지 컨벤션
@@ -59,6 +60,11 @@ Sheepy_QA_Python/
 │     ├─ process_check.py
 │     ├─ screen_capture.py
 │     ├─ image_analysis.py
+│     ├─ language_screen.py
+│     ├─ image_diff.py
+│     ├─ keyboard_input.py
+│     ├─ window_state.py
+│     ├─ judgement.py
 │     ├─ wait.py
 │     ├─ local_test_config.py
 │     └─ evidence.py
@@ -138,6 +144,14 @@ pytest tests/local
 .\scripts\run_tc_003_process_detection.ps1
 .\scripts\run_tc_004_initial_screenshot.ps1
 .\scripts\run_tc_005_black_screen_check.ps1
+.\scripts\run_tc_009_language_selection_screen.ps1
+.\scripts\run_tc_017_language_selection_input.ps1
+```
+
+Sprint 1 실행 환경과 초기 진입은 다음 스크립트로 실행합니다.
+
+```powershell
+.\scripts\run_sprint_1_initial_entry.ps1
 ```
 
 Sprint 2 화면 상태 판별은 다음 스크립트로 실행합니다.
@@ -146,7 +160,15 @@ Sprint 2 화면 상태 판별은 다음 스크립트로 실행합니다.
 .\scripts\run_sprint_2_screen_state.ps1
 ```
 
-현재 로컬 Steam 테스트는 `TC-001`부터 `TC-005`까지의 실행 환경, AppID 실행, 프로세스 감지, 초기 화면 screenshot 저장, 검은 화면 여부 확인을 대상으로 합니다.
+Sprint 3 언어 선택 화면과 선택 입력은 다음 스크립트로 실행합니다.
+
+```powershell
+.\scripts\run_sprint_3_language_selection.ps1
+```
+
+현재 로컬 Steam smoke 테스트는 `TC-001`부터 `TC-005`까지의 실행 환경, AppID 실행, 프로세스 감지, 초기 화면 screenshot 저장, 검은 화면 여부 확인을 대상으로 합니다.
+
+`TC-017`은 실제 Enter 입력을 전송하므로 Sprint 3 스크립트 또는 개별 TC 스크립트로 명시적으로 실행합니다.
 
 ## CI
 
@@ -160,4 +182,4 @@ CI는 Python 의존성 설치, import 오류, 기본 유틸 테스트가 깨지�
 
 문서 기반 테스트 설계와 Python 자동화 기본 구조를 작성한 상태입니다.
 
-실제 Steam 실행이 필요한 `TC-001`부터 `TC-005`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.
+실제 Steam 실행이 필요한 `TC-001`부터 `TC-005`, `TC-009`, `TC-017`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.
