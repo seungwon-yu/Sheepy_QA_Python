@@ -6,6 +6,35 @@ Steam 게임 `Sheepy: A Short Adventure`를 대상으로 Python 기반 자동화
 
 이후 자동화가 반복되거나 실패 분석이 복잡해지는 지점을 확인한 뒤, 하네스 또는 루프 엔지니어링이 필요한지 비교하는 것을 목표로 합니다.
 
+## 포트폴리오에서 먼저 볼 부분
+
+이 프로젝트는 실제 Steam 게임처럼 내부 상태를 직접 읽기 어려운 대상을 외부 관찰 evidence로 검증하는 포트폴리오입니다.
+
+| 확인 대상 | 파일 |
+| --- | --- |
+| 현재 완료 범위와 실행 결과 | [docs/progress.md](docs/progress.md) |
+| 테스트 케이스 목록 | [docs/test-cases.md](docs/test-cases.md) |
+| 테스트 기준과 TC 연결 | [docs/traceability-matrix.md](docs/traceability-matrix.md) |
+| PASS/FAIL/REVIEW_REQUIRED 판단 기준 | [docs/judgement-basis.md](docs/judgement-basis.md) |
+| 대표 evidence 샘플 | [docs/evidence-samples.md](docs/evidence-samples.md) |
+| 로컬 Python 실행 환경 | [docs/local-environment.md](docs/local-environment.md) |
+| CI와 로컬 QA 범위 구분 | [docs/ci.md](docs/ci.md) |
+
+대표 산출물은 실행 후 `artifacts/evidence/` 아래에 생성됩니다. `artifacts/`는 로컬 실행 결과라 저장소에는 포함하지 않지만, 각 TC 실행 폴더에서 다음 파일을 확인할 수 있습니다.
+
+```text
+artifacts/evidence/<timestamp>-TC-xxx/
+├─ judgement.json
+├─ process-state.json
+├─ execution-log.json
+├─ screen-analysis.json
+├─ image-diff.json
+├─ foreground-window.json
+└─ *.png
+```
+
+`judgement.json`은 테스트 동작 수행 여부, 기대 신호, 이상 신호, 차단 조건을 분리해서 기록합니다. 내부 상태 접근이나 OCR 없이 판단 근거가 부족한 경우에는 제품 결함으로 단정하지 않고 `REVIEW_REQUIRED`로 남기는 것이 핵심 원칙입니다.
+
 ## 프로젝트 기준
 
 이 프로젝트의 테스트 설계 기준은 다음 두 문서를 함께 사용합니다.
@@ -43,6 +72,8 @@ TC 대분류/소분류 설계
 - `docs/sprint-strategy.md`: Sprint를 나눈 기준과 ISTQB 연결 근거
 - `docs/player-state-strategy.md`: 최초 실행 유저와 기존 플레이 유저 분리 기준
 - `docs/judgement-basis.md`: PASS/FAIL/REVIEW_REQUIRED 판단 근거 기록 기준
+- `docs/evidence-samples.md`: 대표 evidence 산출물과 judgement 예시
+- `docs/local-environment.md`: Windows PowerShell 기준 Python 실행 환경과 문제 해결
 - `docs/progress.md`: 현재 완료 범위와 다음 작업 후보
 - `docs/code-convention.md`: 코드 작성 컨벤션
 - `docs/commit-convention.md`: 커밋 메시지 컨벤션
@@ -110,12 +141,28 @@ Sheepy_QA_Python/
 
 ## 로컬 테스트
 
-```bash
-pip install -r requirements.txt
-pytest
+Windows PowerShell 기준 권장 실행 순서입니다.
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pytest
 ```
 
 현재 단위 테스트는 실제 Steam 게임을 실행하지 않고, 실행 명령 생성, 프로세스 상태 판단, evidence 파일 저장 같은 기본 유틸을 먼저 검증합니다.
+
+`py` 런처가 없는 PC에서는 Python 3.11 이상을 설치한 뒤 아래처럼 전체 경로 또는 등록된 실행 파일 이름을 사용합니다.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m pytest
+```
+
+`pytest`를 직접 실행하지 않고 `python -m pytest`를 사용하는 이유는, 가상환경의 Python과 pytest 모듈을 확실하게 연결하기 위해서입니다. 일부 Windows 환경에서는 `pytest` 명령이 PATH에 등록되지 않았거나 Microsoft Store용 `python.exe` 별칭 때문에 실행이 막힐 수 있습니다.
 
 ## 로컬 Steam 테스트
 
@@ -130,9 +177,9 @@ pytest
 
 실행 명령:
 
-```bash
+```powershell
 $env:SHEEPY_RUN_STEAM_TESTS = "1"
-pytest tests/local
+python -m pytest tests/local
 ```
 
 또는 Windows PowerShell에서 아래 스크립트로 한 번에 실행할 수 있습니다.
@@ -153,6 +200,10 @@ pytest tests/local
 .\scripts\run_tc_009_language_selection_screen.ps1
 .\scripts\run_tc_010_gameplay_entry.ps1
 .\scripts\run_tc_012_freeze_detection.ps1
+.\scripts\run_tc_013_first_run_state.ps1
+.\scripts\run_tc_014_returning_state.ps1
+.\scripts\run_tc_015_save_preservation.ps1
+.\scripts\run_tc_016_basic_gameplay_flow.ps1
 .\scripts\run_tc_017_language_selection_input.ps1
 .\scripts\run_tc_018_post_language_screen.ps1
 .\scripts\run_tc_019_lobby_menu_options.ps1
@@ -198,8 +249,21 @@ CI는 Python 의존성 설치, import 오류, 기본 유틸 테스트가 깨지�
 
 실제 Sheepy 실행, 게임 화면 캡처, 키보드 입력 반응 확인은 로컬 QA에서 수행합니다.
 
+## 이미지 기반 판정의 한계와 방어 기준
+
+이 프로젝트는 실제 상용 게임을 대상으로 하므로 테스트 코드가 게임 내부 좌표, 렌더 스레드, UI 텍스트를 직접 읽지 않습니다. 따라서 화면 밝기, 색상 분포, 후보 영역, 입력 전후 이미지 차이 같은 외부 관찰 신호를 사용합니다.
+
+이 방식은 다음 한계를 가집니다.
+
+- 창이 다른 창에 가려지면 screenshot 판정이 왜곡될 수 있습니다.
+- OCR을 사용하지 않으므로 버튼 문구를 텍스트로 직접 검증하지 않습니다.
+- 정적 화면, 컷신, 배경 애니메이션에 따라 이미지 변화량 기준이 흔들릴 수 있습니다.
+- 해상도나 UI 배치가 크게 바뀌면 후보 영역 기준을 재검토해야 합니다.
+
+그래서 자동화 결과는 단순 PASS/FAIL만 남기지 않고 `judgement.json`에 차단 조건과 판단 근거를 함께 저장합니다. 사전조건이나 관찰 근거가 부족하면 `FAIL` 대신 `REVIEW_REQUIRED`로 기록해 제품 결함 오판을 줄입니다.
+
 ## 현재 상태
 
 문서 기반 테스트 설계와 Python 자동화 기본 구조를 작성한 상태입니다.
 
-실제 Steam 실행이 필요한 `TC-001`부터 `TC-007`, `TC-009`, `TC-010`, `TC-011`, `TC-012`, `TC-017`, `TC-018`, `TC-019`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.
+실제 Steam 실행이 필요한 `TC-001`부터 `TC-007`, `TC-009`부터 `TC-019`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.

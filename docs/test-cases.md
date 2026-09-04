@@ -235,6 +235,97 @@ Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
 | --- | --- | --- |
 | Markdown 실행 요약 리포트 생성 | 문서/리포트 작업 | JSON evidence를 사람이 읽기 좋은 Markdown 문서로 변환 |
 
+## Sprint 7 TC: 플레이어 상태, 세이브 보존, 기본 플레이 흐름
+
+### TC-013 최초 실행 상태 식별
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
+| 소분류 | TC-03-A 초기 화면 도달 |
+| 테스트 베이시스 | 세이브 데이터가 없는 최초 실행 유저는 Continue 없이 Start Your Journey 진입 CTA가 보여야 함 |
+| 테스트 조건 | 로비 화면 CTA 신호를 기준으로 최초 실행 유저 후보를 식별한다 |
+| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
+| 플레이어 상태 | PLAYER-NEW |
+| 절차 | 게임 창 탐지, 로비 screenshot 저장, CTA 후보 영역 분석, player-state.json 저장 |
+| 기대결과 | Start Your Journey가 관찰되고 Continue가 관찰되지 않아야 한다 |
+| Evidence | first-run-state.png, lobby-menu-analysis.json, player-state.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_013_first_run_state.ps1` |
+
+현재 제한:
+
+- 세이브 파일을 삭제하거나 수정하지 않는다.
+- 기존 플레이 데이터가 있는 PC에서는 Continue가 표시될 수 있으므로 `PLAYER_NEW` 판단은 실패 또는 검토 대상이 될 수 있다.
+
+### TC-014 기존 플레이 상태 식별
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
+| 소분류 | TC-03-B 메뉴 표시 |
+| 테스트 베이시스 | 세이브 데이터가 있는 기존 플레이 유저는 Continue CTA가 표시될 수 있음 |
+| 테스트 조건 | 로비 화면 CTA 신호를 기준으로 기존 플레이 유저 후보를 식별한다 |
+| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
+| 플레이어 상태 | PLAYER-RETURNING |
+| 절차 | 게임 창 탐지, 로비 screenshot 저장, CTA 후보 영역 분석, player-state.json 저장 |
+| 기대결과 | Continue가 관찰되어야 한다 |
+| Evidence | returning-state.png, lobby-menu-analysis.json, player-state.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_014_returning_state.ps1` |
+
+현재 제한:
+
+- 최초 실행 상태 PC에서는 Continue가 없을 수 있으므로 이 TC는 세이브 상태별 실행 조건을 분리해야 한다.
+- OCR 없이 후보 영역의 이미지 신호로 CTA를 판단한다.
+
+### TC-015 세이브 상태 보존 확인
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | 저장/로드 |
+| 소분류 | 후속 확장 |
+| 테스트 베이시스 | 자동화 테스트는 기존 사용자 세이브 데이터를 손상시키지 않아야 함 |
+| 테스트 조건 | Sheepy 관련 저장 파일 후보를 관찰 전후로 비교한다 |
+| 사전조건 | 관찰 가능한 Sheepy 관련 저장 파일 후보가 있어야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
+| 절차 | 저장 파일 후보 스냅샷, 짧은 대기, 재스냅샷, 누락 파일 비교 |
+| 기대결과 | 관찰 전 존재하던 저장 파일 경로가 관찰 후에도 유지되어야 한다 |
+| Evidence | save-before.json, save-after.json, save-preservation.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_015_save_preservation.ps1` |
+
+현재 제한:
+
+- 저장 파일을 백업, 삭제, 복원하지 않는 비파괴 관찰 테스트이다.
+- 게임이 정상적으로 autosave를 수행할 수 있으므로 파일 수정 시각 변경만으로 실패 처리하지 않는다.
+- 저장 파일 후보를 찾지 못하면 제품 결함으로 단정하지 않고 `REVIEW_REQUIRED`로 기록한다.
+
+### TC-016 기본 이동/점프 플레이 흐름
+
+| 항목 | 내용 |
+| --- | --- |
+| 대분류 | TC-GROUP-05 기본 플레이 흐름 |
+| 소분류 | TC-05-B 기본 이동 흐름 |
+| 테스트 베이시스 | 플레이 화면에서 이동과 점프 입력에 대해 관찰 가능한 반응이 있어야 함 |
+| 테스트 조건 | 플레이 화면 후보에서 이동/점프 입력 전후 화면 변화가 무입력 변화보다 명확한지 확인한다 |
+| 사전조건 | Sheepy가 실행 중이고 플레이 화면 후보 상태여야 한다 |
+| 플레이어 상태 | PLAYER-UNKNOWN |
+| 절차 | 플레이 화면 screenshot 저장, 무입력 대기 screenshot 저장, Right/Left/Space 입력, 입력 후 screenshot 저장, 이미지 차이 비교 |
+| 기대결과 | 입력 후 변화량이 무입력 변화량보다 기준값 이상 커야 한다 |
+| Evidence | before-gameplay-flow.png, idle-gameplay-flow.png, after-gameplay-flow.png, idle-diff.json, input-diff.json, gameplay-flow.json, judgement.json |
+| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, REVIEW_REQUIRED |
+| 자동화 상태 | 로컬 전용 pytest 구현 |
+| 개별 실행 | `scripts/run_tc_016_basic_gameplay_flow.ps1` |
+
+현재 제한:
+
+- 게임 내부 좌표나 캐릭터 상태를 직접 읽지 않고 화면 변화량으로 판단한다.
+- 플레이 화면 후보가 아닌 로비, 언어 선택 화면, 검은 화면에서는 `REVIEW_REQUIRED`로 기록한다.
+
 ## 다음 Sprint 후보: 언어 선택 화면
 
 ### TC-009 언어 선택 화면 도달 확인

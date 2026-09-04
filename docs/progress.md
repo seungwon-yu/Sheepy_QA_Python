@@ -84,6 +84,17 @@
 - `docs/player-state-strategy.md`에 `PLAYER-NEW`, `PLAYER-RETURNING`, `PLAYER-UNKNOWN` 기준을 정리했다.
 - 세이브 파일을 직접 수정하는 테스트는 사용자 데이터 손상 위험이 있으므로, 세이브 경로와 백업/복원 기준 확인 후 후속 Sprint에서 구현한다.
 
+### Sprint 7: 플레이어 상태, 세이브 보존, 기본 플레이 흐름
+
+- TC-013 최초 실행 유저 상태 식별을 구현했다.
+- TC-014 기존 플레이 유저 상태 식별을 구현했다.
+- TC-015 세이브 상태 보존 확인을 구현했다.
+- TC-016 기본 이동/점프 플레이 흐름을 구현했다.
+- `src/sheepy_qa/player_state.py`에서 로비 CTA 신호를 기준으로 `PLAYER_NEW`, `PLAYER_RETURNING`, `PLAYER_UNKNOWN`을 분류한다.
+- `src/sheepy_qa/save_data.py`에서 Sheepy 관련 저장 파일 후보를 비파괴적으로 스냅샷하고, 관찰 전후 누락 여부를 비교한다.
+- `src/sheepy_qa/gameplay_flow.py`에서 플레이 화면 후보 상태와 입력 전후 이미지 변화량을 기준으로 기본 플레이 흐름을 요약한다.
+- 각 TC는 개별 PowerShell 스크립트로 실행할 수 있게 분리했다.
+
 ## 최근 검증 결과
 
 기본 테스트:
@@ -218,14 +229,19 @@ artifacts/evidence/2026-09-03T13-32-09.410+00-00-TC-012
 
 ## 다음 작업 후보
 
-1. TC-008 실패 evidence 저장 확인 구현
-2. TC-013, TC-014, TC-015로 최초 실행 유저와 기존 플레이 유저 상태 분리
-3. TC-016 기본 이동/점프 플레이 흐름 구현
-4. Sprint 4 입력 TC가 상태 오염 없이 반복 실행되도록 사전조건 복구 또는 하네스 필요성 검토
+1. Sprint 4 입력 TC가 상태 오염 없이 반복 실행되도록 사전조건 복구 또는 하네스 필요성 검토
+2. TC-013, TC-014가 같은 PC에서 상호 배타적일 수 있으므로 세이브 상태별 실행 절차를 더 명확히 분리
+3. TC-016이 안정적으로 PASS하도록 플레이 화면 진입 helper 또는 로비 진입 복구 helper 추가
 
 ## 별도 문서 작업 후보
 
 - Markdown 실행 요약 리포트 생성은 제품 동작을 검증하는 TC가 아니므로 TC 번호에서 제외하고 문서/리포트 작업으로 관리한다.
+
+## 포트폴리오 문서 보강
+
+- `README.md`에 포트폴리오에서 먼저 볼 문서, 대표 산출물 구조, Python 가상환경 실행 기준을 추가했다.
+- `docs/evidence-samples.md`에 TC-010, TC-019, TC-012 대표 evidence와 judgement 해석 예시를 정리했다.
+- `docs/local-environment.md`에 Windows PowerShell 기준 `.venv` 생성, `python -m pytest` 실행, Steam 로컬 테스트 조건, Python PATH 문제 해결 기준을 정리했다.
 
 ## 현재 주의할 점
 
