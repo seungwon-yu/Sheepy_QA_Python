@@ -17,7 +17,7 @@
 ## 게임 없는 기준 실행
 
 명령: `.\.venv\Scripts\python.exe -m pytest -q` (SHEEPY_RUN_STEAM_TESTS=0).
-결과: **86 passed, 18 skipped**. 실제 게임 미실행 18개는 통과로 합산하지 않는다. compileall도 통과했다.
+결과: **89 passed, 18 skipped**. 실제 게임 미실행 18개는 통과로 합산하지 않는다. compileall도 통과했다.
 
 단위 테스트는 관찰·판단 함수가 지정된 입력에서 동작하는지를 검증한다. 화면 인식 정확도와 실제 게임 반복 안정성이 검증됐다는 의미가 아니다. 기준 실행 보관본은 artifacts/results/baseline-summary.json에 있다. 최근 선택 실행은 pytest-summary.json에 별도 생성된다.
 

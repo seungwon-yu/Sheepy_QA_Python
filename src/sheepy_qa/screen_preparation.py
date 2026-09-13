@@ -36,14 +36,17 @@ def ensureScreen(
     events = []
     sentFrom = set()
     candidateSince = None
+    loadingObserved = False
     while True:
         current = observe()
         events.append({"elapsed": round(clock() - started, 3), "state": current.state, "foreground": current.foreground})
         if not current.foreground:
             return PreparationResult(False, target, current.state, "대상 창 포커스 또는 캡처 조건 부족", events)
         accepted = {target} if target != "POST_LANGUAGE" else {"POST_LANGUAGE", "LOBBY", "GAMEPLAY"}
+        if current.state == "BLACK" and "LOBBY" in sentFrom:
+            loadingObserved = True
         if target == "GAMEPLAY":
-            if current.state == "GAMEPLAY":
+            if current.state == "GAMEPLAY" and ("LOBBY" not in sentFrom or loadingObserved):
                 if candidateSince is None:
                     candidateSince = clock()
             else:

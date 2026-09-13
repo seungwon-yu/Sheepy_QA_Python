@@ -60,7 +60,7 @@ class LocalScreenSession:
             focusWindow(window.handle)
             time.sleep(0.3)
         try:
-            result = ensureScreen(target, self.observe, self.enter)
+            result = ensureScreen(target, self.observe, self.enter, timeoutSeconds=30)
         except Exception as error:
             from sheepy_qa.screen_preparation import PreparationResult
             result = PreparationResult(False, target, "UNKNOWN", f"관찰/입력 오류: {type(error).__name__}: {error}")
