@@ -7,3 +7,7 @@ GitHub Actions는 Python 의존성 설치와 기본 pytest를 수행한다. 실�
 workflow는 JUnit과 artifacts 전체를 실패 시에도 업로드한다. 원격 실행을 확인하지 않았다면 workflow 파일 구성만 완료로 기록한다. 화면 관찰은 Windows 로컬에서 별도로 수행한다.
 
 현재 문서의 실행 수치와 원격 검증 여부는 [진행 상태](progress.md), [완성도](completion-review.md)를 참조한다.
+
+## 게시 후 원격 검증
+
+2026-09-14: 커밋 `1432086`의 [GitHub Actions 실행](https://github.com/seungwon-yu/Sheepy_QA_Python/actions/runs/34767030568)이 `success`로 완료됐다. `sheepy-qa-python-test-results` artifact 생성 및 미만료 상태를 API로 확인했다. 원격 CI는 실제 Sheepy 게임 플레이 검증을 수행하지 않는다.
