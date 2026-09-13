@@ -1,0 +1,16 @@
+{
+  "detected": true,
+  "initialProcessPresent": true,
+  "elapsedSeconds": 2.0,
+  "samples": [
+    {
+      "elapsedSeconds": 2.0,
+      "detected": true,
+      "processCount": 7,
+      "processNames": [
+        "SheepyAShortAdventure.exe"
+      ]
+    }
+  ],
+  "publicSample": "PID 및 설치 경로 제외; 원본은 로컬 artifacts에 보관"
+}

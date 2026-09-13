@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- | --- |
 | TC-001 | 환경 | Steam 실행/경로 신호 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | PASS ([기동 기록](local-verification.md)) |
 | TC-002 | 실행 | AppID 실행 명령 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | PASS ([기동 기록](local-verification.md)) |
-| TC-003 | 실행 | 프로세스 감지 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | FAIL ([기동 기록](local-verification.md)) |
+| TC-003 | 실행 | 프로세스 감지 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | 수동 실행 후 감지 PASS / 자동 기동 이전 FAIL ([기동 기록](local-verification.md)) |
 | TC-004 | 화면 | 초기 캡처 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 | TC-005 | 화면 | 검은 화면 후보 | [코드](../tests\local\test_tc_005_screen_state.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 | TC-006 | 입력 | Space 시각 반응 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | 수정 후 실제 게임 미실행 |

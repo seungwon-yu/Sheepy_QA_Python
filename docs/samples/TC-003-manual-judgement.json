@@ -1,0 +1,26 @@
+{
+  "result": "PASS",
+  "expectedResult": "SHEEPY_PROCESS_DETECTED",
+  "actualResult": "SHEEPY_PROCESS_DETECTED",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "Sheepy 관련 프로세스 감지",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "process-state.json"
+    }
+  ],
+  "forbiddenSignals": [
+    {
+      "name": "지정 시간 내 프로세스 미감지",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "evidenceKey": "process-state.json"
+    }
+  ],
+  "blockingConditions": [],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}
