@@ -1,83 +1,27 @@
-# 추적 매트릭스
+# 기준→TC→구현→실행 추적
 
-## 목적
+[테스트 기준](test-basis-and-standards.md), [상세 TC](test-cases.md), [최신 결과](progress.md)를 연결한다. 구현과 실제 게임 통과는 다른 상태이다.
 
-이 문서는 테스트 기준, 대분류, 소분류, TC가 어떻게 연결되는지 보여준다.
-
-새 TC를 추가할 때는 반드시 이 문서에 연결 관계를 갱신한다.
-
-## 기준별 대분류 연결
-
-| 기준 | 적용 대분류 |
-| --- | --- |
-| ISTQB Foundation - 테스트 베이시스 | 전체 대분류 |
-| ISTQB Foundation - 테스트 조건 | 전체 대분류 |
-| ISTQB Foundation - 기대결과 | 전체 TC |
-| ISTQB Foundation - 리스크 기반 우선순위 | TC-GROUP-01, TC-GROUP-02, TC-GROUP-07 |
-| ISTQB Foundation - 결함 보고와 evidence | TC-GROUP-08 |
-| ISTQB Game Testing - Game Product Risks | TC-GROUP-01, TC-GROUP-02, TC-GROUP-07 |
-| ISTQB Game Testing - Game Mechanics Testing | TC-GROUP-04, TC-GROUP-05 |
-| ISTQB Game Testing - Graphics Testing | TC-GROUP-03, TC-GROUP-06 |
-| ISTQB Game Testing - Game Level Testing | TC-GROUP-05 |
-| ISTQB Game Testing - Game Controllers Testing | TC-GROUP-04 |
-| ISTQB Game Testing - Save Data and Player Progression Risk | TC-GROUP-03, TC-GROUP-05, 저장/로드 |
-
-## TC 추적표
-
-| TC ID | 대분류 | 소분류 | 주요 기준 | 우선순위 | 자동화 방식 |
+| TC | 분류 | 관찰 목적 | 구현 | 구현 상태 | 검증 상태 |
 | --- | --- | --- | --- | --- | --- |
-| TC-001 | 설치 및 실행 환경 | TC-01-A Steam 환경 | 테스트 환경, 플랫폼 리스크 | High | 프로세스/경로 확인 |
-| TC-002 | 실행/종료 | TC-02-A 게임 실행 | 기능 테스트, 실행 리스크 | High | Steam AppID 실행 |
-| TC-003 | 실행/종료 | TC-02-B 프로세스 감지 | 기대결과, 프로세스 evidence | High | psutil 프로세스 확인 |
-| TC-004 | 메인 화면 및 초기 진입 | TC-03-C 화면 캡처 | 관찰 가능한 결과, 그래픽 evidence | High | screenshot 저장 |
-| TC-005 | 화면/그래픽 표시 | TC-06-A 검은 화면 감지 | Graphics Testing, 진행 불가 리스크 | High | screenshot 밝기와 픽셀 분포 분석 |
-| TC-006 | 입력 반응 | TC-04-B 점프 입력 | Controller Testing, 게임 메커닉 | Medium | 입력 전후 이미지 비교 |
-| TC-007 | 안정성/크래시/프리즈 | TC-07-C 짧은 안정성 | 신뢰성, 크래시 리스크 | High | 프로세스 타임라인과 주기적 screenshot 저장 |
-| TC-008 | Evidence 및 리포트 | TC-08-A/B/C | 결함 보고, evidence | High | 파일 생성 확인 |
-| TC-009 | 메인 화면 및 초기 진입 | TC-03-D 언어 선택 화면 | 초기 진입 화면, 관찰 가능한 결과 | High | 창 캡처와 언어 선택 UI 이미지 분석 |
-| TC-010 | 기본 플레이 흐름 | TC-05-A 새 게임 시작 | Game Mechanics Testing, 상태 전이 | High | 로비 CTA 입력과 플레이 화면 후보 이미지 분석 |
-| TC-011 | 입력 반응 | TC-04-A 이동 입력 | Controller Testing, 게임 메커닉 | Medium | 무입력 변화량과 입력 후 이미지 변화량 비교 |
-| TC-012 | 안정성/크래시/프리즈 | TC-07-B 프리즈 감지 | 신뢰성, 프리즈 리스크 | High | 연속 screenshot 이미지 비교 |
-| TC-013 | 메인 화면 및 초기 진입 | TC-03-A 초기 화면 도달 | 최초 실행 상태, 테스트 데이터 | Medium | 후속 구현 |
-| TC-014 | 메인 화면 및 초기 진입 | TC-03-B 메뉴 표시 | 기존 플레이 상태, 저장 상태 복구 | Medium | 후속 구현 |
-| TC-015 | 저장/로드 | 후속 확장 | 세이브 데이터 보존, 리그레션 리스크 | High | 후속 구현 |
-| TC-016 | 기본 플레이 흐름 | TC-05-B 기본 이동 흐름 | Game Mechanics Testing, 입력 기반 진행 | Medium | 후속 구현 |
-| TC-017 | 입력 반응 | TC-04-D 언어 선택 입력 | Controller Testing, 상태 전이 | High | foreground 확인 후 Enter 입력과 이미지 차이 분석 |
-| TC-018 | 메인 화면 및 초기 진입 | TC-03-E 언어 선택 이후 화면 | 상태 전이 후 화면 확인, 그래픽 evidence | High | 창 캡처와 언어 선택 이후 화면 분류 |
-| TC-019 | 메인 화면 및 초기 진입 | TC-03-F 로비 CTA 상태 | 초기 진입 선택지, 플레이어 상태 힌트 | High | 로비 CTA 후보 영역 이미지 분석 |
+| TC-001 | 환경 | Steam 실행/경로 신호 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | PASS ([기동 기록](local-verification.md)) |
+| TC-002 | 실행 | AppID 실행 명령 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | PASS ([기동 기록](local-verification.md)) |
+| TC-003 | 실행 | 프로세스 감지 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | FAIL ([기동 기록](local-verification.md)) |
+| TC-004 | 화면 | 초기 캡처 | [코드](../tests\local\test_tc_001_004_local_steam.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-005 | 화면 | 검은 화면 후보 | [코드](../tests\local\test_tc_005_screen_state.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-006 | 입력 | Space 시각 반응 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-007 | 안정성 | 짧은 실행 관찰 | [코드](../tests\local\test_tc_007_short_stability.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-008 | 도구 | evidence 파일 저장 | [코드](../tests\local\..\unit\test_evidence_validation.py) | 구현됨 | 도구 검증 통과 |
+| TC-009 | 화면 | 언어 선택 후보 | [코드](../tests\local\test_tc_009_017_language_selection.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-010 | 진입 | 플레이 화면 후보 전환 | [코드](../tests\local\test_tc_010_gameplay_entry.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-011 | 입력 | 방향키 시각 반응 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-012 | 안정성 | 연속 화면 변화 관찰 | [코드](../tests\local\test_tc_012_freeze_detection.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-013 | 유저 상태 | 최초 실행 후보 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-014 | 유저 상태 | 기존 플레이 후보 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-015 | 저장 | 파일 경로 유지 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-016 | 입력 | 복합 입력 시각 반응 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-017 | 입력 | 언어 선택 입력 반응 | [코드](../tests\local\test_tc_009_017_language_selection.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-018 | 화면 | 언어 이후 후보 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | 수정 후 실제 게임 미실행 |
+| TC-019 | 화면 | 기존 유저 로비 CTA 후보 | [코드](../tests\local\test_tc_019_lobby_menu_options.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 
-## 대분류에서 TC로 내려가는 방식
-
-```text
-기준
-↓
-대분류
-↓
-소분류
-↓
-테스트 조건
-↓
-TC
-↓
-기대결과
-↓
-Evidence
-```
-
-예시:
-
-```text
-ISTQB Game Testing - Game Controllers Testing
-↓
-TC-GROUP-04 입력 반응
-↓
-TC-04-B 점프 입력
-↓
-점프 키 입력 전후 화면 변화 확인
-↓
-TC-006 기본 입력 반응 확인
-↓
-입력 전후 화면 차이가 기준값 이상이어야 함
-↓
-before-input.png, after-input.png, image-diff.json
-```
+자동화 상태 준비/판정 함수의 단위 테스트는 제품 TC 통과로 합산하지 않는다. 최신 실제 실행이 추가되면 이 표의 실행 상태와 progress를 함께 갱신한다.

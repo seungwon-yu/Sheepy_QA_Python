@@ -16,7 +16,7 @@ def createDiff(changedPixelRatio: float) -> ImageDiffResult:
 def test_summarize_freeze_observation_passes_when_change_is_visible() -> None:
     result = summarizeFreezeObservation([createDiff(0.0), createDiff(0.02)])
 
-    assert result.resultState == "FREEZE_NOT_DETECTED"
+    assert result.resultState == "SCREEN_CHANGE_OBSERVED"
     assert result.visibleChangeCount == 1
 
 

@@ -1,0 +1,32 @@
+{
+  "result": "PASS",
+  "expectedResult": "SHEEPY_APPID_LAUNCH_COMMAND_CALLED",
+  "actualResult": "SHEEPY_APPID_LAUNCH_COMMAND_CALLED",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "Sheepy AppID 실행 URI 포함",
+      "expected": "steam://run/1568400",
+      "actual": [
+        "cmd",
+        "/c",
+        "start",
+        "",
+        "steam://run/1568400"
+      ],
+      "passed": true,
+      "evidenceKey": "execution-log.json.command"
+    }
+  ],
+  "forbiddenSignals": [
+    {
+      "name": "dryRun 실행",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "evidenceKey": "execution-log.json.dryRun"
+    }
+  ],
+  "blockingConditions": [],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}

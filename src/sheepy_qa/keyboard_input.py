@@ -29,8 +29,10 @@ def pressRight(holdSeconds: float = 0.15) -> None:
 
 def pressKey(virtualKey: int, holdSeconds: float = 0.05) -> None:
     sendVirtualKey(virtualKey, isKeyUp=False)
-    time.sleep(holdSeconds)
-    sendVirtualKey(virtualKey, isKeyUp=True)
+    try:
+        time.sleep(holdSeconds)
+    finally:
+        sendVirtualKey(virtualKey, isKeyUp=True)
 
 
 def sendVirtualKey(virtualKey: int, isKeyUp: bool) -> None:

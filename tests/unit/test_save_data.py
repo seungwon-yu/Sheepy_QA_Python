@@ -25,7 +25,7 @@ def test_compare_save_snapshots_reports_preserved_files() -> None:
 
     result = compareSaveSnapshots(before, after)
 
-    assert result.resultState == "SAVE_DATA_PRESERVED"
+    assert result.resultState == "SAVE_FILES_PRESENT"
     assert result.missingFiles == []
 
 

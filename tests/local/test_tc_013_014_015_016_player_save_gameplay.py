@@ -85,7 +85,7 @@ def writeWindowReviewRequired(writer: EvidenceWriter, runDir: Path, expectedResu
         ]
     )
     writer.writeJson(runDir, "judgement.json", judgementRecord)
-    pytest.xfail(judgementRecord.judgementBasis)
+    pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
 
 def captureLobbyEvidence(writer: EvidenceWriter, runDir: Path, fileName: str):
@@ -178,7 +178,7 @@ def test_tc_013_first_run_player_state_is_identified() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"
 
@@ -244,7 +244,7 @@ def test_tc_014_returning_player_state_is_identified() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"
 
@@ -266,7 +266,7 @@ def test_tc_015_save_data_paths_are_preserved_during_observation() -> None:
     writer.writeJson(runDir, "save-preservation.json", preservationResult)
 
     judgementRecord = createJudgementRecord(
-        expectedResult="SAVE_DATA_PRESERVED",
+        expectedResult="SAVE_FILES_PRESENT",
         actualResult=preservationResult.resultState,
         actionPerformed=True,
         expectedSignals=[
@@ -307,133 +307,12 @@ def test_tc_015_save_data_paths_are_preserved_during_observation() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"
 
 
 @pytest.mark.tc_016
-def test_tc_016_basic_movement_and_jump_gameplay_flow_is_detected() -> None:
-    if not shouldRunSteamTests():
-        pytest.skip("Set SHEEPY_RUN_STEAM_TESTS=1 to run local Steam QA tests.")
-
-    writer = EvidenceWriter()
-    runDir = writer.createRunDir("TC-016")
-    processMatched, window = prepareSheepyWindow(writer, runDir)
-
-    if window is None:
-        writeWindowReviewRequired(writer, runDir, "BASIC_GAMEPLAY_FLOW_DETECTED", processMatched)
-
-    beforeImagePath = captureWindowScreenshot(window, runDir / "before-gameplay-flow.png")
-    beforeScreenAnalysis = analyzeImage(beforeImagePath)
-    beforeLanguageAnalysis = analyzeLanguageSelectionScreen(beforeImagePath)
-    beforeLobbyMenuAnalysis = analyzeLobbyMenu(beforeImagePath)
-    baselineDiff = compareImages(beforeImagePath, beforeImagePath)
-    beforeGameplayResult = classifyGameplayScreen(
-        screenAnalysis=beforeScreenAnalysis,
-        languageAnalysis=beforeLanguageAnalysis,
-        lobbyMenuAnalysis=beforeLobbyMenuAnalysis,
-        transitionDiff=baselineDiff
-    )
-
-    time.sleep(1)
-    idleImagePath = captureWindowScreenshot(window, runDir / "idle-gameplay-flow.png")
-    idleDiff = compareImages(beforeImagePath, idleImagePath)
-    pressRight()
-    pressLeft()
-    pressSpace()
-    time.sleep(1)
-    afterImagePath = captureWindowScreenshot(window, runDir / "after-gameplay-flow.png")
-    inputDiff = compareImages(idleImagePath, afterImagePath)
-    gameplayFlowResult = summarizeGameplayFlow(
-        gameplayScreenResult=beforeGameplayResult,
-        idleDiff=idleDiff,
-        inputDiff=inputDiff
-    )
-    actionPerformed = window.isForeground and window.processName.lower() == "sheepyashortadventure.exe"
-
-    writer.writeJson(runDir, "before-screen-analysis.json", beforeScreenAnalysis)
-    writer.writeJson(runDir, "before-language-screen-analysis.json", beforeLanguageAnalysis)
-    writer.writeJson(runDir, "before-lobby-menu-analysis.json", beforeLobbyMenuAnalysis)
-    writer.writeJson(runDir, "before-gameplay-screen.json", beforeGameplayResult)
-    writer.writeJson(runDir, "idle-diff.json", idleDiff)
-    writer.writeJson(runDir, "input-diff.json", inputDiff)
-    writer.writeJson(
-        runDir,
-        "input-log.json",
-        {
-            "input": "RIGHT_LEFT_SPACE",
-            "idleChangedPixelRatio": idleDiff.changedPixelRatio,
-            "inputChangedPixelRatio": inputDiff.changedPixelRatio,
-            "inputChangeDelta": gameplayFlowResult.inputChangeDelta,
-            "isSheepyForeground": actionPerformed
-        }
-    )
-    writer.writeJson(runDir, "gameplay-flow.json", gameplayFlowResult)
-
-    judgementRecord = createJudgementRecord(
-        expectedResult="BASIC_GAMEPLAY_FLOW_DETECTED",
-        actualResult=gameplayFlowResult.resultState,
-        actionPerformed=actionPerformed and beforeGameplayResult.isGameplayScreenCandidate,
-        expectedSignals=[
-            JudgementCondition(
-                name="플레이 화면 후보",
-                expected="GAMEPLAY_SCREEN_CANDIDATE",
-                actual=beforeGameplayResult.screenState,
-                passed=beforeGameplayResult.isGameplayScreenCandidate,
-                evidenceKey="before-gameplay-screen.json.screenState"
-            ),
-            JudgementCondition(
-                name="입력 후 변화량",
-                expected="inputChangeDelta >= 0.005",
-                actual=gameplayFlowResult.inputChangeDelta,
-                passed=gameplayFlowResult.inputChangeDelta >= 0.005,
-                evidenceKey="gameplay-flow.json.inputChangeDelta"
-            )
-        ],
-        forbiddenSignals=[
-            JudgementCondition(
-                name="언어 선택 화면 잔류",
-                expected=False,
-                actual=beforeLanguageAnalysis.isLanguageSelectionLike,
-                passed=beforeLanguageAnalysis.isLanguageSelectionLike is False,
-                evidenceKey="before-language-screen-analysis.json.isLanguageSelectionLike"
-            ),
-            JudgementCondition(
-                name="로비 CTA 잔류",
-                expected=False,
-                actual=beforeLobbyMenuAnalysis.continueVisible or beforeLobbyMenuAnalysis.startJourneyVisible,
-                passed=beforeLobbyMenuAnalysis.continueVisible is False and beforeLobbyMenuAnalysis.startJourneyVisible is False,
-                evidenceKey="before-lobby-menu-analysis.json"
-            ),
-            JudgementCondition(
-                name="검은 화면 지속",
-                expected=False,
-                actual=beforeScreenAnalysis.isMostlyBlack,
-                passed=beforeScreenAnalysis.isMostlyBlack is False,
-                evidenceKey="before-screen-analysis.json.isMostlyBlack"
-            )
-        ],
-        blockingConditions=[
-            JudgementCondition(
-                name="Sheepy process detected",
-                expected=True,
-                actual=processMatched,
-                passed=processMatched,
-                evidenceKey="process-state.json"
-            ),
-            JudgementCondition(
-                name="입력 대상 foreground window",
-                expected="SheepyAShortAdventure.exe",
-                actual=window.processName,
-                passed=actionPerformed,
-                evidenceKey="focused-window.json"
-            )
-        ]
-    )
-    writer.writeJson(runDir, "judgement.json", judgementRecord)
-
-    if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
-
-    assert judgementRecord.result == "PASS"
+def test_tc_016_basic_movement_and_jump_gameplay_flow_is_detected():
+    from sheepy_qa.local_checks import runVisualInputCheck
+    runVisualInputCheck("TC-016", lambda session: [session.input(pressRight), session.input(pressLeft), session.input(pressSpace)])

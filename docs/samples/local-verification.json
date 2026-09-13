@@ -1,0 +1,28 @@
+{
+  "dateKST": "2026-09-14",
+  "scope": "실제 환경/실행 명령/프로세스 관찰",
+  "latest": [
+    {
+      "testCaseId": "TC-001",
+      "runDirectory": "2026-09-13T15-43-22.035+00-00-TC-001",
+      "result": "PASS",
+      "expected": "STEAM_AVAILABLE",
+      "actual": "STEAM_AVAILABLE"
+    },
+    {
+      "testCaseId": "TC-002",
+      "runDirectory": "2026-09-13T15-47-39.409+00-00-TC-002",
+      "result": "PASS",
+      "expected": "SHEEPY_APPID_LAUNCH_COMMAND_CALLED",
+      "actual": "SHEEPY_APPID_LAUNCH_COMMAND_CALLED"
+    },
+    {
+      "testCaseId": "TC-003",
+      "runDirectory": "2026-09-13T15-47-39.429+00-00-TC-003",
+      "result": "FAIL",
+      "expected": "SHEEPY_PROCESS_DETECTED",
+      "actual": "SHEEPY_PROCESS_NOT_DETECTED"
+    }
+  ],
+  "note": "TC-003의 최초 60초 미감지 FAIL 이력을 별도 보존. 제품 원인 확정 아님."
+}

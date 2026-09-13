@@ -1,521 +1,269 @@
-# 테스트 케이스 목록
+# 테스트 케이스: 관찰 계약
 
-## 목적
+모든 TC는 관찰한 신호의 범위에서만 판정한다. 실제 게임 버전/환경/결과는 [진행 상태](progress.md)에 별도로 기록한다. TC-008은 제품 TC가 아닌 도구 검증이다.
 
-이 문서는 Sheepy 자동화 QA의 개별 TC를 정리한다.
+## TC-001 Steam 실행/경로 신호
 
-각 TC는 `docs/test-classification.md`의 대분류와 소분류에 연결된다.
-
-## TC 작성 형식
-
-각 TC는 다음 항목을 가진다.
-
-| 항목 | 설명 |
+| 항목 | 기준 |
 | --- | --- |
-| TC ID | 테스트 케이스 식별자 |
-| 대분류 | TC-GROUP ID와 이름 |
-| 소분류 | 소분류 ID와 이름 |
-| 테스트 베이시스 | 테스트 기준이 되는 자료 또는 관찰 |
-| 테스트 조건 | 검증할 조건 |
-| 사전조건 | 실행 전 필요한 조건 |
-| 플레이어 상태 | 최초 실행 유저, 기존 플레이 유저, 상태 불명확 중 하나 |
-| 절차 | 테스트 수행 단계 |
-| 기대결과 | PASS 기준 |
-| Evidence | 저장해야 할 증거 |
-| 실패 분류 후보 | 실패 시 우선 검토할 분류 |
+| 분류 | 환경 |
+| 베이시스 | Steam 실행/경로 신호 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | Steam 설치 환경 |
+| 절차 | snapshot 수집 |
+| 기대결과 | Steam 경로 또는 프로세스 신호 |
+| 한계 | 프로세스/경로는 로그인·게임 설치 성공을 보장하지 않음 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_001_004_local_steam.py) |
 
-각 TC는 구현 시 가능하면 `docs/judgement-basis.md`의 기준에 따라 `judgement.json`을 저장한다.
+## TC-002 AppID 실행 명령
 
-판단 근거는 다음 세 조건을 분리해서 남긴다.
-
-- 테스트 동작이 실제로 수행됐는가
-- 기대 신호가 정상적으로 발생했는가
-- 발생하면 안 되는 이상 신호가 없었는가
-
-## Sprint 1 TC
-
-Sprint 1은 한 번에 전체 게임 진행을 검증하지 않는다.
-
-각 TC는 독립 실행 가능한 자동화 단위로 나누며, 앞 단계가 안정적으로 확인된 뒤 다음 단계로 넘어간다.
-
-상세 Sprint 순서는 `docs/sprint-plan.md`를 따른다.
-
-### TC-001 Steam 실행 환경 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-01 설치 및 실행 환경 |
-| 소분류 | TC-01-A Steam 환경 |
-| 테스트 베이시스 | Steam 클라이언트에서 Sheepy를 실행해야 함 |
-| 테스트 조건 | Steam 클라이언트 실행 가능 여부를 확인한다 |
-| 사전조건 | Windows에 Steam이 설치되어 있어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | Steam 프로세스 또는 실행 경로를 확인한다 |
-| 기대결과 | Steam 실행 또는 Steam 프로세스 확인이 가능해야 한다 |
-| Evidence | process-state.json, judgement.json |
-| 실패 분류 후보 | ENV_FAIL |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_001_steam_environment.ps1` |
+| 분류 | 실행 |
+| 베이시스 | AppID 실행 명령 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | Steam 실행 가능 |
+| 절차 | Steam URI 호출 |
+| 기대결과 | AppID 1568400 명령 실행 |
+| 한계 | 게임 정상 기동은 TC-003/004 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_001_004_local_steam.py) |
 
-### TC-002 Sheepy AppID 실행 시도
+## TC-003 프로세스 감지
 
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-02 실행/종료 |
-| 소분류 | TC-02-A 게임 실행 |
-| 테스트 베이시스 | Sheepy Steam AppID는 1568400 |
-| 테스트 조건 | Steam AppID로 게임 실행을 시도한다 |
-| 사전조건 | Steam 로그인 및 Sheepy 설치가 완료되어 있어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | steam://run/1568400 또는 Steam 실행 명령을 호출한다 |
-| 기대결과 | 실행 명령이 오류 없이 호출되어야 한다 |
-| Evidence | execution-log.json, judgement.json |
-| 실패 분류 후보 | ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_002_sheepy_launch.ps1` |
+| 분류 | 실행 |
+| 베이시스 | 프로세스 감지 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 게임 실행 시도 후 |
+| 절차 | 제한 시간 프로세스 탐색 |
+| 기대결과 | Sheepy 프로세스 발견 |
+| 한계 | 응답성은 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_001_004_local_steam.py) |
 
-### TC-003 게임 프로세스 감지
+## TC-004 초기 캡처
 
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-02 실행/종료 |
-| 소분류 | TC-02-B 프로세스 감지 |
-| 테스트 베이시스 | 게임 실행 후 OS에서 프로세스를 관찰할 수 있어야 함 |
-| 테스트 조건 | 지정 시간 안에 Sheepy 관련 프로세스를 감지한다 |
-| 사전조건 | TC-002 실행 시도가 완료되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 일정 시간 동안 프로세스 목록을 확인한다 |
-| 기대결과 | 지정 시간 안에 게임 프로세스가 실행 상태로 확인되어야 한다 |
-| Evidence | process-state.json, judgement.json |
-| 실패 분류 후보 | ENV_FAIL, PRODUCT_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_003_process_detection.ps1` |
+| 분류 | 화면 |
+| 베이시스 | 초기 캡처 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 게임 화면을 볼 수 있음 |
+| 절차 | screenshot 저장 |
+| 기대결과 | 파일 생성 |
+| 한계 | 전체 화면 캡처이며 게임 내용 정상성은 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_001_004_local_steam.py) |
 
-### TC-004 초기 화면 스크린샷 저장
+## TC-005 검은 화면 후보
 
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
-| 소분류 | TC-03-C 화면 캡처 |
-| 테스트 베이시스 | 실행 후 화면 evidence를 저장해야 함 |
-| 테스트 조건 | 게임 실행 후 초기 화면 스크린샷을 저장한다 |
-| 사전조건 | 게임 창이 화면에 표시되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 게임 실행 후 지정 대기 시간 뒤 screenshot을 저장한다 |
-| 기대결과 | screenshot 파일이 생성되고 파일 크기가 0보다 커야 한다 |
-| Evidence | screenshot.png, screen-metadata.json, judgement.json |
-| 실패 분류 후보 | ENV_FAIL, TEST_FAIL |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_004_initial_screenshot.ps1` |
+| 분류 | 화면 |
+| 베이시스 | 검은 화면 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 게임 표시·가림 없음 |
+| 절차 | 밝기/픽셀 분포 분석 |
+| 기대결과 | 검은 화면 기준 미해당 |
+| 한계 | 어두운 정상 장면/다른 창 오탐 가능 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_005_screen_state.py) |
 
-### TC-005 검은 화면 여부 확인
+## TC-006 Space 시각 반응
 
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-06 화면/그래픽 표시 |
-| 소분류 | TC-06-A 검은 화면 감지 |
-| 테스트 베이시스 | 게임 실행 후 화면이 장시간 검은 상태면 진행 불가 리스크가 있음 |
-| 테스트 조건 | 초기 화면 screenshot이 완전한 검은 화면인지 확인한다 |
-| 사전조건 | TC-004 screenshot이 저장되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | screenshot의 평균 밝기 또는 픽셀 분포를 분석한다 |
-| 기대결과 | 화면이 완전 검은 상태로만 유지되지 않아야 한다 |
-| Evidence | screenshot.png, image-analysis.json, screen-state.json, process-state.json, execution-log.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_005_black_screen_check.ps1` |
+| 분류 | 입력 |
+| 베이시스 | Space 시각 반응 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 로비에서 준비 가능한 게임 |
+| 절차 | GAMEPLAY 후보 준비→무입력→Space→비교 |
+| 기대결과 | 변화량 차이 >=0.005 |
+| 한계 | 점프 자체 확정 아님 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) |
 
-판단 기준:
+## TC-007 짧은 실행 관찰
 
-- `averageBrightness`가 검은 화면 기준값보다 높아야 한다.
-- `darkPixelRatio`가 대부분의 화면이 검은 픽셀임을 나타내지 않아야 한다.
-- `uniqueSampledColorCount`가 화면 변화 또는 시각 정보가 있음을 보여야 한다.
-- 언어 선택 화면처럼 배경이 어둡더라도 국기나 텍스트 등 시각 정보가 있으면 검은 화면으로 단정하지 않는다.
-
-현재 제한:
-
-- 전체 화면 screenshot을 분석하므로, 게임 창 포커스가 다른 창에 가려진 경우 `ENV_FAIL` 또는 `REVIEW_REQUIRED` 검토가 필요하다.
-- 메인 메뉴의 정확한 문구나 버튼 식별은 아직 수행하지 않는다.
-
-### TC-006 기본 입력 반응 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-04 입력 반응 |
-| 소분류 | TC-04-B 점프 입력 |
-| 테스트 베이시스 | 2D 플랫폼 게임은 점프 입력 반응이 핵심 조작 중 하나임 |
-| 테스트 조건 | 점프 키 입력 전후 화면 변화가 있는지 확인한다 |
-| 사전조건 | 게임 창이 활성화되어 있어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 입력 전 screenshot 저장, 점프 입력, 입력 후 screenshot 저장, 이미지 차이 비교 |
-| 기대결과 | 입력 전후 화면 차이가 기준값 이상이어야 한다 |
-| Evidence | before-input.png, after-input.png, image-diff.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_006_basic_action_input.ps1` |
+| 분류 | 안정성 |
+| 베이시스 | 짧은 실행 관찰 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 게임 실행·창 관찰 |
+| 절차 | 30초 프로세스/캡처 관찰 |
+| 기대결과 | 프로세스 유지·캡처 성공 |
+| 한계 | 장시간 안정성 보장 아님 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_007_short_stability.py) |
 
-판단 기준:
+## TC-008 evidence 파일 저장
 
-- 테스트 대상 창이 `SheepyAShortAdventure.exe` foreground 상태여야 한다.
-- 입력 전 무입력 대기 화면 변화량과 입력 후 화면 변화량을 분리해서 비교한다.
-- 입력 후 변화량이 무입력 변화량보다 충분히 커야 입력 반응으로 판단한다.
-- 언어 선택 이후 화면이 아닌 상태에서 실행되면 제품 실패가 아니라 `REVIEW_REQUIRED`로 기록한다.
-
-현재 제한:
-
-- Space 입력은 화면을 다음 상태로 진행시킬 수 있으므로 Sprint 4 통합 실행에서는 마지막에 실행한다.
-- 현재는 이미지 차이 기반 반응만 확인하며, 캐릭터 좌표나 게임 내부 상태는 읽지 않는다.
-
-### TC-007 짧은 실행 안정성 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-07 안정성/크래시/프리즈 |
-| 소분류 | TC-07-C 짧은 안정성 |
-| 테스트 베이시스 | 게임은 짧은 시간 동안 비정상 종료 없이 유지되어야 함 |
-| 테스트 조건 | 일정 시간 동안 게임 프로세스가 유지되는지 확인한다 |
-| 사전조건 | 게임 프로세스가 실행 중이어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 30초 동안 프로세스 상태와 화면 변화를 관찰한다 |
-| 기대결과 | 프로세스가 비정상 종료되지 않아야 한다 |
-| Evidence | process-timeline.json, screenshots/ |
-| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_007_short_stability.ps1` |
+| 분류 | 도구 |
+| 베이시스 | evidence 파일 저장 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 임시 evidence 디렉터리 |
+| 절차 | 필수 파일 존재/크기 검사 |
+| 기대결과 | 파일 존재·비어 있지 않음 |
+| 한계 | 제품 TC가 아닌 도구 검증 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\..\unit\test_evidence_validation.py) |
 
-판단 기준:
+## TC-009 언어 선택 후보
 
-- 관찰 샘플이 2개 이상 저장되어야 한다.
-- 모든 관찰 샘플에서 Sheepy 프로세스가 유지되어야 한다.
-- 모든 관찰 샘플에서 screenshot이 저장되어야 한다.
-- 비정상 종료 또는 캡처 실패 샘플이 0개여야 한다.
-
-현재 제한:
-
-- 이 TC는 짧은 실행 안정성만 확인한다.
-- 화면이 멈췄는지 여부는 별도 `TC-012 프리즈 감지`에서 판단한다.
-- 입력 없이 관찰하므로 특정 조작 후 안정성은 후속 TC에서 확장한다.
-
-### TC-008 실패 evidence 저장 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-08 Evidence 및 리포트 |
-| 소분류 | TC-08-A Screenshot, TC-08-B Process State, TC-08-C Test Result |
-| 테스트 베이시스 | 자동화 QA는 실패 시 판단 가능한 증거를 남겨야 함 |
-| 테스트 조건 | 실패 시 screenshot, process state, log, result가 저장되는지 확인한다 |
-| 사전조건 | 테스트 실행 폴더가 생성 가능해야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 의도된 실패 또는 조건 불만족 상황에서 evidence 저장을 확인한다 |
-| 기대결과 | 지정된 evidence 파일이 생성되어야 한다 |
-| Evidence | screenshot.png, process-state.json, execution-log.txt, result.json |
-| 실패 분류 후보 | TEST_FAIL, ENV_FAIL |
+| 분류 | 화면 |
+| 베이시스 | 언어 선택 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 언어 화면이 표시되는 실행 상태 |
+| 절차 | 창 캡처·언어 UI 후보 분석 |
+| 기대결과 | 언어 화면 특징 충족 |
+| 한계 | 문구를 OCR로 읽는 것이 아님 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_009_017_language_selection.py) |
 
-## 후속 TC 후보
+## TC-010 플레이 화면 후보 전환
 
-| 후보 TC | 대분류 | 소분류 | 설명 |
-| --- | --- | --- | --- |
-| TC-009 언어 선택 화면 도달 확인 | TC-GROUP-03 | TC-03-D | 초기 진입 화면이 언어 선택 화면인지 판별 |
-| TC-010 새 게임 시작 확인 | TC-GROUP-05 | TC-05-A | 새 게임 또는 Continue 진입 확인 |
-| TC-011 이동 입력 반응 | TC-GROUP-04 | TC-04-A | 좌우 입력 전후 화면 변화 확인 |
-| TC-012 프리즈 감지 | TC-GROUP-07 | TC-07-B | 일정 시간 화면 변화 없음 감지 |
-| TC-013 최초 실행 상태 식별 | TC-GROUP-03 | TC-03-A | 세이브 데이터가 없는 첫 진입 상태 확인 |
-| TC-014 기존 플레이 상태 식별 | TC-GROUP-03 | TC-03-B | 세이브 데이터가 있는 기존 진입 상태 확인 |
-| TC-015 세이브 상태 보존 확인 | 저장/로드 | 후속 확장 | 테스트 후 기존 세이브 데이터가 손상되지 않았는지 확인 |
-| TC-016 기본 이동/점프 플레이 흐름 | TC-GROUP-05 | TC-05-B | 실제 플레이 화면에서 짧은 이동/점프 조합 확인 |
-| TC-017 언어 선택 입력 반응 확인 | TC-GROUP-04 | TC-04-D | 언어 선택 화면에서 선택 입력 후 화면 전환 확인 |
-| TC-018 언어 선택 이후 화면 상태 확인 | TC-GROUP-03 | TC-03-E | 언어 선택 완료 후 화면 상태 캡처와 분류 |
-| TC-019 로비 CTA 버튼 상태 확인 | TC-GROUP-03 | TC-03-F | Continue와 Start Your Journey 표시 여부 확인 |
-
-## TC에서 제외한 문서 작업 후보
-
-다음 항목은 제품 동작을 검증하는 TC가 아니므로 TC 번호에서 제외한다.
-
-| 작업 | 성격 | 설명 |
-| --- | --- | --- |
-| Markdown 실행 요약 리포트 생성 | 문서/리포트 작업 | JSON evidence를 사람이 읽기 좋은 Markdown 문서로 변환 |
-
-## Sprint 7 TC: 플레이어 상태, 세이브 보존, 기본 플레이 흐름
-
-### TC-013 최초 실행 상태 식별
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
-| 소분류 | TC-03-A 초기 화면 도달 |
-| 테스트 베이시스 | 세이브 데이터가 없는 최초 실행 유저는 Continue 없이 Start Your Journey 진입 CTA가 보여야 함 |
-| 테스트 조건 | 로비 화면 CTA 신호를 기준으로 최초 실행 유저 후보를 식별한다 |
-| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
-| 플레이어 상태 | PLAYER-NEW |
-| 절차 | 게임 창 탐지, 로비 screenshot 저장, CTA 후보 영역 분석, player-state.json 저장 |
-| 기대결과 | Start Your Journey가 관찰되고 Continue가 관찰되지 않아야 한다 |
-| Evidence | first-run-state.png, lobby-menu-analysis.json, player-state.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_013_first_run_state.ps1` |
+| 분류 | 진입 |
+| 베이시스 | 플레이 화면 후보 전환 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 지원 가능한 로비 |
+| 절차 | 로비 확인→Enter→변화 관찰 |
+| 기대결과 | 로비 CTA 소멸·플레이 후보 |
+| 한계 | 실제 조작 가능은 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_010_gameplay_entry.py) |
 
-현재 제한:
+## TC-011 방향키 시각 반응
 
-- 세이브 파일을 삭제하거나 수정하지 않는다.
-- 기존 플레이 데이터가 있는 PC에서는 Continue가 표시될 수 있으므로 `PLAYER_NEW` 판단은 실패 또는 검토 대상이 될 수 있다.
-
-### TC-014 기존 플레이 상태 식별
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
-| 소분류 | TC-03-B 메뉴 표시 |
-| 테스트 베이시스 | 세이브 데이터가 있는 기존 플레이 유저는 Continue CTA가 표시될 수 있음 |
-| 테스트 조건 | 로비 화면 CTA 신호를 기준으로 기존 플레이 유저 후보를 식별한다 |
-| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
-| 플레이어 상태 | PLAYER-RETURNING |
-| 절차 | 게임 창 탐지, 로비 screenshot 저장, CTA 후보 영역 분석, player-state.json 저장 |
-| 기대결과 | Continue가 관찰되어야 한다 |
-| Evidence | returning-state.png, lobby-menu-analysis.json, player-state.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_014_returning_state.ps1` |
+| 분류 | 입력 |
+| 베이시스 | 방향키 시각 반응 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 로비에서 준비 가능한 게임 |
+| 절차 | GAMEPLAY 준비→무입력→Right/Left→비교 |
+| 기대결과 | 변화량 차이 >=0.005 |
+| 한계 | 실제 좌표 이동 확정 아님 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) |
 
-현재 제한:
+## TC-012 연속 화면 변화 관찰
 
-- 최초 실행 상태 PC에서는 Continue가 없을 수 있으므로 이 TC는 세이브 상태별 실행 조건을 분리해야 한다.
-- OCR 없이 후보 영역의 이미지 신호로 CTA를 판단한다.
-
-### TC-015 세이브 상태 보존 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | 저장/로드 |
-| 소분류 | 후속 확장 |
-| 테스트 베이시스 | 자동화 테스트는 기존 사용자 세이브 데이터를 손상시키지 않아야 함 |
-| 테스트 조건 | Sheepy 관련 저장 파일 후보를 관찰 전후로 비교한다 |
-| 사전조건 | 관찰 가능한 Sheepy 관련 저장 파일 후보가 있어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 저장 파일 후보 스냅샷, 짧은 대기, 재스냅샷, 누락 파일 비교 |
-| 기대결과 | 관찰 전 존재하던 저장 파일 경로가 관찰 후에도 유지되어야 한다 |
-| Evidence | save-before.json, save-after.json, save-preservation.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_015_save_preservation.ps1` |
+| 분류 | 안정성 |
+| 베이시스 | 연속 화면 변화 관찰 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 관찰 가능한 게임 창 |
+| 절차 | 20초·5초 간격 캡처·실제 시각 기록 |
+| 기대결과 | 화면 변화 및 연속 무변화 10초 미만 |
+| 한계 | 정적 장면이면 보류; 내부 프리즈 부재 확정 아님 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_012_freeze_detection.py) |
 
-현재 제한:
+## TC-013 최초 실행 후보
 
-- 저장 파일을 백업, 삭제, 복원하지 않는 비파괴 관찰 테스트이다.
-- 게임이 정상적으로 autosave를 수행할 수 있으므로 파일 수정 시각 변경만으로 실패 처리하지 않는다.
-- 저장 파일 후보를 찾지 못하면 제품 결함으로 단정하지 않고 `REVIEW_REQUIRED`로 기록한다.
-
-### TC-016 기본 이동/점프 플레이 흐름
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-05 기본 플레이 흐름 |
-| 소분류 | TC-05-B 기본 이동 흐름 |
-| 테스트 베이시스 | 플레이 화면에서 이동과 점프 입력에 대해 관찰 가능한 반응이 있어야 함 |
-| 테스트 조건 | 플레이 화면 후보에서 이동/점프 입력 전후 화면 변화가 무입력 변화보다 명확한지 확인한다 |
-| 사전조건 | Sheepy가 실행 중이고 플레이 화면 후보 상태여야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 플레이 화면 screenshot 저장, 무입력 대기 screenshot 저장, Right/Left/Space 입력, 입력 후 screenshot 저장, 이미지 차이 비교 |
-| 기대결과 | 입력 후 변화량이 무입력 변화량보다 기준값 이상 커야 한다 |
-| Evidence | before-gameplay-flow.png, idle-gameplay-flow.png, after-gameplay-flow.png, idle-diff.json, input-diff.json, gameplay-flow.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_016_basic_gameplay_flow.ps1` |
+| 분류 | 유저 상태 |
+| 베이시스 | 최초 실행 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 사람이 준비한 NEW 로비 |
+| 절차 | CTA 관찰 |
+| 기대결과 | Start 후보 있음·Continue 없음 |
+| 한계 | 기존 세이브 삭제로 준비하지 않음 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) |
 
-현재 제한:
+## TC-014 기존 플레이 후보
 
-- 게임 내부 좌표나 캐릭터 상태를 직접 읽지 않고 화면 변화량으로 판단한다.
-- 플레이 화면 후보가 아닌 로비, 언어 선택 화면, 검은 화면에서는 `REVIEW_REQUIRED`로 기록한다.
-
-## 다음 Sprint 후보: 언어 선택 화면
-
-### TC-009 언어 선택 화면 도달 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
-| 소분류 | TC-03-D 언어 선택 화면 |
-| 테스트 베이시스 | 현재 관찰 결과 게임 실행 후 언어 선택 화면이 표시됨 |
-| 테스트 조건 | 실행 후 초기 화면이 언어 선택 화면인지 확인한다 |
-| 사전조건 | Steam 로그인 및 Sheepy 실행 가능 상태 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 게임 실행, 프로세스 감지, screenshot 저장, 언어 선택 화면 특징 확인 |
-| 기대결과 | 영어, 프랑스어, 스페인어, 중국어, 일본어 중 하나 이상의 언어 선택 UI가 보여야 한다 |
-| Evidence | language-selection-screen.png, screen-analysis.json, language-screen-analysis.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_009_language_selection_screen.ps1` |
+| 분류 | 유저 상태 |
+| 베이시스 | 기존 플레이 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 사람이 준비한 RETURNING 로비 |
+| 절차 | CTA 관찰 |
+| 기대결과 | Continue 후보 있음 |
+| 한계 | 저장 내용 복원 성공은 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) |
 
-플레이어 상태 판단:
+## TC-015 파일 경로 유지
 
-- 최초 실행 유저에게만 언어 선택 화면이 나오는지 아직 확정하지 않는다.
-- 기존 플레이 유저에게도 언어 선택 화면이 반복 표시되는지는 별도 재실행 관찰이 필요하다.
-- 따라서 초기 자동화에서는 `PLAYER-UNKNOWN`으로 두고, 세이브 상태 기준이 확정되면 `PLAYER-NEW`와 `PLAYER-RETURNING`으로 분리한다.
-
-### TC-017 언어 선택 입력 반응 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-04 입력 반응 |
-| 소분류 | TC-04-D 언어 선택 입력 |
-| 테스트 베이시스 | 언어 선택 화면에서 선택 입력을 통해 다음 화면으로 진행할 수 있어야 함 |
-| 테스트 조건 | 언어 선택 화면에서 선택 입력 후 화면 변화가 발생하는지 확인한다 |
-| 사전조건 | TC-009 언어 선택 화면 도달이 확인되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 입력 전 screenshot 저장, 선택 입력 수행, 입력 후 screenshot 저장, 화면 변화 비교 |
-| 기대결과 | 입력 전후 screenshot 차이가 발생하고 다음 화면으로 전환되어야 한다 |
-| Evidence | before-language-input.png, after-language-input.png, image-diff.json, input-log.json, foreground-window.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_017_language_selection_input.ps1` |
+| 분류 | 저장 |
+| 베이시스 | 파일 경로 유지 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 관찰 가능한 저장 후보 파일 |
+| 절차 | 전후 파일 목록 비교 |
+| 기대결과 | SAVE_FILES_PRESENT |
+| 한계 | 내용 무결성·진행 복원 미검증 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) |
 
-플레이어 상태 판단:
+## TC-016 복합 입력 시각 반응
 
-- 최초 실행 유저라면 언어 선택 입력은 첫 진입 흐름의 필수 단계일 가능성이 높다.
-- 기존 플레이 유저라면 언어 선택 화면이 재노출되는 설계인지 먼저 확인해야 한다.
-- 기존 플레이 유저에게 언어 선택 화면이 나오지 않는다면 이 TC는 `PLAYER-NEW` 전용 TC로 분리한다.
-
-## Sprint 4 TC: 언어 선택 이후 화면과 입력 반응
-
-### TC-018 언어 선택 이후 화면 상태 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
-| 소분류 | TC-03-E 언어 선택 이후 화면 |
-| 테스트 베이시스 | 언어 선택 입력 이후 다음 화면이 표시되어야 함 |
-| 테스트 조건 | 현재 게임 화면이 언어 선택 이후 화면인지 캡처하고 분류한다 |
-| 사전조건 | Sheepy가 실행 중이고 언어 선택이 완료된 상태여야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 게임 창 탐지, 창 단독 screenshot 저장, 이미지 분석, 언어 선택 화면 특징 재검사, 이후 화면 분류 |
-| 기대결과 | 화면이 검은 화면이 아니고 언어 선택 화면 특징이 남아 있지 않으며, 충분한 시각 정보가 있어야 한다 |
-| Evidence | post-language-screen.png, screen-analysis.json, language-screen-analysis.json, post-language-screen.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_018_post_language_screen.ps1` |
+| 분류 | 입력 |
+| 베이시스 | 복합 입력 시각 반응 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 로비에서 준비 가능한 게임 |
+| 절차 | GAMEPLAY 준비→무입력→방향키/Space |
+| 기대결과 | 변화량 차이 >=0.005 |
+| 한계 | 이동/점프 각각의 성공은 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) |
 
-판단 기준:
+## TC-017 언어 선택 입력 반응
 
-- `post-language-screen.json.screenState`가 `POST_LANGUAGE_SCREEN`이어야 한다.
-- `screen-analysis.json.uniqueSampledColorCount`가 10보다 커야 한다.
-- `language-screen-analysis.json.isLanguageSelectionLike`가 `false`여야 한다.
-- `screen-analysis.json.isMostlyBlack`이 `false`여야 한다.
-- 언어 선택 화면이 다시 감지되면 사전조건 불충족 가능성이 있으므로 `REVIEW_REQUIRED`로 남긴다.
-
-### TC-011 이동 입력 반응
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-04 입력 반응 |
-| 소분류 | TC-04-A 이동 입력 |
-| 테스트 베이시스 | 2D 플랫폼 게임은 좌우 이동 입력 반응이 핵심 조작 중 하나임 |
-| 테스트 조건 | 좌우 입력 전후 화면 변화가 무입력 상태 변화보다 명확한지 확인한다 |
-| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 화면이 표시되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 입력 전 screenshot 저장, 무입력 대기 screenshot 저장, 좌우 입력, 입력 후 screenshot 저장, 이미지 차이 비교 |
-| 기대결과 | 입력 후 변화량이 무입력 변화량보다 기준값 이상 커야 한다 |
-| Evidence | before-movement-input.png, idle-movement-input.png, after-movement-input.png, idle-diff.json, input-diff.json, input-log.json, foreground-window.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_011_movement_input.ps1` |
+| 분류 | 입력 |
+| 베이시스 | 언어 선택 입력 반응 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 언어 화면과 foreground 확인 |
+| 절차 | Enter 전후 이미지 비교 |
+| 기대결과 | 화면 변화 |
+| 한계 | 다음 화면 정상성은 별도 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_009_017_language_selection.py) |
 
-판단 기준:
+## TC-018 언어 이후 후보
 
-- 테스트 대상 창이 `SheepyAShortAdventure.exe` foreground 상태여야 한다.
-- 사전 화면은 `POST_LANGUAGE_SCREEN`으로 분류되어야 한다.
-- `input-log.json.inputChangeDelta`가 `0.005` 이상이어야 한다.
-- 입력 후 화면이 완전히 동일하면 이상 신호로 기록한다.
-- 사전 화면이 언어 선택 화면 또는 검은 화면이면 제품 실패로 단정하지 않고 `REVIEW_REQUIRED`로 남긴다.
-
-### TC-019 로비 CTA 버튼 상태 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-03 메인 화면 및 초기 진입 |
-| 소분류 | TC-03-F 로비 CTA 상태 |
-| 테스트 베이시스 | 언어 선택 이후 로비 화면에서 Continue와 Start Your Journey가 표시됨 |
-| 테스트 조건 | 로비 화면의 주요 진입 CTA가 관찰 가능한지 확인한다 |
-| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN, 결과에 따라 PLAYER-RETURNING 힌트 기록 |
-| 절차 | 게임 창 탐지, 창 단독 screenshot 저장, 언어 선택 이후 화면 분류, 왼쪽 메뉴 CTA 후보 영역 분석 |
-| 기대결과 | Continue와 Start Your Journey 후보 영역에서 메뉴 텍스트 신호가 모두 관찰되어야 한다 |
-| Evidence | lobby-menu.png, screen-analysis.json, language-screen-analysis.json, post-language-screen.json, lobby-menu-analysis.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_019_lobby_menu_options.ps1` |
+| 분류 | 화면 |
+| 베이시스 | 언어 이후 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | 게임 창 관찰 |
+| 절차 | POST_LANGUAGE 준비·관찰 |
+| 기대결과 | 검은 화면·언어 특징 없음 |
+| 한계 | 로비/플레이를 확정하지 않음 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) |
 
-판단 기준:
+## TC-019 기존 유저 로비 CTA 후보
 
-- `post-language-screen.json.screenState`가 `POST_LANGUAGE_SCREEN`이어야 한다.
-- `lobby-menu-analysis.json.continueVisible`이 `true`여야 한다.
-- `lobby-menu-analysis.json.startJourneyVisible`이 `true`여야 한다.
-- 언어 선택 화면 특징이 남아 있거나 검은 화면이면 이상 신호로 기록한다.
-- `Continue`가 표시되면 기존 플레이 유저 가능성이 있으므로 `playerStateHint`를 `PLAYER-RETURNING`으로 기록한다.
-
-현재 제한:
-
-- OCR을 사용하지 않고 화면 내 예상 CTA 영역의 밝기와 텍스트 후보 픽셀 비율로 판별한다.
-- 따라서 버튼 문구를 실제 텍스트로 읽는 것은 아니며, 로비 UI 배치가 크게 바뀌면 기준 재검토가 필요하다.
-- 이 TC는 로비 CTA 표시 상태를 확인하는 테스트이고, 어떤 CTA를 선택해 실제 플레이로 진입하는지는 후속 TC에서 다룬다.
-
-## Sprint 5 TC: 기본 플레이 진입
-
-### TC-010 로비 CTA를 통한 플레이 화면 진입 확인
-
-| 항목 | 내용 |
+| 항목 | 기준 |
 | --- | --- |
-| 대분류 | TC-GROUP-05 기본 플레이 흐름 |
-| 소분류 | TC-05-A 새 게임 시작 |
-| 테스트 베이시스 | 로비 화면에서 Continue 또는 Start Your Journey를 선택하면 실제 플레이 화면으로 진입해야 함 |
-| 테스트 조건 | 로비 CTA 선택 입력 후 로비 화면이 사라지고 플레이 화면 후보로 전환되는지 확인한다 |
-| 사전조건 | Sheepy가 실행 중이고 언어 선택 이후 로비 화면이 표시되어야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN, Continue 감지 시 PLAYER-RETURNING 힌트 기록 |
-| 절차 | 로비 screenshot 저장, CTA 표시 확인, Enter 입력, 입력 후 screenshot 저장, 로비 CTA 잔류 여부와 화면 변화량 확인 |
-| 기대결과 | 로비 CTA가 더 이상 관찰되지 않고 화면 변화량이 기준값 이상이며 플레이 화면 후보로 분류되어야 한다 |
-| Evidence | before-gameplay-entry.png, after-gameplay-entry.png, before-lobby-menu-analysis.json, after-lobby-menu-analysis.json, transition-diff.json, gameplay-screen.json, entry-input-log.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, TEST_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_010_gameplay_entry.ps1` |
-
-판단 기준:
-
-- 입력 전 화면에서 Continue 또는 Start Your Journey가 관찰되어야 한다.
-- Enter 입력 후 `gameplay-screen.json.screenState`가 `GAMEPLAY_SCREEN_CANDIDATE`여야 한다.
-- 로비 대비 입력 후 화면 변화량이 `0.05` 이상이어야 한다.
-- 입력 후 언어 선택 화면 또는 검은 화면이 아니어야 한다.
-- 입력 후 Continue 또는 Start Your Journey CTA가 남아 있으면 플레이 진입으로 판단하지 않는다.
-
-현재 제한:
-
-- 현재 자동화는 선택된 CTA를 직접 읽지 않고, 로비에서 Enter를 눌러 현재 선택 상태로 진입한다.
-- `Continue`가 선택된 상태에서는 기존 플레이 유저 흐름으로 진입할 수 있으므로 `entry-input-log.json`에 `PLAYER-RETURNING` 힌트를 남긴다.
-- 이 TC는 플레이 화면 후보 진입까지만 확인하며, 실제 조작 가능한 상태인지는 후속 입력/안정성 TC에서 확인한다.
-
-### TC-012 프리즈 감지
-
-| 항목 | 내용 |
-| --- | --- |
-| 대분류 | TC-GROUP-07 안정성/크래시/프리즈 |
-| 소분류 | TC-07-B 프리즈 감지 |
-| 테스트 베이시스 | 실행 중 게임 화면이 장시간 정지하면 플레이 진행에 직접적인 영향을 준다 |
-| 테스트 조건 | 일정 시간 동안 연속 screenshot을 저장하고 화면 변화가 관찰되는지 확인한다 |
-| 사전조건 | Sheepy가 실행 중이고 게임 창이 관찰 가능해야 한다 |
-| 플레이어 상태 | PLAYER-UNKNOWN |
-| 절차 | 일정 간격으로 screenshot 저장, 연속 screenshot 쌍 이미지 비교, 변화 샘플 수 요약 |
-| 기대결과 | 비교 가능한 screenshot 쌍이 있고, 관찰 중 화면 변화가 1회 이상 확인되어야 한다 |
-| Evidence | freeze-sample-*.png, freeze-diff-*.json, freeze-samples.json, freeze-summary.json, final-process-state.json, judgement.json |
-| 실패 분류 후보 | PRODUCT_FAIL, ENV_FAIL, REVIEW_REQUIRED |
-| 자동화 상태 | 로컬 전용 pytest 구현 |
-| 개별 실행 | `scripts/run_tc_012_freeze_detection.ps1` |
-
-판단 기준:
-
-- 비교 가능한 screenshot 쌍이 1개 이상 있어야 한다.
-- 연속 screenshot 비교에서 기준값 이상의 화면 변화가 1회 이상 있어야 한다.
-- 관찰 종료 시 Sheepy 프로세스가 유지되어야 한다.
-- 변화가 거의 없더라도 현재 장면이 정적 화면일 수 있으므로, 근거가 부족하면 제품 프리즈로 단정하지 않고 `REVIEW_REQUIRED`로 남긴다.
-
-현재 제한:
-
-- 내부 FPS, 렌더 스레드, 게임 엔진 상태는 직접 읽지 않는다.
-- 화면이 의도적으로 정적인 메뉴나 컷신일 경우 이미지 변화가 작을 수 있다.
-- 조작 후 프리즈 여부는 후속 입력 기반 안정성 TC에서 확장한다.
+| 분류 | 화면 |
+| 베이시스 | 기존 유저 로비 CTA 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
+| 사전조건 | RETURNING 로비 |
+| 절차 | LOBBY 준비·영역 분석 |
+| 기대결과 | Continue/Start 후보 둘 다 있음 |
+| 한계 | 문구 OCR·선택 CTA 확정 아님 |
+| Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |
+| 실패 처리 | 사전조건 부족=REVIEW_REQUIRED, 신호 실패=FAIL 후 사람 원인 검토 |
+| 구현 | [코드](../tests\local\test_tc_019_lobby_menu_options.py) |

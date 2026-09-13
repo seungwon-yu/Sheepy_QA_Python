@@ -1,136 +1,17 @@
-# 로컬 Python 실행 환경
+# Windows 실행 환경
 
-## 목적
-
-이 문서는 `pytest` 또는 `python` 명령이 PC마다 다르게 동작하는 문제를 줄이기 위한 실행 기준을 정리한다.
-
-Windows에서는 Python이 설치되어 있어도 `python`, `py`, `pytest` 명령이 모두 같은 방식으로 등록되지 않을 수 있다. 따라서 이 프로젝트는 가상환경을 만들고 `python -m pytest`로 실행하는 방식을 권장한다.
-
-## 권장 환경
-
-| 항목 | 기준 |
-| --- | --- |
-| OS | Windows 10 이상 |
-| Python | 3.11 이상 |
-| Shell | Windows PowerShell |
-| 대상 게임 | Steam 버전 `Sheepy: A Short Adventure` |
-| 로컬 게임 테스트 | Steam 로그인, 게임 설치, GUI 세션 필요 |
-
-## 처음 실행
-
-PowerShell에서 프로젝트 폴더로 이동한 뒤 실행한다.
+Python 3.11 이상, Steam 설치/로그인, Sheepy 설치, 대화형 데스크톱이 실제 게임 테스트에 필요하다. 게임 없는 단위 테스트는 Linux에서도 실행한다. 실제 환경값은 [환경 프로필](environment-profile.md)에 기록한다.
 
 ```powershell
-cd .\Sheepy_QA_Python
 py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pytest
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pytest tests/unit
 ```
 
-`py` 런처가 없다면 설치된 Python 실행 파일로 가상환경을 만든다.
+가상환경 Python을 직접 사용하므로 Activate.ps1과 실행 정책 변경이 필수가 아니다. py가 없으면 설치한 python.exe 전체 경로를 사용한다. `pytest` 단독 명령의 PATH 오류를 제품 문제로 보지 않는다.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pytest
-```
+게임 창 크기·디스플레이 배율·창 가림·foreground는 이미지 기준에 영향을 준다. 창 캡처는 화면 영역을 캡처하므로 다른 창에 가려지면 영향을 받을 수 있다. TC-004/005의 전체 화면 관찰도 별도 제한이다.
 
-## pytest를 직접 실행하지 않는 이유
+로컬 결과는 artifacts/evidence, 집계는 artifacts/results에 있다. 창 탐지 실패는 프로세스 이름·window-search·preparation을 함께 검토한다. 기본 Steam 경로 외 설치와 실행 감지는 TC-001의 환경 관찰 범위이며 게임 설치/로그인 성공을 자동 확정하지 않는다.
 
-아래 명령은 환경에 따라 실패할 수 있다.
-
-```powershell
-pytest
-```
-
-이유:
-
-- `pytest.exe`가 PATH에 등록되지 않았을 수 있다.
-- 전역 Python과 가상환경 Python이 다를 수 있다.
-- Microsoft Store용 `python.exe` 별칭이 먼저 잡힐 수 있다.
-
-그래서 아래 명령을 기본으로 사용한다.
-
-```powershell
-python -m pytest
-```
-
-이 방식은 현재 활성화된 가상환경의 Python이 설치된 pytest 모듈을 실행하게 한다.
-
-## 로컬 Steam 테스트
-
-실제 Steam 게임 실행이 필요한 테스트는 기본 pytest에서는 skip된다.
-
-실행 조건:
-
-- Steam 설치
-- Steam 로그인
-- Sheepy 설치
-- 게임 창을 띄울 수 있는 Windows GUI 세션
-- 테스트 중 게임 창이 다른 창에 가려지지 않는 상태
-
-실행:
-
-```powershell
-$env:SHEEPY_RUN_STEAM_TESTS = "1"
-python -m pytest tests/local
-```
-
-개별 TC는 `scripts/` 아래 PowerShell 스크립트로 실행할 수 있다.
-
-```powershell
-.\scripts\run_tc_010_gameplay_entry.ps1
-.\scripts\run_tc_012_freeze_detection.ps1
-.\scripts\run_tc_019_lobby_menu_options.ps1
-```
-
-## CI와 다른 점
-
-GitHub Actions CI는 실제 Steam 테스트를 실행하지 않는다.
-
-CI는 다음 범위만 확인한다.
-
-- 의존성 설치
-- import 오류
-- 실제 Steam 없이 실행 가능한 unit test
-- pytest 결과 artifact 생성
-
-실제 게임 실행, 화면 캡처, 키보드 입력, 프리즈 관찰은 로컬 QA 범위이다.
-
-## 문제 해결
-
-### python 명령이 Microsoft Store로 연결되는 경우
-
-Windows 설정에서 App execution aliases의 `python.exe`, `python3.exe` 별칭을 끄거나, Python 공식 설치 경로의 실행 파일을 직접 사용한다.
-
-예:
-
-```powershell
-C:\Users\<user>\AppData\Local\Programs\Python\Python312\python.exe -m venv .venv
-```
-
-### Activate.ps1 실행이 막히는 경우
-
-현재 PowerShell 세션에만 실행 정책을 완화한다.
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-```
-
-### 로컬 Steam 테스트가 REVIEW_REQUIRED로 끝나는 경우
-
-우선 아래 evidence를 확인한다.
-
-```text
-window-search.json
-focused-window.json
-foreground-window.json
-judgement.json
-```
-
-게임 창을 찾지 못했거나 foreground가 아니면 제품 결함이 아니라 테스트 환경 또는 관찰 조건 문제일 수 있다.
+Steam 환경 snapshot은 기본 경로·프로세스 외 steam:// protocol 등록 명령도 읽는다. 등록 신호가 로그인·실제 실행 성공을 보장하지 않으며 해당 명령을 실행하는 검사도 아니다.

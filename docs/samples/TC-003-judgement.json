@@ -1,0 +1,26 @@
+{
+  "result": "FAIL",
+  "expectedResult": "SHEEPY_PROCESS_DETECTED",
+  "actualResult": "SHEEPY_PROCESS_NOT_DETECTED",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "Sheepy 관련 프로세스 감지",
+      "expected": true,
+      "actual": false,
+      "passed": false,
+      "evidenceKey": "process-state.json"
+    }
+  ],
+  "forbiddenSignals": [
+    {
+      "name": "지정 시간 내 프로세스 미감지",
+      "expected": false,
+      "actual": true,
+      "passed": false,
+      "evidenceKey": "process-state.json"
+    }
+  ],
+  "blockingConditions": [],
+  "judgementBasis": "테스트 동작은 수행되었으나 판정 조건을 충족하지 못했다: Sheepy 관련 프로세스 감지, 지정 시간 내 프로세스 미감지"
+}

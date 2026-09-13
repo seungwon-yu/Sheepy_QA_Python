@@ -94,7 +94,7 @@ def compareSaveSnapshots(before: SaveDataSnapshot, after: SaveDataSnapshot) -> S
         )
 
     return SavePreservationResult(
-        resultState="SAVE_DATA_PRESERVED",
+        resultState="SAVE_FILES_PRESENT",
         beforeFileCount=len(before.files),
         afterFileCount=len(after.files),
         missingFiles=missingFiles,

@@ -1,269 +1,39 @@
-# Sheepy_QA_Python
+# Sheepy 실제 게임 관찰 QA 포트폴리오
 
-Steam 게임 `Sheepy: A Short Adventure`를 대상으로 Python 기반 자동화 QA를 연습하는 프로젝트입니다.
+게임 QA 신입 지원을 위해 Steam 게임 **Sheepy: A Short Adventure**를 외부에서 관찰하는 Python 자동화 프로젝트입니다. **검증 대상 선정 → 사전조건 확인 → 입력·화면 증거 수집 → 기대/실제 비교 → 판단 한계 설명**을 보여줍니다.
 
-이번 프로젝트는 처음부터 하네스 엔지니어링이나 루프 엔지니어링을 적용하지 않고, 먼저 일반적인 자동화 QA 방식으로 테스트 기준과 TC를 설계합니다.
+## 먼저 볼 자료
 
-이후 자동화가 반복되거나 실패 분석이 복잡해지는 지점을 확인한 뒤, 하네스 또는 루프 엔지니어링이 필요한지 비교하는 것을 목표로 합니다.
-
-## 포트폴리오에서 먼저 볼 부분
-
-이 프로젝트는 실제 Steam 게임처럼 내부 상태를 직접 읽기 어려운 대상을 외부 관찰 evidence로 검증하는 포트폴리오입니다.
-
-| 확인 대상 | 파일 |
+| 질문 | 자료 |
 | --- | --- |
-| 현재 완료 범위와 실행 결과 | [docs/progress.md](docs/progress.md) |
-| 테스트 케이스 목록 | [docs/test-cases.md](docs/test-cases.md) |
-| 테스트 기준과 TC 연결 | [docs/traceability-matrix.md](docs/traceability-matrix.md) |
-| PASS/FAIL/REVIEW_REQUIRED 판단 기준 | [docs/judgement-basis.md](docs/judgement-basis.md) |
-| 대표 evidence 샘플 | [docs/evidence-samples.md](docs/evidence-samples.md) |
-| 로컬 Python 실행 환경 | [docs/local-environment.md](docs/local-environment.md) |
-| CI와 로컬 QA 범위 구분 | [docs/ci.md](docs/ci.md) |
+| 어떤 기준으로 테스트했는가? | [테스트 기준](docs/test-basis-and-standards.md), [TC 상세](docs/test-cases.md) |
+| 무엇을 확인했고 무엇은 확정할 수 없는가? | [판단 기준](docs/judgement-basis.md), [증거 샘플](docs/evidence-samples.md) |
+| 반복 실행 문제를 어떻게 다뤘는가? | [사전조건 개선 사례](docs/case-study.md) |
+| 현재 완료 여부는? | [진행 상태](docs/progress.md), [완성도 판단](docs/completion-review.md) |
 
-대표 산출물은 실행 후 `artifacts/evidence/` 아래에 생성됩니다. `artifacts/`는 로컬 실행 결과라 저장소에는 포함하지 않지만, 각 TC 실행 폴더에서 다음 파일을 확인할 수 있습니다.
+## 실제 구현 범위
 
-```text
-artifacts/evidence/<timestamp>-TC-xxx/
-├─ judgement.json
-├─ process-state.json
-├─ execution-log.json
-├─ screen-analysis.json
-├─ image-diff.json
-├─ foreground-window.json
-└─ *.png
-```
+`pytest`, `Pillow`, `psutil`, Windows `ctypes`를 사용합니다. OpenCV·OCR·AI 이미지 판정은 구현하지 않았습니다.
+프로세스, 창, 시각적 반응, 저장 파일 경로를 관찰합니다. 화면 변화가 이동·점프 성공을, 파일 존재가 저장 데이터 무결성을 증명하지는 않습니다.
 
-`judgement.json`은 테스트 동작 수행 여부, 기대 신호, 이상 신호, 차단 조건을 분리해서 기록합니다. 내부 상태 접근이나 OCR 없이 판단 근거가 부족한 경우에는 제품 결함으로 단정하지 않고 `REVIEW_REQUIRED`로 남기는 것이 핵심 원칙입니다.
+언어 선택→로비→플레이 화면 후보의 제한된 준비 절차를 추가했습니다. 알 수 없는 화면에서 키를 반복하지 않으며, 임의 플레이 화면에서 로비로 복귀하는 기능은 없습니다. 내부 상태를 읽는 엔진 하네스는 사용하지 않습니다.
 
-## 프로젝트 기준
+## 게임 없이 실행
 
-이 프로젝트의 테스트 설계 기준은 다음 두 문서를 함께 사용합니다.
-
-- ISTQB CTFL Foundation Level: 테스트 설계 절차, 테스트 베이시스, 테스트 조건, 테스트 케이스, 기대결과, 실행 결과 기준
-- ISTQB CTFL Game Testing: 게임 QA 특화 리스크, 게임 메커닉, 그래픽, 사운드, 레벨, 컨트롤러, 로컬라이제이션 기준
-
-상세 기준은 `docs/test-basis-and-standards.md`에 정리합니다.
-
-## 현재 목표
-
-```text
-실제 Steam 게임
-↓
-Python 자동화 QA
-↓
-테스트 기준 수립
-↓
-TC 대분류/소분류 설계
-↓
-실행/화면/입력/evidence 중심 테스트
-↓
-하네스와 루프 필요성 비교
-```
-
-## 문서 구조
-
-- `AGENTS.md`: 다음 작업자가 먼저 읽을 프로젝트 지도
-- `docs/test-basis-and-standards.md`: 테스트 기준과 적용 원칙
-- `docs/test-classification.md`: TC 대분류와 소분류 기준
-- `docs/test-cases.md`: 전체 TC 목록과 상세 분류
-- `docs/traceability-matrix.md`: 기준, 대분류, 소분류, TC 연결표
-- `docs/guardrails.md`: 테스트 수행 원칙과 제한사항
-- `docs/sprint-plan.md`: Sprint별 자동화 진행 순서와 개별 실행 단위
-- `docs/sprint-strategy.md`: Sprint를 나눈 기준과 ISTQB 연결 근거
-- `docs/player-state-strategy.md`: 최초 실행 유저와 기존 플레이 유저 분리 기준
-- `docs/judgement-basis.md`: PASS/FAIL/REVIEW_REQUIRED 판단 근거 기록 기준
-- `docs/evidence-samples.md`: 대표 evidence 산출물과 judgement 예시
-- `docs/local-environment.md`: Windows PowerShell 기준 Python 실행 환경과 문제 해결
-- `docs/progress.md`: 현재 완료 범위와 다음 작업 후보
-- `docs/code-convention.md`: 코드 작성 컨벤션
-- `docs/commit-convention.md`: 커밋 메시지 컨벤션
-- `docs/ci.md`: CI 범위와 로컬 QA 범위 구분
-
-## 프로젝트 구조
-
-```text
-Sheepy_QA_Python/
-├─ src/
-│  └─ sheepy_qa/
-│     ├─ config.py
-│     ├─ steam_app.py
-│     ├─ steam_environment.py
-│     ├─ process_check.py
-│     ├─ screen_capture.py
-│     ├─ image_analysis.py
-│     ├─ language_screen.py
-│     ├─ post_language_screen.py
-│     ├─ lobby_menu.py
-│     ├─ gameplay_screen.py
-│     ├─ stability.py
-│     ├─ freeze_detection.py
-│     ├─ image_diff.py
-│     ├─ keyboard_input.py
-│     ├─ window_state.py
-│     ├─ judgement.py
-│     ├─ wait.py
-│     ├─ local_test_config.py
-│     └─ evidence.py
-├─ tests/
-│  ├─ unit/
-│  └─ local/
-├─ docs/
-├─ .github/
-│  └─ workflows/
-│     └─ ci.yml
-├─ pyproject.toml
-├─ pytest.ini
-└─ requirements.txt
-```
-
-## 초기 TC 대분류
-
-| 대분류 | 목적 |
-| --- | --- |
-| 설치 및 실행 환경 | Steam, OS, 게임 설치, 실행 가능 상태 확인 |
-| 실행/종료 | 게임 프로세스 시작과 종료 확인 |
-| 메인 화면 및 초기 진입 | 초기 화면 도달과 기본 UI 확인 |
-| 입력 반응 | 키보드 입력에 대한 반응 확인 |
-| 기본 플레이 흐름 | 새 게임 시작 후 기본 이동/점프 흐름 확인 |
-| 화면/그래픽 표시 | 화면 깨짐, 검은 화면, UI 표시 문제 확인 |
-| 안정성/크래시/프리즈 | 일정 시간 동안 중단 없이 동작하는지 확인 |
-| Evidence 및 리포트 | 실패 시 증거와 실행 결과를 남기는지 확인 |
-
-## 자동화 방향
-
-초기 자동화는 다음 도구 후보를 기준으로 합니다.
-
-- `pytest`: 테스트 실행
-- `pyautogui` 또는 `pydirectinput`: 키보드/마우스 입력
-- `Pillow`: 스크린샷 저장
-- `opencv-python`: 화면 이미지 비교
-- `psutil`: 프로세스 상태 확인
-
-## 로컬 테스트
-
-Windows PowerShell 기준 권장 실행 순서입니다.
+Windows PowerShell, Python 3.11 이상 기준입니다.
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pytest
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pytest
 ```
 
-현재 단위 테스트는 실제 Steam 게임을 실행하지 않고, 실행 명령 생성, 프로세스 상태 판단, evidence 파일 저장 같은 기본 유틸을 먼저 검증합니다.
+가상환경 활성화 없이 실행하므로 PATH 혼동을 줄입니다. `py`가 없다면 설치된 Python의 전체 경로로 가상환경을 만듭니다. [환경 설정](docs/local-environment.md)
 
-`py` 런처가 없는 PC에서는 Python 3.11 이상을 설치한 뒤 아래처럼 전체 경로 또는 등록된 실행 파일 이름을 사용합니다.
+실제 Steam 테스트는 별도 opt-in입니다. 게임 설치·로그인·입력 대상 창·유저 상태를 먼저 기록하고 [실행 순서](docs/sprint-plan.md)를 따릅니다. 기존 세이브 삭제·수정은 하지 않습니다.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m pytest
-```
+## 결과 해석
 
-`pytest`를 직접 실행하지 않고 `python -m pytest`를 사용하는 이유는, 가상환경의 Python과 pytest 모듈을 확실하게 연결하기 위해서입니다. 일부 Windows 환경에서는 `pytest` 명령이 PATH에 등록되지 않았거나 Microsoft Store용 `python.exe` 별칭 때문에 실행이 막힐 수 있습니다.
+단위 테스트 통과와 실제 게임 테스트 통과를 분리합니다. `REVIEW_REQUIRED`는 pytest의 skip으로 표현하고 별도 집계하며, 통과로 세지 않습니다. 최신 실행 요약은 `artifacts/results/pytest-summary.md`에 생성됩니다. 이전 게임 실행 결과는 [과거 이력](docs/history/2026-09-13-before-revision.md)에 남깁니다.
 
-## 로컬 Steam 테스트
-
-실제 Steam과 Sheepy 실행이 필요한 테스트는 기본 `pytest`에서는 skip됩니다.
-
-로컬에서 실제 게임 테스트를 실행하려면 다음 조건이 필요합니다.
-
-- Steam 설치
-- Steam 로그인
-- Sheepy 설치
-- GUI 화면 세션
-
-실행 명령:
-
-```powershell
-$env:SHEEPY_RUN_STEAM_TESTS = "1"
-python -m pytest tests/local
-```
-
-또는 Windows PowerShell에서 아래 스크립트로 한 번에 실행할 수 있습니다.
-
-```powershell
-.\scripts\run_local_steam_tests.ps1
-```
-
-각 TC는 다음 스크립트로 하나씩 실행할 수 있습니다.
-
-```powershell
-.\scripts\run_tc_001_steam_environment.ps1
-.\scripts\run_tc_002_sheepy_launch.ps1
-.\scripts\run_tc_003_process_detection.ps1
-.\scripts\run_tc_004_initial_screenshot.ps1
-.\scripts\run_tc_005_black_screen_check.ps1
-.\scripts\run_tc_007_short_stability.ps1
-.\scripts\run_tc_009_language_selection_screen.ps1
-.\scripts\run_tc_010_gameplay_entry.ps1
-.\scripts\run_tc_012_freeze_detection.ps1
-.\scripts\run_tc_013_first_run_state.ps1
-.\scripts\run_tc_014_returning_state.ps1
-.\scripts\run_tc_015_save_preservation.ps1
-.\scripts\run_tc_016_basic_gameplay_flow.ps1
-.\scripts\run_tc_017_language_selection_input.ps1
-.\scripts\run_tc_018_post_language_screen.ps1
-.\scripts\run_tc_019_lobby_menu_options.ps1
-.\scripts\run_tc_011_movement_input.ps1
-.\scripts\run_tc_006_basic_action_input.ps1
-```
-
-Sprint 1 실행 환경과 초기 진입은 다음 스크립트로 실행합니다.
-
-```powershell
-.\scripts\run_sprint_1_initial_entry.ps1
-```
-
-Sprint 2 화면 상태 판별은 다음 스크립트로 실행합니다.
-
-```powershell
-.\scripts\run_sprint_2_screen_state.ps1
-```
-
-Sprint 3 언어 선택 화면과 선택 입력은 다음 스크립트로 실행합니다.
-
-```powershell
-.\scripts\run_sprint_3_language_selection.ps1
-```
-
-Sprint 4 언어 선택 이후 화면과 입력 반응은 다음 스크립트로 실행합니다.
-
-```powershell
-.\scripts\run_sprint_4_input_response.ps1
-```
-
-현재 로컬 Steam smoke 테스트는 `TC-001`부터 `TC-005`까지의 실행 환경, AppID 실행, 프로세스 감지, 초기 화면 screenshot 저장, 검은 화면 여부 확인을 대상으로 합니다.
-
-`TC-017`은 실제 Enter 입력을 전송하므로 Sprint 3 스크립트 또는 개별 TC 스크립트로 명시적으로 실행합니다.
-
-`TC-006`, `TC-011`은 실제 키보드 입력을 전송하므로 Sprint 4 스크립트 또는 개별 TC 스크립트로 명시적으로 실행합니다.
-
-## CI
-
-GitHub Actions CI는 실제 Steam 게임을 실행하지 않습니다.
-
-CI는 Python 의존성 설치, import 오류, 기본 유틸 테스트가 깨지지 않았는지 확인하는 용도입니다.
-
-실제 Sheepy 실행, 게임 화면 캡처, 키보드 입력 반응 확인은 로컬 QA에서 수행합니다.
-
-## 이미지 기반 판정의 한계와 방어 기준
-
-이 프로젝트는 실제 상용 게임을 대상으로 하므로 테스트 코드가 게임 내부 좌표, 렌더 스레드, UI 텍스트를 직접 읽지 않습니다. 따라서 화면 밝기, 색상 분포, 후보 영역, 입력 전후 이미지 차이 같은 외부 관찰 신호를 사용합니다.
-
-이 방식은 다음 한계를 가집니다.
-
-- 창이 다른 창에 가려지면 screenshot 판정이 왜곡될 수 있습니다.
-- OCR을 사용하지 않으므로 버튼 문구를 텍스트로 직접 검증하지 않습니다.
-- 정적 화면, 컷신, 배경 애니메이션에 따라 이미지 변화량 기준이 흔들릴 수 있습니다.
-- 해상도나 UI 배치가 크게 바뀌면 후보 영역 기준을 재검토해야 합니다.
-
-그래서 자동화 결과는 단순 PASS/FAIL만 남기지 않고 `judgement.json`에 차단 조건과 판단 근거를 함께 저장합니다. 사전조건이나 관찰 근거가 부족하면 `FAIL` 대신 `REVIEW_REQUIRED`로 기록해 제품 결함 오판을 줄입니다.
-
-## 현재 상태
-
-문서 기반 테스트 설계와 Python 자동화 기본 구조를 작성한 상태입니다.
-
-실제 Steam 실행이 필요한 `TC-001`부터 `TC-007`, `TC-009`부터 `TC-019`까지는 로컬 전용 pytest 테스트로 분리해 구현했습니다.
+[전체 문서 지도](docs/index.md) · [추적표](docs/traceability-matrix.md) · [작업 규칙](AGENTS.md)

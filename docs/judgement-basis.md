@@ -1,143 +1,24 @@
-# 판단 근거 기록 기준
+# 판단 근거와 실행 상태
 
-## 목적
+## 판정 계약
 
-이 문서는 자동화 테스트 결과에 판단 근거를 남기는 기준을 정의한다.
+`createJudgementRecord`는 동작 수행, 하나 이상의 필수 기대 신호, 이상 신호, 사전조건을 확인한다. 빈 expectedSignals는 REVIEW_REQUIRED이다. expectedResult/actualResult는 설명용 상태명이며 문자열 동일성 대신 TC의 명시적 신호를 평가한다.
 
-자동화 QA에서 단순히 `로그가 있음`, `파일이 생성됨`, `스크린샷이 있음`만으로 PASS를 판단하면 안 된다.
-
-각 TC는 테스트 동작이 실제로 수행되었는지, 기대 신호가 발생했는지, 발생하면 안 되는 이상 신호가 없었는지를 분리해서 기록한다.
-
-## 기준
-
-ISTQB Foundation 관점에서는 테스트 케이스마다 사전조건, 입력, 기대결과, 실제결과, 실행 결과가 분리되어야 한다.
-
-ISTQB Game Testing 관점에서는 화면, 입력, 진행, 크래시, 프리즈 같은 게임 특화 리스크를 관찰 가능한 evidence로 남겨야 한다.
-
-따라서 이 프로젝트의 판단 근거는 다음 세 조건을 기본 구조로 사용한다.
-
-```text
-판단 결과 =
-테스트 동작 수행 여부
-AND 기대 신호 발생 여부
-AND 이상 신호 부재 여부
-AND 사전조건 충족 여부
-```
-
-## 조건 구분
-
-| 조건 | 의미 | 예시 |
+| 결과 | 조건 | 해석 |
 | --- | --- | --- |
-| 테스트 동작 수행 여부 | 자동화가 의도한 동작을 실제로 수행했는가 | Steam 실행 명령 호출, Enter 입력 전송 |
-| 기대 신호 | 기대결과를 만족한다는 관찰 가능한 신호 | 언어 선택 항목 후보 2개 이상, 화면 변화 발생 |
-| 이상 신호 | 발생하면 안 되는 신호 | 검은 화면 지속, 입력 전후 완전 동일 화면 |
-| 사전조건/차단 조건 | 판단 전에 먼저 만족해야 하는 조건 | Sheepy 창 감지, foreground window 확인 |
+| PASS | 동작·기대 신호·이상 신호 부재·사전조건 충족 | 해당 관찰 계약 충족 |
+| FAIL | 관찰 조건은 충족했지만 기대 신호 실패 | 제품 결함 확정 전 인식/입력/환경 검토 |
+| REVIEW_REQUIRED | 동작 불확실, 사전조건 부족, 필수 신호 없음 | 검증 완료가 아님 |
 
-## PASS 기준
+pytest에서는 REVIEW_REQUIRED를 `skip("REVIEW_REQUIRED: ...")`로 표현한다. 알려진 결함의 기대 실패를 의미하는 xfail과 구분한다. tests/conftest.py가 PASS/FAIL/REVIEW_REQUIRED/NOT_RUN을 별도 집계한다. 명령 종료 코드 0만 보고 전체 게임 검증 완료로 판단하지 않는다.
 
-아래 조건을 모두 만족하면 PASS로 기록한다.
+## 관찰 범위
 
-```text
-1. 테스트 동작이 실제로 수행됨
-2. 기대 신호가 모두 확인됨
-3. 이상 신호가 검출되지 않음
-4. 사전조건과 차단 조건이 충족됨
-```
-
-## FAIL 기준
-
-테스트 동작과 사전조건은 충족했지만 기대 신호가 없거나 이상 신호가 검출되면 FAIL로 기록한다.
-
-예시:
-
-```text
-- 언어 선택 화면 분석 결과 선택 항목 후보가 기준보다 적음
-- 입력은 수행됐지만 입력 전후 화면 변화가 기준보다 작음
-- 검은 화면이 지속되는 것으로 분석됨
-```
-
-## REVIEW_REQUIRED 기준
-
-판단 근거가 부족하거나 사전조건을 충족하지 못하면 제품 결함으로 단정하지 않고 REVIEW_REQUIRED로 기록한다.
-
-예시:
-
-```text
-- Sheepy 창을 찾지 못함
-- 입력 대상 foreground window가 Sheepy가 아님
-- screenshot이 게임 창이 아니라 다른 창을 캡처함
-- 테스트 동작이 실제로 수행됐는지 확인할 수 없음
-```
-
-## Evidence 파일 형식
-
-각 TC는 가능하면 `judgement.json`을 저장한다.
-
-이 기준은 Sprint 3 전용이 아니라 전체 Sprint에 공통 적용한다.
-
-현재 적용 범위:
-
-| Sprint | TC | 적용 상태 |
+| 신호 | 말할 수 있는 것 | 말할 수 없는 것 |
 | --- | --- | --- |
-| Sprint 1 | TC-001, TC-002, TC-003, TC-004 | 적용 |
-| Sprint 2 | TC-005 | 적용 |
-| Sprint 3 | TC-009, TC-017 | 적용 |
+| INPUT_VISUAL_RESPONSE | 무입력 대비 이미지 변화 | 이동/점프 성공 확정 |
+| GAMEPLAY_SCREEN_CANDIDATE | 로비에서 화면 후보로 전환 | 조작·레벨 진행 정상 보장 |
+| SCREEN_CHANGE_OBSERVED | 변화 및 연속 무변화 제한 미만 | 내부 프리즈 부재 보장 |
+| SAVE_FILES_PRESENT | 관찰 전 파일 경로 존재 유지 | 저장 내용 무결성/복원 가능 |
 
-기본 구조:
-
-```json
-{
-  "result": "PASS",
-  "expectedResult": "LANGUAGE_SELECTION_SCREEN",
-  "actualResult": "LANGUAGE_SELECTION_SCREEN",
-  "actionPerformed": true,
-  "expectedSignals": [],
-  "forbiddenSignals": [],
-  "blockingConditions": [],
-  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
-}
-```
-
-## Sprint 3 적용
-
-TC-009 언어 선택 화면 도달 확인:
-
-```text
-테스트 동작:
-Sheepy 실행 후 게임 창 screenshot 저장
-
-기대 신호:
-중앙 영역에서 언어 선택 항목 후보가 2개 이상 확인됨
-어두운 배경 위에 채도 있는 UI 색상 블록이 기준 이상 확인됨
-
-이상 신호:
-검은 화면 지속이 검출되지 않음
-
-사전조건:
-Sheepy 창을 찾고 해당 창 screenshot을 저장할 수 있음
-```
-
-TC-017 언어 선택 입력 반응 확인:
-
-```text
-테스트 동작:
-Enter 입력 전송
-
-기대 신호:
-입력 전후 screenshot 차이가 기준 이상 발생
-
-이상 신호:
-입력 전후 화면이 완전히 동일하지 않음
-
-사전조건:
-입력 대상 foreground window가 Sheepy임
-Sheepy 창이 foreground가 아니면 입력을 전송하지 않고 REVIEW_REQUIRED로 처리함
-```
-
-## 주의사항
-
-- FAIL을 없애기 위해 기대결과를 바꾸지 않는다.
-- PASS를 만들기 위해 assertion을 완화하지 않는다.
-- 관찰 방식이 잘못된 경우 제품 FAIL로 단정하지 않고 REVIEW_REQUIRED로 남긴다.
-- 기준값을 변경할 때는 실제 evidence와 변경 이유를 문서에 남긴다.
-- 검은 배경이 많은 화면이라도 UI, 텍스트, 아이콘 같은 시각 정보가 있으면 검은 화면으로 단정하지 않는다.
+임계값 변경은 [이미지 평가](image-validation.md)의 자료와 이유를 남긴 후 수행한다. 실패를 없애기 위한 완화는 하지 않는다.

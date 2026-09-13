@@ -63,7 +63,7 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
 
     if window is None:
         judgementRecord = createJudgementRecord(
-            expectedResult="FREEZE_NOT_DETECTED",
+            expectedResult="SCREEN_CHANGE_OBSERVED",
             actualResult="REVIEW_REQUIRED",
             actionPerformed=False,
             expectedSignals=[],
@@ -86,9 +86,10 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
             ]
         )
         writer.writeJson(runDir, "judgement.json", judgementRecord)
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     screenshotPaths: list[Path] = []
+    sampleTimes: list[float] = []
     durationSeconds = 20
     intervalSeconds = 5
     startedAt = time.monotonic()
@@ -105,6 +106,7 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
                 runDir / f"freeze-sample-{len(screenshotPaths):02d}.png"
             )
             screenshotPaths.append(screenshotPath)
+            sampleTimes.append(time.monotonic() - startedAt)
 
         if elapsedSeconds >= durationSeconds:
             break
@@ -119,13 +121,14 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
         writer.writeJson(runDir, f"freeze-diff-{index - 1:02d}-{index:02d}.json", diff)
 
     finalProcesses = findProcessesByName(["sheepy", "sheepyashortadventure"])
-    freezeResult = summarizeFreezeObservation(diffs)
+    freezeResult = summarizeFreezeObservation(diffs, sampleTimes=sampleTimes if sampleTimes else None)
     writer.writeJson(
         runDir,
         "freeze-samples.json",
         {
             "durationSeconds": durationSeconds,
             "intervalSeconds": intervalSeconds,
+            "sampleTimes": sampleTimes,
             "screenshotFiles": [path.name for path in screenshotPaths]
         }
     )
@@ -133,7 +136,7 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
     writer.writeJson(runDir, "freeze-summary.json", freezeResult)
 
     judgementRecord = createJudgementRecord(
-        expectedResult="FREEZE_NOT_DETECTED",
+        expectedResult="SCREEN_CHANGE_OBSERVED",
         actualResult=freezeResult.resultState,
         actionPerformed=len(screenshotPaths) > 1,
         expectedSignals=[
@@ -162,6 +165,7 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
             )
         ],
         blockingConditions=[
+            JudgementCondition("화면 관찰 근거", "SCREEN_CHANGE_OBSERVED", freezeResult.resultState, freezeResult.resultState == "SCREEN_CHANGE_OBSERVED", "freeze-summary.json"),
             JudgementCondition(
                 name="Sheepy process detected",
                 expected=True,
@@ -181,6 +185,6 @@ def test_tc_012_screen_freeze_is_not_detected_during_observation() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"

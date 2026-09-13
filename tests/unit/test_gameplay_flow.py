@@ -29,7 +29,7 @@ def test_summarize_gameplay_flow_accepts_clear_input_delta() -> None:
         inputDiff=createDiff(0.04)
     )
 
-    assert result.resultState == "BASIC_GAMEPLAY_FLOW_DETECTED"
+    assert result.resultState == "GAMEPLAY_INPUT_VISUAL_RESPONSE"
     assert result.inputChangeDelta == 0.03
 
 

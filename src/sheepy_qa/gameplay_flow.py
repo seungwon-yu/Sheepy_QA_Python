@@ -30,7 +30,7 @@ def summarizeGameplayFlow(
 
     if inputChangeDelta >= minInputChangeDelta:
         return GameplayFlowResult(
-            resultState="BASIC_GAMEPLAY_FLOW_DETECTED",
+            resultState="GAMEPLAY_INPUT_VISUAL_RESPONSE",
             inputChangeDelta=inputChangeDelta,
             reason="플레이 화면 후보에서 입력 후 변화량이 무입력 변화량보다 충분히 크게 관찰되었다."
         )

@@ -87,7 +87,7 @@ def test_tc_007_game_remains_stable_for_short_observation() -> None:
             ]
         )
         writer.writeJson(runDir, "judgement.json", judgementRecord)
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     samples: list[StabilitySample] = []
     startedAt = time.monotonic()
@@ -180,6 +180,6 @@ def test_tc_007_game_remains_stable_for_short_observation() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"

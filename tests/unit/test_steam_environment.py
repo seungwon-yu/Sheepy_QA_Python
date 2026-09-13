@@ -1,6 +1,15 @@
 from sheepy_qa.steam_environment import SteamEnvironmentSnapshot, isSteamAvailable
 
 
+def test_protocol_registration_is_an_environment_signal():
+    snapshot = SteamEnvironmentSnapshot(False, False, [], [], True, "custom steam launcher")
+    assert isSteamAvailable(snapshot)
+
+
+def test_no_environment_signal_is_not_available():
+    assert not isSteamAvailable(SteamEnvironmentSnapshot(False, False, [], []))
+
+
 def test_is_steam_available_returns_true_when_process_exists() -> None:
     snapshot = SteamEnvironmentSnapshot(
         steamProcessFound=True,

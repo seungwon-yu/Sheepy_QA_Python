@@ -155,7 +155,7 @@ def test_tc_009_language_selection_screen_is_visible() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"
 
@@ -272,6 +272,6 @@ def test_tc_017_language_selection_enter_input_changes_screen() -> None:
     writer.writeJson(runDir, "judgement.json", judgementRecord)
 
     if judgementRecord.result == "REVIEW_REQUIRED":
-        pytest.xfail(judgementRecord.judgementBasis)
+        pytest.skip("REVIEW_REQUIRED: " + judgementRecord.judgementBasis)
 
     assert judgementRecord.result == "PASS"

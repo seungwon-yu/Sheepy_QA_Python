@@ -38,7 +38,7 @@ def createJudgementRecord(
     hasExpectedSignalFailure = any(condition.passed is False for condition in expectedSignals)
     hasForbiddenSignalFailure = any(condition.passed is False for condition in forbiddenSignals)
 
-    if hasBlockingCondition or actionPerformed is False:
+    if hasBlockingCondition or actionPerformed is False or not expectedSignals:
         result = "REVIEW_REQUIRED"
     elif hasExpectedSignalFailure or hasForbiddenSignalFailure:
         result = "FAIL"
@@ -76,6 +76,9 @@ def createJudgementBasis(
 
     if result == "PASS":
         return "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+
+    if not expectedSignals:
+        return "필수 기대 신호가 없어 관찰 근거를 확인할 수 없다. REVIEW_REQUIRED로 검토한다."
 
     if actionPerformed is False:
         return "테스트 동작 수행 여부가 확인되지 않아 제품 결함으로 단정하지 않고 검토가 필요하다."

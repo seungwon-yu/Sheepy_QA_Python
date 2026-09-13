@@ -1,0 +1,26 @@
+{
+  "result": "PASS",
+  "expectedResult": "STEAM_AVAILABLE",
+  "actualResult": "STEAM_AVAILABLE",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "Steam 실행 가능 상태",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "process-state.json"
+    }
+  ],
+  "forbiddenSignals": [
+    {
+      "name": "Steam 경로와 프로세스 모두 미확인",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "evidenceKey": "process-state.json"
+    }
+  ],
+  "blockingConditions": [],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}
