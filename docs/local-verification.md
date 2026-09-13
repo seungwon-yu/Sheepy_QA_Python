@@ -27,3 +27,5 @@ TC-003은 `process-observation.json`에 각 감지 시각과 프로세스 목록
 Computer Use의 창 목록에서 SheepyAShortAdventure 창 1개를 찾았으나 캡처는 `SetIsBorderRequired failed: 해당 인터페이스를 지원하지 않습니다. (0x80004002)`로 실패했다. 창을 재선택해 한 번 재시도했지만 동일했다. 이는 관찰 도구 오류이며 Sheepy 게임 결함으로 분류하지 않는다. 화면 미확인 상태에서 게임 입력을 하지 않았다.
 
 TC-003의 프로세스 감지 계약은 통과했지만 자동 기동 3회 반복, 로비 화면, 입력 반응, 정답셋 평가는 여전히 미완료이다.
+
+[추가 실제 게임 진단과 남은 결함](live-validation-2026-09-14.md). 캡처는 desktop 권한의 프로젝트 API로 재개했으며 도구 캡처 오류와 분리한다.

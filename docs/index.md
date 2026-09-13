@@ -26,3 +26,5 @@ README→현재 상태→테스트 기준/TC→사례→실행 결과→완성�
 | [기준→TC→구현→실행 추적](traceability-matrix.md) |
 
 최종본 작업 범위와 단계별 완료 조건은 [최종본 계획](finalization-plan.md)을 따른다.
+
+[추가 실제 게임 진단과 남은 결함](live-validation-2026-09-14.md). 캡처는 desktop 권한의 프로젝트 API로 재개했으며 도구 캡처 오류와 분리한다.

@@ -42,6 +42,8 @@ def ensureScreen(
         events.append({"elapsed": round(clock() - started, 3), "state": current.state, "foreground": current.foreground})
         if not current.foreground:
             return PreparationResult(False, target, current.state, "대상 창 포커스 또는 캡처 조건 부족", events)
+        if current.state == "LANGUAGE" and "LOBBY" in sentFrom:
+            return PreparationResult(False, target, current.state, "로비 진입 후 예상하지 않은 언어 후보: 추가 입력 중단", events)
         accepted = {target} if target != "POST_LANGUAGE" else {"POST_LANGUAGE", "LOBBY", "GAMEPLAY"}
         if current.state == "BLACK" and "LOBBY" in sentFrom:
             loadingObserved = True

@@ -64,3 +64,10 @@ def test_lobby_fade_without_loading_is_not_gameplay_ready():
     result, inputs = run([ScreenObservation(s) for s in ["LOBBY", "GAMEPLAY"]])
     assert not result.ready
     assert inputs == ["ENTER"]
+
+
+def test_false_language_candidate_after_lobby_never_sends_second_enter():
+    result, inputs = run([ScreenObservation(s) for s in ["LOBBY", "BLACK", "GAMEPLAY", "LANGUAGE"]])
+    assert not result.ready
+    assert inputs == ["ENTER"]
+    assert "추가 입력 중단" in result.reason
