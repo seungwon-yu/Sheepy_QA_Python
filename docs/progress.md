@@ -17,7 +17,7 @@
 ## 게임 없는 기준 실행
 
 명령: `.\.venv\Scripts\python.exe -m pytest -q` (SHEEPY_RUN_STEAM_TESTS=0).
-결과: **67 passed, 18 skipped**. 실제 게임 미실행 18개는 통과로 합산하지 않는다. compileall도 통과했다.
+결과: **75 passed, 18 skipped**. 실제 게임 미실행 18개는 통과로 합산하지 않는다. compileall도 통과했다.
 
 단위 테스트는 관찰·판단 함수가 지정된 입력에서 동작하는지를 검증한다. 화면 인식 정확도와 실제 게임 반복 안정성이 검증됐다는 의미가 아니다. 기준 실행 보관본은 artifacts/results/baseline-summary.json에 있다. 최근 선택 실행은 pytest-summary.json에 별도 생성된다.
 
@@ -35,3 +35,5 @@
 TC-001 환경과 TC-002 명령 호출은 실제 통과. TC-003은 최초 60초 미감지 후 Steam 준비 상태를 확인하고 한 번 재시도했다. 최신 결과는 FAIL이다. [실제 기동 기록](local-verification.md). 나머지 실제 화면/입력 테스트 15개는 미실행이다.
 
 최종본 작업 범위와 단계별 완료 조건은 [최종본 계획](finalization-plan.md)을 따른다.
+
+기동 진단 보완: 시간별 프로세스 관찰 8개 회귀 검증(최초 존재·마감 시각 감지·타임아웃·잘못된 시간값)이 통과했다. 실제 기동 재검증은 수동 실행 준비 대기이다.

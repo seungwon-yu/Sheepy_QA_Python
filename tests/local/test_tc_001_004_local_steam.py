@@ -7,7 +7,7 @@ from sheepy_qa.process_check import findProcessesByName, hasRunningProcess
 from sheepy_qa.screen_capture import captureScreenshot
 from sheepy_qa.steam_app import SteamApp
 from sheepy_qa.steam_environment import createSteamEnvironmentSnapshot, isSteamAvailable
-from sheepy_qa.wait import waitUntil
+from sheepy_qa.process_observation import observeProcessUntil
 
 
 pytestmark = pytest.mark.local_steam
@@ -97,13 +97,14 @@ def test_tc_003_sheepy_process_is_detected_after_launch() -> None:
 
     writer = EvidenceWriter()
     runDir = writer.createRunDir("TC-003")
-    matched, processes = waitUntil(
+    observation = observeProcessUntil(
         supplier=lambda: findProcessesByName(["sheepy", "sheepyashortadventure"]),
-        predicate=hasRunningProcess,
         timeoutSeconds=60,
         intervalSeconds=1
     )
-    writer.writeJson(runDir, "process-state.json", processes)
+    matched = observation.detected
+    writer.writeJson(runDir, "process-observation.json", observation)
+    writer.writeJson(runDir, "process-state.json", observation.samples[-1]["processes"])
     judgementRecord = createJudgementRecord(
         expectedResult="SHEEPY_PROCESS_DETECTED",
         actualResult="SHEEPY_PROCESS_DETECTED" if matched else "SHEEPY_PROCESS_NOT_DETECTED",

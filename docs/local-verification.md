@@ -13,3 +13,7 @@
 판정 근거는 [현재 관찰 JSON](samples/local-verification.json), [프로세스 판정](samples/TC-003-judgement.json)에 있다. 원본 실행별 evidence와 local-launch-first.json은 로컬 artifacts에 보존한다.
 
 최신 프로세스 관찰도 실패했으므로 기동 환경/로그인/Steam 상태를 확인해야 한다. 제품 버그로 단정하지 않으며 화면·입력 TC는 미실행이다.
+
+## 기동 진단 증거 보완
+
+TC-003은 `process-observation.json`에 각 감지 시각과 프로세스 목록을 기록한다. `initialProcessPresent=true`는 관찰 시작부터 게임이 있었다는 뜻이며 새 기동 성공으로 세지 않는다. false에서 감지로 바뀌어도 프로세스 출현만 증명하며 창 준비나 게임 플레이 성공을 보장하지 않는다. `process-state.json`은 최종 샘플로 호환 유지한다. 과거 60초 FAIL은 그대로 보존하며 새 실제 실행 결과는 아직 없다.

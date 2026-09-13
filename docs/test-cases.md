@@ -32,6 +32,8 @@
 
 ## TC-003 프로세스 감지
 
+추가 증거: `process-observation.json`의 시간별 샘플과 `initialProcessPresent`. 시작부터 존재한 프로세스는 새 기동 반복 성공에 합산하지 않는다.
+
 | 항목 | 기준 |
 | --- | --- |
 | 분류 | 실행 |
