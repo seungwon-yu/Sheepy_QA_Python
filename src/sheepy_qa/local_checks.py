@@ -6,6 +6,7 @@ from sheepy_qa.local_screen_session import LocalScreenSession
 from sheepy_qa.local_test_config import shouldRunSteamTests
 from sheepy_qa.judgement import JudgementCondition, createJudgementRecord
 from sheepy_qa.image_diff import compareImages
+from sheepy_qa.image_evaluation import INPUT_RESPONSE_THRESHOLD
 from sheepy_qa.screen_capture import captureWindowScreenshot
 
 def prepareCheck(testId, target):
@@ -54,9 +55,9 @@ def runVisualInputCheck(testId, action):
     delta = round(inputDiff.changedPixelRatio - idleDiff.changedPixelRatio, 4)
     writer.writeJson(runDir, "idle-diff.json", idleDiff)
     writer.writeJson(runDir, "input-diff.json", inputDiff)
-    writer.writeJson(runDir, "visual-response.json", {"delta": delta, "threshold": 0.005, "scope": "시각적 반응이며 실제 이동/점프 성공 확정은 아님"})
-    record = createJudgementRecord("INPUT_VISUAL_RESPONSE", "OBSERVED" if delta >= 0.005 else "NOT_CLEAR", performed,
-        [JudgementCondition("무입력 대비 변화량", ">=0.005", delta, delta >= 0.005, "visual-response.json")], [],
+    writer.writeJson(runDir, "visual-response.json", {"delta": delta, "threshold": INPUT_RESPONSE_THRESHOLD, "scope": "시각적 반응이며 실제 이동/점프 성공 확정은 아님"})
+    record = createJudgementRecord("INPUT_VISUAL_RESPONSE", "OBSERVED" if delta >= INPUT_RESPONSE_THRESHOLD else "NOT_CLEAR", performed,
+        [JudgementCondition("무입력 대비 변화량", ">=0.005", delta, delta >= INPUT_RESPONSE_THRESHOLD, "visual-response.json")], [],
         [JudgementCondition("준비 완료", True, prepared.ready, prepared.ready, "preparation.json")])
     writer.writeJson(runDir, "judgement.json", record)
     assert record.result == "PASS", record.judgementBasis
