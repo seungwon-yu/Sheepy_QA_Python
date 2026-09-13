@@ -35,15 +35,23 @@ def ensureScreen(
     started = clock()
     events = []
     sentFrom = set()
+    candidateSince = None
     while True:
         current = observe()
         events.append({"elapsed": round(clock() - started, 3), "state": current.state, "foreground": current.foreground})
         if not current.foreground:
             return PreparationResult(False, target, current.state, "대상 창 포커스 또는 캡처 조건 부족", events)
         accepted = {target} if target != "POST_LANGUAGE" else {"POST_LANGUAGE", "LOBBY", "GAMEPLAY"}
-        if current.state in accepted:
+        if target == "GAMEPLAY":
+            if current.state == "GAMEPLAY":
+                if candidateSince is None:
+                    candidateSince = clock()
+            else:
+                candidateSince = None
+        sustained = target != "GAMEPLAY" or (candidateSince is not None and clock() - candidateSince >= 2)
+        if current.state in accepted and sustained:
             return PreparationResult(True, target, current.state, "필요한 화면 관찰 조건 충족; 제품 전체 정상 판정은 아님", events)
-        if current.state not in {"LANGUAGE", "BLACK", "LOBBY", "POST_LANGUAGE"}:
+        if current.state not in {"LANGUAGE", "BLACK", "LOBBY", "POST_LANGUAGE", "GAMEPLAY"}:
             return PreparationResult(False, target, current.state, "알 수 없는 화면에서 입력하지 않고 검토", events)
         elapsed = clock() - started
         if elapsed >= timeoutSeconds:
