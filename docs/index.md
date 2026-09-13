@@ -24,3 +24,5 @@ README→현재 상태→테스트 기준/TC→사례→실행 결과→완성�
 | [테스트 케이스: 관찰 계약](test-cases.md) |
 | [테스트 분류와 위험](test-classification.md) |
 | [기준→TC→구현→실행 추적](traceability-matrix.md) |
+
+최종본 작업 범위와 단계별 완료 조건은 [최종본 계획](finalization-plan.md)을 따른다.
