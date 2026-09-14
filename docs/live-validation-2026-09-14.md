@@ -33,3 +33,16 @@
 4. 수정 후 정상 흐름 3회와 실패 차단 증거를 확보하기 전 최종본 완료로 표시하지 않는다.
 
 게임 파일·세이브는 직접 수정하거나 삭제하지 않았다. 수동 메뉴 탐색 Escape→Down→Down→Enter로 Quit 후 로비 복귀를 확인했으며 이 경로를 아직 자동 복구 기능으로 구현하지 않았다.
+
+## 주변 대비 수정 후 실제 재검증
+
+코드 기준 `31c90e9`, 2026-09-14 19:20 KST. 사용자 실행 후 Continue 선택 로비를 캡처로 확인했다. 창 외곽 826×542, 렌더링 캡처 810×503(상하 검은 여백 포함)이다. 이전 640×360과 다른 크기이며 OS 배율·현재 build는 재확인하지 않았다. sandbox에서는 창 미감지였고 승인된 desktop 실행에서 확인했다.
+
+| TC / 실행 ID (UTC) | 결과 | 근거 |
+| --- | --- | --- |
+| TC-019 / 2026-09-14T10-20-23.529+00-00-TC-019 | PASS 1회 | Continue 대비 0.2078, Start 대비 0.1029. [판정](samples/TC-019-contrast-judgement.json), [분석](samples/TC-019-contrast-analysis.json) |
+| TC-010 / 2026-09-14T10-20-41.380+00-00-TC-010 | REVIEW_REQUIRED | Enter 1회, 3.750초 BLACK 관찰, 13.235초 foreground=false로 중단. [준비 로그](samples/TC-010-focus-loss-preparation.json) |
+
+명령은 `SHEEPY_RUN_STEAM_TESTS=1`에서 `python -m pytest -m tc_019 -q`, 이어서 `python -m pytest -m tc_010 -q -p no:cacheprovider`이다. TC-019의 pytest 캐시 쓰기 경고는 검증 실패와 구분한다. TC-010은 로딩 전에 나타난 GAMEPLAY 후보를 준비 완료로 인정하지 않았고 포커스 상실 후 추가 입력을 보내지 않았다. 포커스 상실 원인과 실제 플레이 진입 완료는 확정하지 않는다. 후속 입력 TC는 실행하지 않았다.
+
+TC-019의 이번 화면은 이전 어두운 표본보다 밝아 절대 밝기 기준도 만족할 수 있다. 이번 PASS만으로 수정 효과나 모든 배율의 안정성을 주장하지 않는다. 실제 수정 효과의 근거는 이전 미탐 표본 회귀이며, 실제 정상 흐름 3회는 아직 미완료이다.
