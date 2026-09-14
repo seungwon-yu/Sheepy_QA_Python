@@ -22,6 +22,6 @@
 | TC-016 | 입력 | 복합 입력 시각 반응 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 | TC-017 | 입력 | 언어 선택 입력 반응 | [코드](../tests\local\test_tc_009_017_language_selection.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 | TC-018 | 화면 | 언어 이후 후보 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | 수정 후 실제 게임 미실행 |
-| TC-019 | 화면 | 기존 유저 로비 CTA 후보 | [코드](../tests\local\test_tc_019_lobby_menu_options.py) | 구현됨 | FAIL (Start 후보 미감지) ([진단](live-validation-2026-09-14.md)) |
+| TC-019 | 화면 | 기존 유저 로비 CTA 후보 | [코드](../tests\local\test_tc_019_lobby_menu_options.py) | 주변 대비 판정 보완 | 이전 실제 FAIL, 보관 표본 회귀 통과; 수정 후 실제 TC 미실행 ([진단](live-validation-2026-09-14.md)) |
 
 자동화 상태 준비/판정 함수의 단위 테스트는 제품 TC 통과로 합산하지 않는다. 최신 실제 실행이 추가되면 이 표의 실행 상태와 progress를 함께 갱신한다.

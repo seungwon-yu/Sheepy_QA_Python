@@ -3,7 +3,10 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageFilter
+
+
+MENU_CONTRAST_THRESHOLD = 3.0
 
 
 @dataclass(frozen=True)
@@ -14,6 +17,8 @@ class MenuOptionSignal:
     topBrightness: float
     textPixelRatio: float
     isVisible: bool
+    contrastPixelRatio: float = 0.0
+    contrastThreshold: float = MENU_CONTRAST_THRESHOLD
 
 
 @dataclass(frozen=True)
@@ -92,11 +97,16 @@ def analyzeMenuOption(
     right = int(width * rightRatio)
     bottom = int(height * bottomRatio)
     brightnessValues: list[float] = []
+    contrasts: list[float] = []
+    # 글씨보다 넓은 주변 평균과 비교해 절대 밝기만으로 배경을 CTA로 세지 않는다.
+    background = image.filter(ImageFilter.BoxBlur(max(1, height / 90)))
 
     for y in range(top, bottom, 2):
         for x in range(left, right, 2):
             red, green, blue = image.getpixel((x, y))
             brightnessValues.append((red + green + blue) / 3)
+            surroundingBrightness = sum(background.getpixel((x, y))) / 3
+            contrasts.append(brightnessValues[-1] - surroundingBrightness)
 
     if not brightnessValues:
         raise ValueError("No pixels were sampled from the menu option region.")
@@ -104,7 +114,8 @@ def analyzeMenuOption(
     sortedBrightness = sorted(brightnessValues)
     topBrightness = sortedBrightness[int(len(sortedBrightness) * 0.95)]
     textPixelRatio = sum(value >= textThreshold for value in brightnessValues) / len(brightnessValues)
-    isVisible = topBrightness >= textThreshold and textPixelRatio >= 0.08
+    contrastPixelRatio = sum(value >= MENU_CONTRAST_THRESHOLD for value in contrasts) / len(contrasts)
+    isVisible = contrastPixelRatio >= 0.08
 
     return MenuOptionSignal(
         name=name,
@@ -112,5 +123,6 @@ def analyzeMenuOption(
         averageBrightness=round(sum(brightnessValues) / len(brightnessValues), 2),
         topBrightness=round(topBrightness, 2),
         textPixelRatio=round(textPixelRatio, 4),
-        isVisible=isVisible
+        isVisible=isVisible,
+        contrastPixelRatio=round(contrastPixelRatio, 4)
     )
