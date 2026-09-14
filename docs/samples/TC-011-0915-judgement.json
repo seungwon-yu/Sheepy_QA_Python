@@ -1,0 +1,26 @@
+{
+  "result": "PASS",
+  "expectedResult": "INPUT_VISUAL_RESPONSE",
+  "actualResult": "OBSERVED",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "무입력 대비 변화량",
+      "expected": ">=0.005",
+      "actual": 0.3485,
+      "passed": true,
+      "evidenceKey": "visual-response.json"
+    }
+  ],
+  "forbiddenSignals": [],
+  "blockingConditions": [
+    {
+      "name": "준비 완료",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "preparation.json"
+    }
+  ],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}
