@@ -1,0 +1,8 @@
+{
+  "durationSeconds": 30,
+  "sampleCount": 7,
+  "processAliveThroughout": true,
+  "screenshotSavedThroughout": true,
+  "failedSampleCount": 0,
+  "resultState": "STABLE_SHORT_RUN"
+}

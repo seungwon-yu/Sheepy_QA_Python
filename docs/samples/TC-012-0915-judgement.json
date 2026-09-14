@@ -1,0 +1,55 @@
+{
+  "result": "PASS",
+  "expectedResult": "SCREEN_CHANGE_OBSERVED",
+  "actualResult": "SCREEN_CHANGE_OBSERVED",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "비교 가능한 screenshot 쌍",
+      "expected": "1개 이상",
+      "actual": 4,
+      "passed": true,
+      "evidenceKey": "freeze-summary.json.comparisonCount"
+    },
+    {
+      "name": "관찰 중 화면 변화",
+      "expected": "visibleChangeCount >= 1",
+      "actual": 4,
+      "passed": true,
+      "evidenceKey": "freeze-summary.json.visibleChangeCount"
+    }
+  ],
+  "forbiddenSignals": [
+    {
+      "name": "프로세스 종료",
+      "expected": false,
+      "actual": false,
+      "passed": true,
+      "evidenceKey": "final-process-state.json"
+    }
+  ],
+  "blockingConditions": [
+    {
+      "name": "화면 관찰 근거",
+      "expected": "SCREEN_CHANGE_OBSERVED",
+      "actual": "SCREEN_CHANGE_OBSERVED",
+      "passed": true,
+      "evidenceKey": "freeze-summary.json"
+    },
+    {
+      "name": "Sheepy process detected",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "initial-process-state.json"
+    },
+    {
+      "name": "Sheepy window detected",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "window-search.json"
+    }
+  ],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}

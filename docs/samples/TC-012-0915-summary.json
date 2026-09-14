@@ -1,0 +1,10 @@
+{
+  "comparisonCount": 4,
+  "visibleChangeCount": 4,
+  "maxChangedPixelRatio": 0.0139,
+  "averageChangedPixelRatio": 0.0083,
+  "resultState": "SCREEN_CHANGE_OBSERVED",
+  "reason": "관찰 구간에서 화면 변화가 있고 연속 무변화 제한 미만이다. 내부 프리즈 부재를 보장하지 않는다.",
+  "longestUnchangedSeconds": 0,
+  "secondsSinceLastChange": 0
+}

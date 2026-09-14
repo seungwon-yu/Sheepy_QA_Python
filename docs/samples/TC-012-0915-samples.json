@@ -1,0 +1,18 @@
+{
+  "durationSeconds": 20,
+  "intervalSeconds": 5,
+  "sampleTimes": [
+    0.6870000000053551,
+    6.375,
+    12.062000000005355,
+    17.78100000001723,
+    23.5
+  ],
+  "screenshotFiles": [
+    "freeze-sample-00.png",
+    "freeze-sample-01.png",
+    "freeze-sample-02.png",
+    "freeze-sample-03.png",
+    "freeze-sample-04.png"
+  ]
+}
