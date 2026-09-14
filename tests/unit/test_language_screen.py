@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from PIL import Image, ImageDraw
+import pytest
 
 from sheepy_qa.language_screen import analyzeLanguageSelectionScreen
 
@@ -31,3 +32,23 @@ def test_analyze_language_selection_screen_rejects_plain_black_image(tmp_path: P
 
     assert result.visibleOptionCount == 0
     assert result.isLanguageSelectionLike is False
+
+
+@pytest.mark.parametrize("size", [(192, 108), (640, 360), (1280, 720)])
+@pytest.mark.parametrize("sideColor,expected", [("black", True), ((50, 70, 130), False)])
+def test_option_colors_require_dark_surroundings(tmp_path, size, sideColor, expected):
+    image = Image.new("RGB", size, sideColor)
+    draw = ImageDraw.Draw(image)
+    width, height = size
+    draw.rectangle((int(width * 0.4), 0, int(width * 0.65), height), fill="black")
+    for y in (0.20, 0.34, 0.48, 0.62, 0.76):
+        draw.rectangle((int(width * 0.46), int(height * y),
+                        int(width * 0.54), int(height * (y + 0.08))), fill=(210, 30, 40))
+    path = tmp_path / "options.png"
+    image.save(path)
+
+    result = analyzeLanguageSelectionScreen(path)
+
+    assert result.visibleOptionCount >= 2
+    assert result.isLanguageSelectionLike is expected
+    assert result.sideDarkPixelRatio == (1.0 if expected else 0.0)

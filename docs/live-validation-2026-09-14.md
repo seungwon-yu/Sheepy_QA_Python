@@ -21,7 +21,7 @@
 
 ![실제 플레이 화면인데 언어 선택 후보로 오판한 사례](samples/gameplay-language-false-positive.png)
 
-이미지는 실제 게임 영역만 포함한다. AI가 화면을 대조한 진단 증거이며 사람이 라벨링한 평가셋으로 주장하지 않는다. centralDarkPixelRatio=0.8144, centralSaturatedPixelRatio=0.062, visibleOptionCount=3으로 기존 휴리스틱의 언어 후보 조건을 충족한다. `test_language_real_regression.py`는 실제 플레이를 언어로 분류하지 않아야 한다는 기대값으로 작성했고 현재 `xfail(strict=True)`이다. 알려진 결함을 통과로 집계하지 않으며, 수정돼 XPASS가 발생하면 xfail 표시를 제거하고 검증한다.
+이미지는 실제 게임 영역만 포함한다. AI가 화면을 대조한 진단 증거이며 사람이 라벨링한 평가셋으로 주장하지 않는다. centralDarkPixelRatio=0.8144, centralSaturatedPixelRatio=0.062, visibleOptionCount=3으로 기존 휴리스틱의 언어 후보 조건을 충족한다. `test_language_real_regression.py`는 실제 플레이를 언어로 분류하지 않아야 한다는 기대값으로 작성했다. 후속 오프라인 수정에서 양옆 배경 조건을 추가해 같은 기대값으로 통과했고 xfail 표시를 제거했다. 위 실제 실행 당시 결과는 보존하며 수정 후 실제 TC는 아직 재실행하지 않았다. [추가 판정 조건과 검증 범위](image-validation.md).
 
 ## 다음 실제 검증 전 조건
 

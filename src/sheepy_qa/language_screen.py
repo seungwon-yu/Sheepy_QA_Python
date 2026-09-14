@@ -15,6 +15,7 @@ class LanguageScreenAnalysisResult:
     centralDarkPixelRatio: float
     centralSaturatedPixelRatio: float
     isLanguageSelectionLike: bool
+    sideDarkPixelRatio: float = 0.0
 
 
 def analyzeLanguageSelectionScreen(imagePath: str | Path, sampleStep: int = 4) -> LanguageScreenAnalysisResult:
@@ -37,6 +38,16 @@ def analyzeLanguageSelectionScreen(imagePath: str | Path, sampleStep: int = 4) -
         darkPixelCount = 0
         saturatedPixelCount = 0
         sampledPixelCount = 0
+        sideDarkPixelCount = 0
+        sideSampledPixelCount = 0
+
+        # 언어 목록 밖의 배경도 확인해 플레이 장면의 중앙 색상 오탐을 줄인다.
+        for left, right in ((0.10, 0.35), (0.68, 0.90)):
+            for y in range(yStart, yEnd, sampleStep):
+                for x in range(int(width * left), int(width * right), sampleStep):
+                    pixel = rgbImage.getpixel((x, y))
+                    sideSampledPixelCount += 1
+                    sideDarkPixelCount += round(sum(pixel) / 3) <= 35
 
         for y in range(yStart, yEnd, sampleStep):
             slotIndex = min((y - yStart) // slotHeight, slotCount - 1)
@@ -70,7 +81,10 @@ def analyzeLanguageSelectionScreen(imagePath: str | Path, sampleStep: int = 4) -
     centralSaturatedPixelRatio = saturatedPixelCount / sampledPixelCount
     hasVisibleLanguageOptions = visibleOptionCount >= 2
     hasColorBlocksOnDarkBackground = centralSaturatedPixelRatio >= 0.035 and centralDarkPixelRatio >= 0.5
-    isLanguageSelectionLike = hasVisibleLanguageOptions and hasColorBlocksOnDarkBackground
+    sideDarkPixelRatio = sideDarkPixelCount / sideSampledPixelCount if sideSampledPixelCount else 0.0
+    isLanguageSelectionLike = (
+        hasVisibleLanguageOptions and hasColorBlocksOnDarkBackground and sideDarkPixelRatio >= 0.95
+    )
 
     return LanguageScreenAnalysisResult(
         width=width,
@@ -79,5 +93,6 @@ def analyzeLanguageSelectionScreen(imagePath: str | Path, sampleStep: int = 4) -
         visibleOptionCount=visibleOptionCount,
         centralDarkPixelRatio=round(centralDarkPixelRatio, 4),
         centralSaturatedPixelRatio=round(centralSaturatedPixelRatio, 4),
-        isLanguageSelectionLike=isLanguageSelectionLike
+        isLanguageSelectionLike=isLanguageSelectionLike,
+        sideDarkPixelRatio=round(sideDarkPixelRatio, 4)
     )
