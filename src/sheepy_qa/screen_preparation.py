@@ -37,8 +37,20 @@ def ensureScreen(
     sentFrom = set()
     candidateSince = None
     loadingObserved = False
+    lastState = "UNKNOWN"
+
+    def failed(phase, error):
+        events.append({"elapsed": round(clock() - started, 3), "phase": phase,
+                       "error": type(error).__name__, "message": str(error), "lastState": lastState})
+        return PreparationResult(False, target, "UNKNOWN",
+                                 f"{phase} 오류: {type(error).__name__}: {error}", events)
+
     while True:
-        current = observe()
+        try:
+            current = observe()
+        except Exception as error:
+            return failed("observe", error)
+        lastState = current.state
         events.append({"elapsed": round(clock() - started, 3), "state": current.state, "foreground": current.foreground})
         if not current.foreground:
             return PreparationResult(False, target, current.state, "대상 창 포커스 또는 캡처 조건 부족", events)
@@ -63,10 +75,18 @@ def ensureScreen(
             return PreparationResult(False, target, current.state, "화면 준비 제한 시간 초과", events)
         canEnter = current.state == "LANGUAGE" or (current.state == "LOBBY" and target == "GAMEPLAY")
         if canEnter and current.state not in sentFrom:
-            enter()
+            events.append({"action": "ENTER_ATTEMPT", "from": current.state,
+                           "elapsed": round(clock() - started, 3)})
+            try:
+                enter()
+            except Exception as error:
+                return failed("enter", error)
             sentFrom.add(current.state)
             events.append({"action": "ENTER", "from": current.state})
-        pause(min(intervalSeconds, timeoutSeconds - elapsed))
+        try:
+            pause(min(intervalSeconds, timeoutSeconds - elapsed))
+        except Exception as error:
+            return failed("pause", error)
 
 
 def ensureLobbyScreen(observe, enter, **options):

@@ -1,5 +1,6 @@
 """실제 창 캡처를 사전조건 상태 전이에 연결한다. 게임 파일은 변경하지 않는다."""
 import time
+from PIL import Image
 from sheepy_qa.screen_preparation import ScreenObservation, ensureScreen
 from sheepy_qa.screen_capture import captureWindowScreenshot
 from sheepy_qa.window_state import findWindowByProcessNameFragments, focusWindow
@@ -20,6 +21,7 @@ class LocalScreenSession:
         self.lastImage = None
         self.lobbyImage = None
         self.gameplay = None
+        self.captureSize = None
 
     def observe(self):
         self.window = findWindowByProcessNameFragments(["sheepyashortadventure"])
@@ -28,6 +30,16 @@ class LocalScreenSession:
         image = captureWindowScreenshot(self.window, self.runDir / f"prepare-{self.index:03d}.png")
         self.index += 1
         self.lastImage = image
+        with Image.open(image) as captured:
+            size = captured.size
+        if self.captureSize is None:
+            self.captureSize = size
+        elif size != self.captureSize:
+            self.writer.writeJson(self.runDir, f"prepare-{self.index - 1:03d}.json", {
+                "state": "SCREEN_SIZE_CHANGED", "expectedSize": self.captureSize,
+                "actualSize": size, "image": image
+            })
+            raise ValueError(f"화면 크기 변경: {self.captureSize} -> {size}; 비교와 추가 입력 중단")
         screen = analyzeImage(image)
         language = analyzeLanguageSelectionScreen(image)
         lobby = analyzeLobbyMenu(image)
