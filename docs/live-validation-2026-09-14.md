@@ -46,3 +46,22 @@
 명령은 `SHEEPY_RUN_STEAM_TESTS=1`에서 `python -m pytest -m tc_019 -q`, 이어서 `python -m pytest -m tc_010 -q -p no:cacheprovider`이다. TC-019의 pytest 캐시 쓰기 경고는 검증 실패와 구분한다. TC-010은 로딩 전에 나타난 GAMEPLAY 후보를 준비 완료로 인정하지 않았고 포커스 상실 후 추가 입력을 보내지 않았다. 포커스 상실 원인과 실제 플레이 진입 완료는 확정하지 않는다. 후속 입력 TC는 실행하지 않았다.
 
 TC-019의 이번 화면은 이전 어두운 표본보다 밝아 절대 밝기 기준도 만족할 수 있다. 이번 PASS만으로 수정 효과나 모든 배율의 안정성을 주장하지 않는다. 실제 수정 효과의 근거는 이전 미탐 표본 회귀이며, 실제 정상 흐름 3회는 아직 미완료이다.
+
+## TC-010 렌더링 창 오류 재시도
+
+코드 `b0212f6`, 실행 ID `2026-09-14T10-27-34.325+00-00-TC-010` (19:27 KST). 시작 시 플레이 화면을 확인하고 Escape 메뉴에서 Quit 선택을 캡처로 대조한 후 로비로 복귀했다. 준비 중 창 크기 변화가 관찰됐으나 원인은 확정하지 않았다. 게임·세이브 파일은 직접 수정하지 않았다.
+
+`SHEEPY_RUN_STEAM_TESTS=1`, `python -m pytest -m tc_010 -q -p no:cacheprovider` 결과는 **1 skipped / REVIEW_REQUIRED**이다. 로비 준비는 0.219초에 충족했지만 GAMEPLAY 준비 첫 캡처에서 `OSError: Expected one visible Sheepy rendering window`가 발생했다. 이번 TC의 Continue 입력 수행은 확인되지 않았다. [로비 준비](samples/TC-010-render-window-lobby.json), [캡처 오류](samples/TC-010-render-window-preparation.json), [판정](samples/TC-010-render-window-judgement.json).
+
+이후 desktop에서 게임 창을 재조회했지만 감지되지 않았다. Sheepy 프로세스 2개는 남아 있었고 MainWindowTitle은 비어 있었다. 게임 종료·충돌·리사이즈 중 상태 중 어느 원인인지 확정할 수 없다. 추가 입력과 실제 TC 재시도를 중단하고 사용자에게 화면 상태 확인을 요청했다. 19:20의 포커스 상실과 이번 렌더링 창 오류를 별개 실행으로 유지한다. TC-010 정상 전환 통과와 3회 반복은 미완료이다.
+
+사용자가 게임이 꺼져 다시 실행했다고 확인했다. 종료 원인은 미확정이다. 새 창의 안내 화면 종료 후 640×360 Continue 로비를 캡처로 대조하고 다음 두 실행을 별도로 수행했다.
+
+| 실행 ID (UTC), TC-010 | 결과 | 근거 |
+| --- | --- | --- |
+| 2026-09-14T10-30-35.885+00-00-TC-010 | REVIEW_REQUIRED | LOBBY 준비 첫 관찰 foreground=false. [로그](samples/TC-010-restart-focus-preparation.json) |
+| 2026-09-14T10-31-01.514+00-00-TC-010 | REVIEW_REQUIRED | 제목 표시줄 클릭 후 foreground=true 확인, 같은 Python 프로세스의 pytest.main으로 실행. 이미지 크기 불일치 오류. [로그](samples/TC-010-size-change-preparation.json) |
+
+마지막 실행의 prepare-000~002는 640×360, prepare-003은 1858×1057이었다. 서로 다른 크기의 이미지를 비교하는 단계에서 중단됐다. 크기 변경의 원인은 확정하지 않는다. 테스트 기대값과 이미지 비교 기준을 완화하지 않았다.
+
+추가 결함: LocalScreenSession.prepare의 예외 처리 결과가 events=[]로 기록되어 중단 전 상태·입력 이벤트가 보존되지 않는다. 마지막 실행의 actionPerformed=false를 실제 입력 부재로 해석하면 안 된다. 다음 수정은 크기 변경을 명시적으로 감지해 입력을 중단하고, 예외 이전 이벤트와 마지막 관찰 근거를 유지하는 것이다. 임의 리사이즈로 통과시키지 않는다. 이후 실제 입력 테스트는 실행하지 않았다.

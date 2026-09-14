@@ -1,0 +1,26 @@
+{
+  "result": "REVIEW_REQUIRED",
+  "expectedResult": "GAMEPLAY_SCREEN_CANDIDATE",
+  "actualResult": "UNKNOWN",
+  "actionPerformed": false,
+  "expectedSignals": [
+    {
+      "name": "플레이 화면 후보 전환",
+      "expected": true,
+      "actual": false,
+      "passed": false,
+      "evidenceKey": "preparation.json"
+    }
+  ],
+  "forbiddenSignals": [],
+  "blockingConditions": [
+    {
+      "name": "대상 창 관찰",
+      "expected": true,
+      "actual": false,
+      "passed": false,
+      "evidenceKey": "preparation.json"
+    }
+  ],
+  "judgementBasis": "테스트 동작 수행 여부가 확인되지 않아 제품 결함으로 단정하지 않고 검토가 필요하다."
+}

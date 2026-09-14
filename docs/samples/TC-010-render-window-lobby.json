@@ -1,0 +1,13 @@
+{
+  "ready": true,
+  "target": "LOBBY",
+  "actual": "LOBBY",
+  "reason": "필요한 화면 관찰 조건 충족; 제품 전체 정상 판정은 아님",
+  "events": [
+    {
+      "elapsed": 0.219,
+      "state": "LOBBY",
+      "foreground": true
+    }
+  ]
+}
