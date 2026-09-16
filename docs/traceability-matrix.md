@@ -13,7 +13,7 @@
 | TC-007 | 안정성 | 짧은 실행 관찰 | [코드](../tests\local\test_tc_007_short_stability.py) | 구현됨 | 동일 플레이 장면 3회 PASS, 각 6개 샘플 유지 ([진단](live-validation-2026-09-15.md)) |
 | TC-008 | 도구 | evidence 파일 저장 | [코드](../tests\local\..\unit\test_evidence_validation.py) | 구현됨 | 도구 검증 통과 |
 | TC-009 | 화면 | 언어 선택 후보 | [코드](../tests\local\test_tc_009_017_language_selection.py) | 구현됨 | 수정 후 실제 게임 미실행 |
-| TC-010 | 진입 | 플레이 화면 후보 전환 | [코드](../tests\local\test_tc_010_gameplay_entry.py) | 구현됨 | 크기 변경·이벤트 보존 수정 후 PASS 1회. 3회 반복 미완료 ([진단](live-validation-2026-09-15.md)) |
+| TC-010 | 진입 | 플레이 화면 후보 전환 | [코드](../tests\local\test_tc_010_gameplay_entry.py) | 구현됨 | 매번 Continue 로비 준비 후 3회 PASS. 재기동 반복 아님 ([진단](live-validation-2026-09-16.md)) |
 | TC-011 | 입력 | 방향키 시각 반응 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | PASS 1회, delta=0.3485. 양방향 개별 이동 확정 아님 ([진단](live-validation-2026-09-15.md)) |
 | TC-012 | 안정성 | 연속 화면 변화 관찰 | [코드](../tests\local\test_tc_012_freeze_detection.py) | 구현됨 | 동일 플레이 장면 3회 PASS, 각 4개 비교 모두 변화 ([진단](live-validation-2026-09-15.md)) |
 | TC-013 | 유저 상태 | 최초 실행 후보 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
@@ -22,6 +22,6 @@
 | TC-016 | 입력 | 복합 입력 시각 반응 | [코드](../tests\local\test_tc_013_014_015_016_player_save_gameplay.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 | TC-017 | 입력 | 언어 선택 입력 반응 | [코드](../tests\local\test_tc_009_017_language_selection.py) | 구현됨 | 수정 후 실제 게임 미실행 |
 | TC-018 | 화면 | 언어 이후 후보 | [코드](../tests\local\test_tc_018_006_011_post_language_input.py) | 구현됨 | 수정 후 실제 게임 미실행 |
-| TC-019 | 화면 | 기존 유저 로비 CTA 후보 | [코드](../tests\local\test_tc_019_lobby_menu_options.py) | 주변 대비 판정 보완 | 수정 후 실제 PASS 1회, 3회 반복 미완료 ([진단](live-validation-2026-09-14.md)) |
+| TC-019 | 화면 | 기존 유저 로비 CTA 후보 | [코드](../tests\local\test_tc_019_lobby_menu_options.py) | 주변 대비 판정 보완 | 매번 준비된 Continue 로비에서 3회 PASS ([진단](live-validation-2026-09-16.md)) |
 
 자동화 상태 준비/판정 함수의 단위 테스트는 제품 TC 통과로 합산하지 않는다. 최신 실제 실행이 추가되면 이 표의 실행 상태와 progress를 함께 갱신한다.

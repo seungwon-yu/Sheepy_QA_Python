@@ -1,0 +1,147 @@
+{
+  "ready": true,
+  "target": "GAMEPLAY",
+  "actual": "GAMEPLAY",
+  "reason": "필요한 화면 관찰 조건 충족; 제품 전체 정상 판정은 아님",
+  "events": [
+    {
+      "elapsed": 0.141,
+      "state": "LOBBY",
+      "foreground": true
+    },
+    {
+      "action": "ENTER_ATTEMPT",
+      "from": "LOBBY",
+      "elapsed": 0.141
+    },
+    {
+      "action": "ENTER",
+      "from": "LOBBY"
+    },
+    {
+      "elapsed": 0.875,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 1.562,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 2.234,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 2.922,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 3.562,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 4.219,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 4.812,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 5.406,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 5.984,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 6.594,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 7.203,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 7.797,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 8.391,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 8.984,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 9.578,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 10.187,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 10.781,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 11.375,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 11.984,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 12.703,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 13.344,
+      "state": "BLACK",
+      "foreground": true
+    },
+    {
+      "elapsed": 14.031,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 14.703,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 15.391,
+      "state": "GAMEPLAY",
+      "foreground": true
+    },
+    {
+      "elapsed": 16.078,
+      "state": "GAMEPLAY",
+      "foreground": true
+    }
+  ]
+}
