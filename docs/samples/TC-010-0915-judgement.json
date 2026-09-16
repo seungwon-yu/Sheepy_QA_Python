@@ -1,0 +1,26 @@
+{
+  "result": "PASS",
+  "expectedResult": "GAMEPLAY_SCREEN_CANDIDATE",
+  "actualResult": "GAMEPLAY",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "플레이 화면 후보 전환",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "preparation.json"
+    }
+  ],
+  "forbiddenSignals": [],
+  "blockingConditions": [
+    {
+      "name": "대상 창 관찰",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "preparation.json"
+    }
+  ],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}

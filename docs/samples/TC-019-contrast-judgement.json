@@ -1,0 +1,25 @@
+{
+  "result": "PASS",
+  "expectedResult": "LOBBY_MENU_WITH_CONTINUE_AND_START",
+  "actualResult": "LOBBY_MENU_WITH_CONTINUE_AND_START",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "Continue 후보",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "lobby-menu-analysis.json"
+    },
+    {
+      "name": "Start 후보",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "lobby-menu-analysis.json"
+    }
+  ],
+  "forbiddenSignals": [],
+  "blockingConditions": [],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}

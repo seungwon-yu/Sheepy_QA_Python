@@ -1,0 +1,47 @@
+{
+  "codeCommit": "9860587",
+  "scope": "동일 프로세스의 고정 플레이 장면에서 조작 없이 반복 관찰. 재기동 반복이나 장시간 안정성 보장이 아님",
+  "sourceRoot": "artifacts/evidence",
+  "captureSize": [640, 360],
+  "runs": [
+    {
+      "id": "2026-09-15T09-50-57.904+00-00-TC-007",
+      "testId": "TC-007", "iteration": 1, "result": "PASS",
+      "sampleCount": 6, "lastElapsedSeconds": 30.2,
+      "processAliveThroughout": true, "screenshotSavedThroughout": true, "failedSampleCount": 0
+    },
+    {
+      "id": "2026-09-15T09-51-32.084+00-00-TC-012",
+      "testId": "TC-012", "iteration": 1, "result": "PASS",
+      "sampleCount": 5, "firstCaptureSeconds": 1.141, "lastCaptureSeconds": 25.235,
+      "comparisonCount": 4, "visibleChangeCount": 4, "longestUnchangedSeconds": 0,
+      "averageChangedPixelRatio": 0.01, "maxChangedPixelRatio": 0.0106
+    },
+    {
+      "id": "2026-09-15T09-52-28.154+00-00-TC-007",
+      "testId": "TC-007", "iteration": 2, "result": "PASS",
+      "sampleCount": 6, "lastElapsedSeconds": 30.39,
+      "processAliveThroughout": true, "screenshotSavedThroughout": true, "failedSampleCount": 0
+    },
+    {
+      "id": "2026-09-15T09-53-02.468+00-00-TC-012",
+      "testId": "TC-012", "iteration": 2, "result": "PASS",
+      "sampleCount": 5, "firstCaptureSeconds": 1.015, "lastCaptureSeconds": 25.062,
+      "comparisonCount": 4, "visibleChangeCount": 4, "longestUnchangedSeconds": 0,
+      "averageChangedPixelRatio": 0.0106, "maxChangedPixelRatio": 0.0134
+    },
+    {
+      "id": "2026-09-15T09-54-16.175+00-00-TC-007",
+      "testId": "TC-007", "iteration": 3, "result": "PASS",
+      "sampleCount": 6, "lastElapsedSeconds": 30.34,
+      "processAliveThroughout": true, "screenshotSavedThroughout": true, "failedSampleCount": 0
+    },
+    {
+      "id": "2026-09-15T09-54-50.485+00-00-TC-012",
+      "testId": "TC-012", "iteration": 3, "result": "PASS",
+      "sampleCount": 5, "firstCaptureSeconds": 1.0, "lastCaptureSeconds": 25.391,
+      "comparisonCount": 4, "visibleChangeCount": 4, "longestUnchangedSeconds": 0,
+      "averageChangedPixelRatio": 0.0083, "maxChangedPixelRatio": 0.0114
+    }
+  ]
+}

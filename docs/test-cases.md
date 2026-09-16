@@ -263,7 +263,7 @@
 | 분류 | 화면 |
 | 베이시스 | 기존 유저 로비 CTA 후보 관련 관찰 가능한 신호; 내부 공식 요구사항 아님 |
 | 사전조건 | RETURNING 로비 |
-| 절차 | LOBBY 준비·영역 분석 |
+| 절차 | LOBBY 준비·고정 영역의 주변 대비 픽셀 분석 ([기준과 한계](image-validation.md#어두운-로비-cta-회귀)) |
 | 기대결과 | Continue/Start 후보 둘 다 있음 |
 | 한계 | 문구 OCR·선택 CTA 확정 아님 |
 | Evidence | judgement.json과 해당 분석/입력/프로세스 기록; 준비 TC는 preparation.json |

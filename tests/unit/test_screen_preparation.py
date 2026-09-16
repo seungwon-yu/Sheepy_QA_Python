@@ -71,3 +71,34 @@ def test_false_language_candidate_after_lobby_never_sends_second_enter():
     assert not result.ready
     assert inputs == ["ENTER"]
     assert "추가 입력 중단" in result.reason
+
+
+@pytest.mark.parametrize("phase", ["observe", "enter", "pause"])
+def test_callback_error_keeps_prior_observation_and_input_status(phase):
+    observations = [0]
+    inputs = []
+
+    def observe():
+        observations[0] += 1
+        if phase == "observe" and observations[0] == 2:
+            raise OSError("capture unavailable")
+        return ScreenObservation("LOBBY")
+
+    def enter():
+        if phase == "enter":
+            raise RuntimeError("input incomplete")
+        inputs.append("ENTER")
+
+    def pause(seconds):
+        if phase == "pause":
+            raise RuntimeError("wait interrupted")
+
+    result = ensureScreen("GAMEPLAY", observe, enter, clock=lambda: 0, pause=pause)
+    assert not result.ready
+    assert result.actual == "UNKNOWN"
+    assert result.events[0]["state"] == "LOBBY"
+    assert result.events[-1]["phase"] == phase
+    assert result.events[-1]["lastState"] == "LOBBY"
+    actions = [event.get("action") for event in result.events if "action" in event]
+    assert actions == (["ENTER_ATTEMPT"] if phase == "enter" else ["ENTER_ATTEMPT", "ENTER"])
+    assert inputs == ([] if phase == "enter" else ["ENTER"])

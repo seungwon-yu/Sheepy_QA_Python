@@ -1,0 +1,14 @@
+{
+  "codeCommit": "c4911d3",
+  "sourceRoot": "artifacts/evidence",
+  "captureSize": [640, 360],
+  "scope": "동일 실행 세션에서 매번 Continue 로비를 준비한 3회 반복. 재기동 반복이나 조작 성공 검증은 아님",
+  "runs": [
+    {"id": "2026-09-16T10-29-16.866+00-00-TC-019", "testId": "TC-019", "iteration": 1, "result": "PASS", "ready": true, "actual": "LOBBY", "captureCount": 1, "lastElapsedSeconds": 0.171, "continueVisible": true, "startJourneyVisible": true},
+    {"id": "2026-09-16T10-29-17.360+00-00-TC-010", "testId": "TC-010", "iteration": 1, "result": "PASS", "ready": true, "actual": "GAMEPLAY", "captureCount": 29, "lastElapsedSeconds": 17.438, "enterCount": 1, "blackObserved": true, "allObservedForeground": true},
+    {"id": "2026-09-16T10-31-32.313+00-00-TC-019", "testId": "TC-019", "iteration": 2, "result": "PASS", "ready": true, "actual": "LOBBY", "captureCount": 1, "lastElapsedSeconds": 0.172, "continueVisible": true, "startJourneyVisible": true},
+    {"id": "2026-09-16T10-31-32.819+00-00-TC-010", "testId": "TC-010", "iteration": 2, "result": "PASS", "ready": true, "actual": "GAMEPLAY", "captureCount": 26, "lastElapsedSeconds": 15.547, "enterCount": 1, "blackObserved": true, "allObservedForeground": true},
+    {"id": "2026-09-16T10-33-13.522+00-00-TC-019", "testId": "TC-019", "iteration": 3, "result": "PASS", "ready": true, "actual": "LOBBY", "captureCount": 1, "lastElapsedSeconds": 0.172, "continueVisible": true, "startJourneyVisible": true},
+    {"id": "2026-09-16T10-33-14.020+00-00-TC-010", "testId": "TC-010", "iteration": 3, "result": "PASS", "ready": true, "actual": "GAMEPLAY", "captureCount": 27, "lastElapsedSeconds": 16.078, "enterCount": 1, "blackObserved": true, "allObservedForeground": true}
+  ]
+}

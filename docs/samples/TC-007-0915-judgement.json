@@ -1,0 +1,55 @@
+{
+  "result": "PASS",
+  "expectedResult": "STABLE_SHORT_RUN",
+  "actualResult": "STABLE_SHORT_RUN",
+  "actionPerformed": true,
+  "expectedSignals": [
+    {
+      "name": "관찰 샘플 수",
+      "expected": "1보다 큼",
+      "actual": 7,
+      "passed": true,
+      "evidenceKey": "stability-summary.json.sampleCount"
+    },
+    {
+      "name": "관찰 중 프로세스 유지",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "stability-summary.json.processAliveThroughout"
+    },
+    {
+      "name": "관찰 중 screenshot 저장",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "stability-summary.json.screenshotSavedThroughout"
+    }
+  ],
+  "forbiddenSignals": [
+    {
+      "name": "비정상 종료 샘플",
+      "expected": 0,
+      "actual": 0,
+      "passed": true,
+      "evidenceKey": "stability-summary.json.failedSampleCount"
+    }
+  ],
+  "blockingConditions": [
+    {
+      "name": "Sheepy process detected",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "initial-process-state.json"
+    },
+    {
+      "name": "Sheepy window detected",
+      "expected": true,
+      "actual": true,
+      "passed": true,
+      "evidenceKey": "window-search.json"
+    }
+  ],
+  "judgementBasis": "테스트 동작이 수행되었고, 기대 신호가 확인되었으며, 발생하면 안 되는 이상 신호가 검출되지 않았다."
+}

@@ -25,9 +25,68 @@
 
 ## 다음 실제 검증 전 조건
 
+후속 오프라인 수정: 로비 CTA의 주변 대비를 측정해 보관된 Start 미탐 표본을 회귀 통과로 전환했다. 밝은 단색·완만한 명암 변화의 오탐도 회귀로 차단했다. 실제 실행 당시 FAIL은 유지하며 수정 후 TC-019는 미실행이다. [판정 변경·표본·남은 한계](image-validation.md#어두운-로비-cta-회귀).
+
 1. 언어 화면/플레이/로비/로딩의 실제 표본에 독립적인 정답을 붙여 화면 분류를 보완한다.
 2. Start 항목의 고정 영역·명암 조건을 실제 표본으로 평가한다. 밝은 배경을 글자로 오인하는 반례도 포함한다.
 3. 안정된 로비에서 010→006/011을 각각 재준비해 수행한다. 단계별 최초 결과와 재시도를 분리한다.
 4. 수정 후 정상 흐름 3회와 실패 차단 증거를 확보하기 전 최종본 완료로 표시하지 않는다.
 
 게임 파일·세이브는 직접 수정하거나 삭제하지 않았다. 수동 메뉴 탐색 Escape→Down→Down→Enter로 Quit 후 로비 복귀를 확인했으며 이 경로를 아직 자동 복구 기능으로 구현하지 않았다.
+
+## 주변 대비 수정 후 실제 재검증
+
+코드 기준 `31c90e9`, 2026-09-14 19:20 KST. 사용자 실행 후 Continue 선택 로비를 캡처로 확인했다. 창 외곽 826×542, 렌더링 캡처 810×503(상하 검은 여백 포함)이다. 이전 640×360과 다른 크기이며 OS 배율·현재 build는 재확인하지 않았다. sandbox에서는 창 미감지였고 승인된 desktop 실행에서 확인했다.
+
+| TC / 실행 ID (UTC) | 결과 | 근거 |
+| --- | --- | --- |
+| TC-019 / 2026-09-14T10-20-23.529+00-00-TC-019 | PASS 1회 | Continue 대비 0.2078, Start 대비 0.1029. [판정](samples/TC-019-contrast-judgement.json), [분석](samples/TC-019-contrast-analysis.json) |
+| TC-010 / 2026-09-14T10-20-41.380+00-00-TC-010 | REVIEW_REQUIRED | Enter 1회, 3.750초 BLACK 관찰, 13.235초 foreground=false로 중단. [준비 로그](samples/TC-010-focus-loss-preparation.json) |
+
+명령은 `SHEEPY_RUN_STEAM_TESTS=1`에서 `python -m pytest -m tc_019 -q`, 이어서 `python -m pytest -m tc_010 -q -p no:cacheprovider`이다. TC-019의 pytest 캐시 쓰기 경고는 검증 실패와 구분한다. TC-010은 로딩 전에 나타난 GAMEPLAY 후보를 준비 완료로 인정하지 않았고 포커스 상실 후 추가 입력을 보내지 않았다. 포커스 상실 원인과 실제 플레이 진입 완료는 확정하지 않는다. 후속 입력 TC는 실행하지 않았다.
+
+TC-019의 이번 화면은 이전 어두운 표본보다 밝아 절대 밝기 기준도 만족할 수 있다. 이번 PASS만으로 수정 효과나 모든 배율의 안정성을 주장하지 않는다. 실제 수정 효과의 근거는 이전 미탐 표본 회귀이며, 실제 정상 흐름 3회는 아직 미완료이다.
+
+## TC-010 렌더링 창 오류 재시도
+
+코드 `b0212f6`, 실행 ID `2026-09-14T10-27-34.325+00-00-TC-010` (19:27 KST). 시작 시 플레이 화면을 확인하고 Escape 메뉴에서 Quit 선택을 캡처로 대조한 후 로비로 복귀했다. 준비 중 창 크기 변화가 관찰됐으나 원인은 확정하지 않았다. 게임·세이브 파일은 직접 수정하지 않았다.
+
+`SHEEPY_RUN_STEAM_TESTS=1`, `python -m pytest -m tc_010 -q -p no:cacheprovider` 결과는 **1 skipped / REVIEW_REQUIRED**이다. 로비 준비는 0.219초에 충족했지만 GAMEPLAY 준비 첫 캡처에서 `OSError: Expected one visible Sheepy rendering window`가 발생했다. 이번 TC의 Continue 입력 수행은 확인되지 않았다. [로비 준비](samples/TC-010-render-window-lobby.json), [캡처 오류](samples/TC-010-render-window-preparation.json), [판정](samples/TC-010-render-window-judgement.json).
+
+이후 desktop에서 게임 창을 재조회했지만 감지되지 않았다. Sheepy 프로세스 2개는 남아 있었고 MainWindowTitle은 비어 있었다. 게임 종료·충돌·리사이즈 중 상태 중 어느 원인인지 확정할 수 없다. 추가 입력과 실제 TC 재시도를 중단하고 사용자에게 화면 상태 확인을 요청했다. 19:20의 포커스 상실과 이번 렌더링 창 오류를 별개 실행으로 유지한다. TC-010 정상 전환 통과와 3회 반복은 미완료이다.
+
+사용자가 게임이 꺼져 다시 실행했다고 확인했다. 종료 원인은 미확정이다. 새 창의 안내 화면 종료 후 640×360 Continue 로비를 캡처로 대조하고 다음 두 실행을 별도로 수행했다.
+
+| 실행 ID (UTC), TC-010 | 결과 | 근거 |
+| --- | --- | --- |
+| 2026-09-14T10-30-35.885+00-00-TC-010 | REVIEW_REQUIRED | LOBBY 준비 첫 관찰 foreground=false. [로그](samples/TC-010-restart-focus-preparation.json) |
+| 2026-09-14T10-31-01.514+00-00-TC-010 | REVIEW_REQUIRED | 제목 표시줄 클릭 후 foreground=true 확인, 같은 Python 프로세스의 pytest.main으로 실행. 이미지 크기 불일치 오류. [로그](samples/TC-010-size-change-preparation.json) |
+
+마지막 실행의 prepare-000~002는 640×360, prepare-003은 1858×1057이었다. 서로 다른 크기의 이미지를 비교하는 단계에서 중단됐다. 크기 변경의 원인은 확정하지 않는다. 테스트 기대값과 이미지 비교 기준을 완화하지 않았다.
+
+추가 결함: LocalScreenSession.prepare의 예외 처리 결과가 events=[]로 기록되어 중단 전 상태·입력 이벤트가 보존되지 않는다. 마지막 실행의 actionPerformed=false를 실제 입력 부재로 해석하면 안 된다. 다음 수정은 크기 변경을 명시적으로 감지해 입력을 중단하고, 예외 이전 이벤트와 마지막 관찰 근거를 유지하는 것이다. 임의 리사이즈로 통과시키지 않는다. 이후 실제 입력 테스트는 실행하지 않았다.
+
+## 재기동 후 TC-010 통과
+
+코드 `5a9bc18`, 사용자 요청으로 정상 창 닫기 후 Steam URI 재실행을 수행했다. 최초 실행 ID `2026-09-14T10-36-04.996+00-00-TC-010`은 언어 선택 뒤 로비 준비 30초 초과로 REVIEW_REQUIRED였다. 마지막 캡처는 게임패드 안내 화면인데 BLACK으로 분류됐다. 준비 지연과 어두운 안내 화면의 분류 한계이며 게임 결함으로 확정하지 않는다.
+
+작업 재개 시 게임이 종료돼 있었다. `2026-09-14T14-30-20.546+00-00-TC-010`은 대상 창 관찰 부족으로 REVIEW_REQUIRED였고 이후 게임 프로세스 미존재를 확인했다. Steam으로 다시 실행하고 영어 선택을 Enter 1회로 확정한 뒤 기동 안내 종료를 입력 없이 기다렸다. 640×360 Continue 로비를 캡처로 확인한 후 본 TC를 실행했다. 기존 30초 제한과 판정 코드는 변경하지 않았다.
+
+**실행 ID `2026-09-14T14-33-58.466+00-00-TC-010`, 23:33 KST: PASS 1회.** 명령은 `SHEEPY_RUN_STEAM_TESTS=1`에서 `python -m pytest -m tc_010 -q -p no:cacheprovider`, 결과는 `1 passed, 124 deselected`이다.
+
+- 로비 Enter 1회, 4.109초 BLACK 관찰.
+- 12.641초부터 GAMEPLAY 후보가 유지되어 15.281초에 준비 완료.
+- 전체 관찰 foreground=true. 마지막 캡처는 640×360 플레이 장면으로 AI가 대조했다.
+- 로딩 전 나타난 GAMEPLAY 후보는 조기 통과로 인정하지 않았다.
+
+[준비 이벤트](samples/TC-010-restart-pass-preparation.json) · [PASS 판정](samples/TC-010-restart-pass-judgement.json)
+
+![TC-010 통과 시 마지막 플레이 화면](samples/TC-010-restart-pass-gameplay.png)
+
+이번 결과는 로비→플레이 화면 후보 전환 1회 성공이다. 실제 이동·점프와 동일 조건 3회 반복은 검증하지 않았다. 앞선 보류 실행과 크기 변경·예외 이벤트 유실 문제는 해결된 것으로 간주하지 않는다. 게임 파일·세이브는 직접 변경하지 않았다.
+
+## 후속 크기 변경·이벤트 보존 수정
+
+위 실제 실행 이후 코드에서 첫 캡처 크기를 세션 기준으로 유지하고, 변경 시 prepare-NNN.json에 SCREEN_SIZE_CHANGED와 두 크기·이미지를 기록해 분류와 비교 전에 중단하도록 보완했다. ensureScreen의 관찰·입력·대기 예외는 이전 이벤트를 유지하며 UNKNOWN으로 반환한다. Enter 시도와 완료를 구분해 입력 오류를 무입력으로 해석하지 않게 했다.
+
+게임 없는 회귀 7개 추가: 로비 직후·초기 BLACK·로비 후 BLACK에서 크기 변경 차단, 관찰·입력·대기 오류의 이전 이벤트 유지, preparation.json의 완료 Enter·오류 동시 보존. 전체 `114 passed, 18 skipped`. 정상 전환 연결 회귀도 유지됐다. 이번 수정 후 실제 크기 변경이나 실제 TC는 재실행하지 않았다. 이전 실행 로그를 수정된 형식으로 덮어쓰지 않는다.

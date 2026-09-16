@@ -1,0 +1,13 @@
+{
+  "ready": false,
+  "target": "LOBBY",
+  "actual": "UNKNOWN",
+  "reason": "대상 창 포커스 또는 캡처 조건 부족",
+  "events": [
+    {
+      "elapsed": 0.0,
+      "state": "UNKNOWN",
+      "foreground": false
+    }
+  ]
+}
